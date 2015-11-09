@@ -55,7 +55,7 @@ if(any(phylo_test $tip.label == species) == T){
 
 
 ###put it in a data.frame with stringsAsFactors turned off.
-new.data <- data.frame(species = species, habitat = habitat, Class = Class, tissue = tissue, diet_type = diet_type, iso_13C = iso_13C, delta13C = NA, iso_15N = iso_15N, delta15N = NA, stringsAsFactors = F) 
+new.data <- data.frame(species = species, habitat = habitat, Class = Class, tissue = tissue, diet_type = diet_type, iso_13C = iso_13C, delta_13C = NA, iso_15N = iso_15N, delta_15N = NA, stringsAsFactors = F) 
 	
 
 return(new.data)
@@ -65,7 +65,7 @@ return(new.data)
 
 
 	
-tef_mul_clean <- function(new.data = c(), data = data, species_col_name = c("species"), trees, isotope = c("carbon","nitrogen"), class =  c("mammalia","aves") , random = ~ animal + species + tissue){
+tef.mul.clean <- function(new.data = c(), data = data, species_col_name = c("species"), trees, isotope = c("carbon","nitrogen"), class =  c("mammalia","aves") , random = ~ animal + species + tissue){
 		
 
 #new.data = new.data_badge.c
@@ -78,9 +78,9 @@ tef_mul_clean <- function(new.data = c(), data = data, species_col_name = c("spe
 		
 #####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.
 
-	if((class== "mammalia") == T){ iso_data_sub <- data[data$class == "Mamm",]
+	if((class== "mammalia") == T){ iso_data_sub <- data[data$class == "mammalia",]
 	} else {
-		if((class == "aves") == T){ iso_data_sub <- data[data$class == "Bird",]
+		if((class == "aves") == T){ iso_data_sub <- data[data$class == "aves",]
 		}
 		else{ iso_data_sub <- data}
 	}
@@ -89,18 +89,18 @@ tef_mul_clean <- function(new.data = c(), data = data, species_col_name = c("spe
 		
 #####decide on the isotope###
 	if((isotope == "carbon") == T){
-		dropN <- names(data) %in% c("iso_15N","delta15N")
+		dropN <- names(data) %in% c("iso_15N","delta_15N")
 		iso_data_sub  <- iso_data_sub[!dropN]
 				
-				dropnewN <- names(new.data) %in% c("iso_15N","delta15N")
+				dropnewN <- names(new.data) %in% c("iso_15N","delta_15N")
 		new.data_sub  <- new.data[!dropnewN]
 		
 	} else{ 
 		if((isotope == "nitrogen") == T){
-			dropC <- names(data) %in% c("iso_13C","delta13C")
+			dropC <- names(data) %in% c("iso_13C","delta_13C")
 			iso_data_sub  <- iso_data_sub[!dropC]
 			
-						dropnewC <- names(new.data) %in% c("iso_13C","delta13C")
+						dropnewC <- names(new.data) %in% c("iso_13C","delta_13C")
 		new.data_sub  <- new.data[!dropnewC]
 			
 			}
@@ -155,7 +155,7 @@ tef_mul_clean <- function(new.data = c(), data = data, species_col_name = c("spe
 ######runs the MulTree across each of the models with option of including multiple trees
 
 
-tef_mcmcglmm <- function(mulTree.data , formula = delta13C ~ iso_13C + diet_type + envirnment ,nitt = c(12000), thin = c(10), burnin = c(2000), prior = NULL, pl = TRUE, no.chains = c(2), convergence = c(1.1), ESS = c(1000)){
+tef_mcmcglmm <- function(mulTree.data , formula = delta_13C ~ iso_13C + diet_type + habitat ,nitt = c(12000), thin = c(10), burnin = c(2000), prior = NULL, pl = TRUE, no.chains = c(2), convergence = c(1.1), ESS = c(1000)){
 
 		
 	
