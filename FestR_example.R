@@ -36,7 +36,7 @@ new_data_test <- set.tef.est(species = "Meles_meles", habitat = "terrestrial", C
 # TG: that way you're sure new.data_badge.c col names exactly matches data.
 
 
-tef_data_badger.c <- tef_mul_clean(new.data = new_data_test, data = data, species_col_name = "species", trees =  combined_trees, class = "mammalia", isotope = "carbon" )
+tef_data_badger.c <- tef.mul.clean(new.data = new_data_test, data = data, species_col_name = "species", trees =  combined_trees, class = "mammalia", isotope = "carbon" )
 # TG: That should work now!
 
 
