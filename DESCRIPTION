@@ -2,10 +2,15 @@ Package: FestR
 Title: Fractionation Estimation Using Phylogenetic Inference
 Version: 0.0.0.9000
 Authors@R: c(person("Kevin", "Healy", email = "healyke@tcd.ie", role = c("aut", "cre")),
-              person("Sean", "Kelly", email = "", role = c("aut"))
-              person("Andrew", "Jackson", email = "healyke@tcd.ie", role = c("aut")))
+              person("Sean", "Kelly", email = "", role = c("aut")),
+              person("Andrew", "Jackson", email = "healyke@tcd.ie", role = c("aut"))
+              )
 Description: Uses Bayesian Inference to impute (predict) a tissue fractionation value for an individual based on phylogeny and tissue type.
 Depends: R (>= 3.2.1)
 License: GPL-3
 LazyData: true
 Suggests: testthat
+Imports: 
+    mulTree,
+    stats,
+    graphics

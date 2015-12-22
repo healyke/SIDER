@@ -7,7 +7,7 @@
 #library(caper)
 #library(ape)
 #this is our package for combining trees together
-library(mulTree)
+# library(mulTree)
 # TG: mulTree does already loads these fellows for us
 
 source("FestR_functions.R")

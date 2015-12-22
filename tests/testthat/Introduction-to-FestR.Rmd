@@ -1,0 +1,57 @@
+---
+title: "Introduction to FestR"
+author: "Andrew L Jackson"
+date: "22 December 2015"
+output: html_document
+---
+
+Run the example for FestR. **_Vignette to be finished!!_**
+
+## Read in the data
+
+```{r}
+
+
+
+#read in the data
+mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),
+ header=T, stringsAsFactors = F)
+
+# re-oprder it into species
+mydata <- data[order(data$species),]
+
+# ----------------------------------------------------------------
+#read in the two trees
+mammal_trees <- read.tree(system.file("extdata", "3firstFritzTrees.tre", package = "FestR"))
+bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package = "FestR"))
+
+# TG: I just created a subsample of the BIG trees (all sp) to make it faster
+#combine them together
+combined_trees<-rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)
+
+
+```
+
+## Process the data
+
+```{r}
+#####function that checks the dat for some species we want to estimate TEF for
+new_data_test <- set.tef.est(species = "Meles_meles", 
+                             habitat = "terrestrial", 
+                             Class = "mammalia", 
+                             tissue = "blood", 
+                             diet_type = "omnivore", 
+                             iso_13C = c(-24.1), 
+                             iso_15N = c(7.0), 
+                             phylogeny = combined_trees )
+
+tef_data_badger.c <- tef.mul.clean(new.data = new_data_test, 
+                                   data = data, 
+                                   species_col_name = "species", 
+                                   trees =  combined_trees, 
+                                   class = "mammalia", 
+                                   isotope = "carbon" )
+
+
+
+```
