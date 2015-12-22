@@ -29,8 +29,9 @@ tefMulClean <- function(new.data = c(),
 		
 		
 #####decide on the isotope###
+  ## AJ - the column names in these dataset are a mess!!
 	if((isotope == "carbon") == T){
-		dropN <- names(data) %in% c("iso_15N","delta_15N")
+		dropN <- names(data) %in% c("iso_15N","delta15N")
 		iso_data_sub  <- iso_data_sub[!dropN]
 				
 				dropnewN <- names(new.data) %in% c("iso_15N","delta_15N")
@@ -38,7 +39,7 @@ tefMulClean <- function(new.data = c(),
 		
 	} else{ 
 		if((isotope == "nitrogen") == T){
-			dropC <- names(data) %in% c("iso_13C","delta_13C")
+			dropC <- names(data) %in% c("iso_13C","delta13C")
 			iso_data_sub  <- iso_data_sub[!dropC]
 			
 						dropnewC <- names(new.data) %in% c("iso_13C","delta_13C")

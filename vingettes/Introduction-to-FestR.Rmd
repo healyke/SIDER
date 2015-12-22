@@ -48,7 +48,7 @@ combined_trees<-rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.age
 
 ```{r}
 #####function that checks the dat for some species we want to estimate TEF for
-new_data_test <- set.tef.est(species = "Meles_meles", 
+new_data_test <- setTefEst(species = "Meles_meles", 
                              habitat = "terrestrial", 
                              Class = "mammalia", 
                              tissue = "blood", 
@@ -59,7 +59,7 @@ new_data_test <- set.tef.est(species = "Meles_meles",
 
 
 # There is a bug in this!
-# tef_data_badger.c <- tef.mul.clean(new.data = new_data_test, 
+# tef_data_badger.c <- tefMulClean(new.data = new_data_test, 
 #                                    data = mydata, 
 #                                    species_col_name = "species", 
 #                                    trees =  combined_trees, 
