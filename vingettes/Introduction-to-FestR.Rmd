@@ -7,6 +7,18 @@ output: html_document
 
 Run the example for FestR. **_Vignette to be finished!!_**
 
+## Install mulTree package if required
+
+```{r}
+# Install devtools if required
+#install.packages("devtools")
+#devtools::install_github("TGuillerme/mulTree", ref="release")
+
+library(FestR)
+library(mulTree)
+
+```
+
 ## Read in the data
 
 ```{r}
@@ -18,7 +30,7 @@ mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"
  header=T, stringsAsFactors = F)
 
 # re-oprder it into species
-mydata <- data[order(data$species),]
+mydata <- mydata[order(mydata$species),]
 
 # ----------------------------------------------------------------
 #read in the two trees
@@ -45,12 +57,14 @@ new_data_test <- set.tef.est(species = "Meles_meles",
                              iso_15N = c(7.0), 
                              phylogeny = combined_trees )
 
-tef_data_badger.c <- tef.mul.clean(new.data = new_data_test, 
-                                   data = data, 
-                                   species_col_name = "species", 
-                                   trees =  combined_trees, 
-                                   class = "mammalia", 
-                                   isotope = "carbon" )
+
+# There is a bug in this!
+# tef_data_badger.c <- tef.mul.clean(new.data = new_data_test, 
+#                                    data = mydata, 
+#                                    species_col_name = "species", 
+#                                    trees =  combined_trees, 
+#                                    class = "mammalia", 
+#                                    isotope = "carbon" )
 
 
 
