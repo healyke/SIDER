@@ -19,11 +19,11 @@ tefMulClean <- function(new.data = c(),
 		
 #####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.
 
-	if((class== "mammalia") == T){ iso_data_sub <- data[data$class == "mammalia",]
+	if((class== "mammalia") == T){ iso_data_class <- data[data$class == "mammalia",]
 	} else {
-		if((class == "aves") == T){ iso_data_sub <- data[data$class == "aves",]
+		if((class == "aves") == T){ iso_data_class <- data[data$class == "aves",]
 		}
-		else{ iso_data_sub <- data}
+		else{ iso_data_class <- data}
 	}
 		
 		
@@ -32,7 +32,7 @@ tefMulClean <- function(new.data = c(),
   ## AJ - the column names in these dataset are a mess!!
 	if((isotope == "carbon") == T){
 		dropN <- names(data) %in% c("iso_15N","delta15N")
-		iso_data_sub  <- iso_data_sub[!dropN]
+		iso_data_class  <- iso_data_class[!dropN]
 				
 				dropnewN <- names(new.data) %in% c("iso_15N","delta_15N")
 		new.data_sub  <- new.data[!dropnewN]
@@ -40,7 +40,7 @@ tefMulClean <- function(new.data = c(),
 	} else{ 
 		if((isotope == "nitrogen") == T){
 			dropC <- names(data) %in% c("iso_13C","delta13C")
-			iso_data_sub  <- iso_data_sub[!dropC]
+			iso_data_class  <- iso_data_class[!dropC]
 			
 						dropnewC <- names(new.data) %in% c("iso_13C","delta_13C")
 		new.data_sub  <- new.data[!dropnewC]
@@ -53,7 +53,7 @@ tefMulClean <- function(new.data = c(),
 		
 ########get rid on NAs so that the only NAs are for the new data
 
-		iso_data_sub_na <-  na.omit(iso_data_sub)
+		iso_data_sub_na <-  na.omit(iso_data_class)
 
 ######## Include the new data, I bind it so its at the top and hence easier to read.
 	
