@@ -62,7 +62,7 @@ if(any(phylo_test $tip.label == species) == T){
 
 
 ###put it in a data.frame with stringsAsFactors turned off.
-new.data <- data.frame(species = species, habitat = habitat, Class = Class, tissue = tissue, diet_type = diet_type, iso_13C = iso_13C, delta_13C = NA, iso_15N = iso_15N, delta_15N = NA, stringsAsFactors = F) 
+new.data <- data.frame(species = species, habitat = habitat, Class = Class, tissue = tissue, diet_type = diet_type, iso_13C = iso_13C, delta13C = NA, iso_15N = iso_15N, delta15N = NA, stringsAsFactors = F) 
 	
 
 return(new.data)
