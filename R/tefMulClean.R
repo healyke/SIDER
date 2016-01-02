@@ -34,7 +34,7 @@ tefMulClean <- function(new.data = c(),
 		dropN <- names(data) %in% c("iso_15N","delta15N")
 		iso_data_class  <- iso_data_class[!dropN]
 				
-				dropnewN <- names(new.data) %in% c("iso_15N","delta_15N")
+				dropnewN <- names(new.data) %in% c("iso_15N","delta15N")
 		new.data_sub  <- new.data[!dropnewN]
 		
 	} else{ 
