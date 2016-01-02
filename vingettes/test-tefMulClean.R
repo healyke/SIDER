@@ -32,6 +32,9 @@ new_data_test <- setTefEst(species = "Meles_meles",
                            phylogeny = combined_trees )
 
 
+tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, class = "mammalia", isotope = "carbon" )
+
+
 # ------------------------------------------------------------------------------
 # And now tefMulClean would fail, so here I manually assign some values so 
 # the function can be opened up and tested line by line.
@@ -41,5 +44,5 @@ new.data = new_data_test
 data = mydata
 species_col_name = "species"
 trees =  combined_trees
-class = "mammalia"
+Class = "mammalia"
 isotope = "carbon"

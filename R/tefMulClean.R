@@ -19,9 +19,9 @@ tefMulClean <- function(new.data = c(),
 		
 #####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.
 
-	if((class== "mammalia") == T){ iso_data_class <- data[data$class == "mammalia",]
+	if((class== "mammalia") == T){ iso_data_class <- data[data$Class == "mammalia",]
 	} else {
-		if((class == "aves") == T){ iso_data_class <- data[data$class == "aves",]
+		if((class == "aves") == T){ iso_data_class <- data[data$Class == "aves",]
 		}
 		else{ iso_data_class <- data}
 	}
