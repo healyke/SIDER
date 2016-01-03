@@ -34,7 +34,7 @@ new_data_test <- setTefEst(species = "Meles_meles",
 
 tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, class = "mammalia", isotope = "carbon" )
 
-formula.c == delta13C ~ iso_13C + diet_type + habitat
+formula.c <- delta13C ~ iso_13C + diet_type + habitat
 
 tefMcmcglmm(tef_data_badger.c, formula = formula.c)
 

@@ -124,3 +124,11 @@ data<-read.csv(file="FestR_data.csv",#
 data <- data[order(data$species),]
 tef_data_badger.c <- tef.mul.clean(new.data = new_data_test, data = data, species_col_name = "species", trees =  combined_trees, class = "mammalia", isotope = "carbon" )
 tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = data, species_col_name = "species", trees =  combined_trees, class = "mammalia", isotope = "carbon" )
+library(devtools)#
+install_github("TGuillerme/mulTree", ref=“master")#
+library(mulTree)
+library(devtools)#
+install_github("TGuillerme/mulTree")#
+library(mulTree)
+library(FestR)#
+library(mulTree)

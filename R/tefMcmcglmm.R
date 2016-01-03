@@ -4,7 +4,8 @@
 
 
 tefMcmcglmm <- function(mulTree.data , 
-                         formula = delta_13C ~ iso_13C + diet_type + habitat ,
+                         formula = delta13C ~ iso_13C + diet_type + habitat ,
+                         random.term = ~ animal + species + tissue,
                          nitt = c(12000), 
                          thin = c(10), 
                          burnin = c(2000), 
@@ -17,7 +18,7 @@ tefMcmcglmm <- function(mulTree.data ,
 		
 	
 ####this checks if there is a prior. If there is no prior and the formula is the same as the one we use it uses the same prior as we use.
-		if((is.null(prior) & formula == "delta13C ~ iso_13C + diet_type + envirnment" & mulTree.data$random == "~ animal + species + tissue") == TRUE){
+		if((is.null(prior) & formula == "delta13C ~ iso_13C + diet_type + habitat" & random.term == "~ animal + species + tissue") == TRUE){
 			
 			prior_tef <- list(R = list(V = 1/4, nu=0.002), G = list(G1=list(V = 1/4, nu=0.002),G2=list(V = 1/4, nu=0.002), G3=list(V = 1/4, 										nu=0.002)))
 			} else{
@@ -27,12 +28,21 @@ tefMcmcglmm <- function(mulTree.data ,
 	parameters <- c(nitt, thin, burnin)
 
 ########run the analysis
-		mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=pl, prior = prior_tef, chains = no.chains, convergence = convergence, ESS = ESS,output="teff_output" )
+
+if((length(mulTree.data$tree) > 1) == TRUE){
+	
+		#mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=pl, prior = prior_tef, chains = no.chains, convergence = convergence, ESS = ESS,output="teff_output" )
 				
 	#na.row <-  which(row(is.na(data)) == T)[1]
 
-tef_Liabs_raw <- read.mulTree(mulTree.mcmc="teff_output", extract = "Liab")
+#tef_Liabs_raw <- read.mulTree(mulTree.mcmc="teff_output", extract = "Liab")
 
+}
+else{
+	tef_Liabs_raw <- MCMCglmm(fixed = formula, random = random.term, data = mulTree.data$data, pedigree = mulTree.data$tree)
+	}
+	
+	
 
 #####as the NA row is placed first in the matrix we only want the first column of Liab as the rest are fixed.
 	tef_Liabs <- list()
