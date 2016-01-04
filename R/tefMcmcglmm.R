@@ -18,7 +18,7 @@ tefMcmcglmm <- function(mulTree.data ,
 		
 	
 ####this checks if there is a prior. If there is no prior and the formula is the same as the one we use it uses the same prior as we use.
-		if((is.null(prior) & formula == "delta13C ~ iso_13C + diet_type + habitat" & random.term == "~ animal + species + tissue") == TRUE){
+		if((is.null(prior) & formula == "delta13C ~ iso_13C + diet_type + habitat" & random.term == "~animal + species + tissue") == TRUE){
 			
 			prior_tef <- list(R = list(V = 1/4, nu=0.002), G = list(G1=list(V = 1/4, nu=0.002),G2=list(V = 1/4, nu=0.002), G3=list(V = 1/4, 										nu=0.002)))
 			} else{
@@ -28,32 +28,41 @@ tefMcmcglmm <- function(mulTree.data ,
 	parameters <- c(nitt, thin, burnin)
 
 ########run the analysis
+###need to put animal column into data first by dublicating the species column
+mulTree.data$data$animal <-  mulTree.data$data$species
 
 if((length(mulTree.data$tree) > 1) == TRUE){
 	
-		#mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=pl, prior = prior_tef, chains = no.chains, convergence = convergence, ESS = ESS,output="teff_output" )
+		mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=pl, prior = prior_tef, chains = no.chains, convergence = convergence, ESS = ESS,output="teff_output" )
 				
 	#na.row <-  which(row(is.na(data)) == T)[1]
 
-#tef_Liabs_raw <- read.mulTree(mulTree.mcmc="teff_output", extract = "Liab")
+tef_Liabs_raw <- read.mulTree(mulTree.mcmc="teff_output", extract = "Liab")
 
 }
 else{
-	tef_Liabs_raw <- MCMCglmm(fixed = formula, random = random.term, data = mulTree.data$data, pedigree = mulTree.data$tree)
+	
+	tef_Liabs_raw <- MCMCglmm(fixed = formula, random = random.term, data = mulTree.data$data, pedigree = mulTree.data$tree, prior = prior_tef, nitt = nitt, thin  = thin, burnin = burnin, pl = TRUE)
+	
+tef_Liabs_raw <- 	tef_Liabs_raw$Liab
+	
 	}
 	
+tef_estimates  <- as.mcmc(unlist(tef_Liabs_raw[,1]))
 	
-
+	return(list(tef_estimates = tef_estimates))
+	
+#### I think this loop is for the MulTree function so need to come back and fix this.
 #####as the NA row is placed first in the matrix we only want the first column of Liab as the rest are fixed.
-	tef_Liabs <- list()
-for(i in 1:(length(names(tef_Liabs_rawtef_Liabs_raw)))){
+#	tef_Liabs <- list()
+#for(i in 1:(length(names(tef_Liabs_raw)))){
 
-tef_Liabs[[i]] <-	(tef_Liabs_raw[[i]][,1])
-}
+#tef_Liabs[[i]] <-	(tef_Liabs_raw[[i]][,1])
+#}
 	
-tef_global  <- as.mcmc(unlist(tef_Liabs))
+#tef_global  <- as.mcmc(unlist(tef_Liabs))
 	
-return(list(tef_estimates = tef_Liabs, tef_global = tef_global))
+#return(list(tef_estimates = tef_Liabs, tef_global = tef_global))
 			
 }
 
