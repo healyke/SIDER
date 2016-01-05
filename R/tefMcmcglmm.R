@@ -5,7 +5,7 @@
 
 tefMcmcglmm <- function(mulTree.data , 
                          formula = delta13C ~ iso_13C + diet_type + habitat ,
-                         tef_data_badger.c$random.terms = ~ animal + species + tissue,
+                         random.terms = ~ animal + species + tissue,
                          nitt = c(12000), 
                          thin = c(10), 
                          burnin = c(2000), 
@@ -38,13 +38,15 @@ tefMcmcglmm <- function(mulTree.data ,
 					}
 					
 	parameters <- c(nitt, thin, burnin)
+	
+	 tef_data_badger.c$random.terms <- random.terms
 
 ########run the analysis
 
 ###need to put animal column into data first by dublicating the species column
 #mulTree.data$table$animal <-  mulTree.data$table$species
 
-if((class(mulTree.data$phy) == "multiPhylo") == TRUE){
+#if((class(mulTree.data$phy) == "multiPhylo") == TRUE){
 	
 		mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=TRUE, prior = prior_tef, chains = no.chains, convergence = convergence, ESS = ESS,output="teff_output" )
 				
@@ -52,14 +54,14 @@ if((class(mulTree.data$phy) == "multiPhylo") == TRUE){
 
 tef_Liabs_raw <- read.mulTree(mulTree.mcmc="teff_output", extract = "Liab")
 
-}
+#}
 #else{
 	
 #	tef_Liabs_raw <- MCMCglmm(fixed = formula, random = random.term, data = mulTree.data$table, pedigree = mulTree.data$tree, prior = prior_tef, nitt = nitt, thin  = thin, burnin = burnin, pl = TRUE)
 	
 #tef_Liabs_raw <- 	tef_Liabs_raw$Liab
 	
-	}
+#	}
 	
 #tef_estimates  <- as.mcmc(unlist(tef_Liabs_raw[,1]))
 	
