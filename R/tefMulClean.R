@@ -84,7 +84,7 @@ tefMulClean <- function(new.data = c(),
 #			} else{ clean_iso$random.terms <-as.formula( random)	
 #			}
 		
-			
+			class(clean_iso)<-'mulTree'
 		return(clean_iso)		
 
 }
