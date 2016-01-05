@@ -4,7 +4,7 @@
 
 
 tefMcmcglmm <- function(mulTree.data , 
-                         formula = delta13C ~ iso_13C + diet_type + habitat ,
+                         formula = delta13C ~ source.iso.15N + diet.type + habitat ,
                          random.terms = ~ animal + species + tissue,
                          nitt = c(12000), 
                          thin = c(10), 
@@ -16,21 +16,10 @@ tefMcmcglmm <- function(mulTree.data ,
 
 
 
-#mulTree.data = tef_data_badger.c
-#formula = delta13C ~ iso_13C + diet_type + habitat
-#tef_data_badger.c$random.terms = ~ animal + species + tissue
-#nitt = c(12000)
-#thin = c(10)
-#burnin = c(2000)
-#prior = NULL
-#no.chains = c(2)
-#convergence = c(1.1)
-#ESS = c(1000)
-
 
 	
 ####this checks if there is a prior. If there is no prior and the formula is the same as the one we use it uses the same prior as we use.
-		if((is.null(prior) & formula == "delta13C ~ iso_13C + diet_type + habitat" & tef_data_badger.c$random.term == "~animal + species + tissue") == TRUE){
+		if((is.null(prior) & formula == "delta13C ~ source.iso.15N + diet.type + habitat" & tef_data_badger.c$random.term == "~animal + species + tissue") == TRUE){
 			
 			prior_tef <- list(R = list(V = 1/4, nu=0.002), G = list(G1=list(V = 1/4, nu=0.002),G2=list(V = 1/4, nu=0.002), G3=list(V = 1/4, 										nu=0.002)))
 			} else{
