@@ -1,6 +1,5 @@
 
-## Script to test tefMulClean that is not working.
-# The data.frame column names are all over the place.
+# Test document. To be used as an example etc.
 
 library(FestR)
 library(devtools)
@@ -29,11 +28,11 @@ combined_trees <- rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.a
 # This function also checks that the species is in the tree.
 new_data_test <- setTefEst(species = "Meles_meles", 
                            habitat = "terrestrial", 
-                           Class = "mammalia", 
+                           taxonomic.class = "mammalia", 
                            tissue = "blood", 
-                           diet_type = "omnivore", 
-                           iso_13C = c(-24.1), 
-                           iso_15N = c(7.0), 
+                           diet.type = "omnivore", 
+                           source.iso.13C = c(-24.1), 
+                           source.iso.15N = c(7.0), 
                            phylogeny = combined_trees )
 
 
