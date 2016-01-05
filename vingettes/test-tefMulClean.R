@@ -41,10 +41,10 @@ new_data_test <- setTefEst(species = "Meles_meles",
 # for which we dont have phylogenetic data.
 # It returns a mulTree class object which is required by the imputation 
 # algorithm.
-tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, class = "mammalia", isotope = "carbon")
+tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon")
 
 # define the model to be used for prediction
-formula.c <- delta13C ~ diet_type + habitat
+formula.c <- delta13C ~ diet.type + habitat
 
 # Run the model that performs imputation as part of model fitting.
 Tef_est <- tefMcmcglmm(mulTree.data = tef_data_badger.c, formula = formula.c)

@@ -5,7 +5,7 @@ tefMulClean <- function(new.data = c(),
                         species_col_name = c("species"), 
                         trees, 
                         isotope = c("carbon","nitrogen"), 
-                        class =  c("mammalia","aves") , 
+                        taxonomic.class =  c("mammalia","aves") , 
                         random = ~ animal + species + tissue) {
 		
 
@@ -13,15 +13,15 @@ tefMulClean <- function(new.data = c(),
 #data = mydata
 #species_col_name = "species"
 #trees =  combined_trees
-#class = "mammalia"
+#taxonomic.class = "mammalia"
 #isotope = "carbon"
 
 		
 #####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.
 
-	if((class== "mammalia") == T){ iso_data_class <- data[data$Class == "mammalia",]
+	if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]
 	} else {
-		if((class == "aves") == T){ iso_data_class <- data[data$Class == "aves",]
+		if((taxonomic.class == "aves") == T){ iso_data_class <- data[data$taxonomic.class == "aves",]
 		}
 		else{ iso_data_class <- data}
 	}
@@ -31,18 +31,19 @@ tefMulClean <- function(new.data = c(),
 #####decide on the isotope###
   ## AJ - the column names in these dataset are a mess!!
 	if((isotope == "carbon") == T){
-		dropN <- names(data) %in% c("iso_15N","delta15N")
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")
 		iso_data_class  <- iso_data_class[!dropN]
 				
-				dropnewN <- names(new.data) %in% c("iso_15N","delta15N")
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")
 		new.data_sub  <- new.data[!dropnewN]
 		
 	} else{ 
 		if((isotope == "nitrogen") == T){
-			dropC <- names(data) %in% c("iso_13C","delta13C")
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")
 			iso_data_class  <- iso_data_class[!dropC]
 			
-						dropnewC <- names(new.data) %in% c("iso_13C","delta_13C")
+						dropnewC <- names(new.data) %in% 
+						c("source.iso.13C","delta_13C")
 		new.data_sub  <- new.data[!dropnewC]
 			
 			}
