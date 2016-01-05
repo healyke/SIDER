@@ -1,4 +1,4 @@
-species,habitat,Class,tissue,diet_type,iso_13C,iso_15N,delta13C,delta15N
+species,habitat,taxonomic.class,tissue,diet.type,source.iso.13C,source.iso.15N,delta13C,delta15N
 Rattus_norvegicus,terrestrial,mammalia,liver,herbivore,-25.3,4.8,3.1,1.2
 Rattus_norvegicus,terrestrial,mammalia,liver,carnivore,-16.2,12.3,3.1,0.6
 Rattus_norvegicus,terrestrial,mammalia,liver,omnivore,-24.5,7.1,1.5,3.2
