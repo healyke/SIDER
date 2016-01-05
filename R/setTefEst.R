@@ -2,15 +2,15 @@
 #' 
 #' @param species a binomial species name as a character string.
 #' @param habitat a character string of either "marine" or "terrestrial"
-#' @param Class the class of species as a character string, either "mammalia" or
+#' @param taxonomic.class the class of species as a character string, either "mammalia" or
 #'   "aves"
 #' @param tissue the tissue type as a character string taking one of
 #'   \code{c("blood", "claws", "collagen", "ceather", "hair", "kidney", "liver",
 #'   "milk", "muscle")}
-#' @param diet_type the diet type as a character string taking one of
+#' @param diet.type the diet type as a character string taking one of
 #'   \code{c("carnivore", "herbivore", "omnivore",  "pellet")}
-#' @param iso_13C ? WE DONT ACTUALLY WANT THIS?
-#' @param iso_15N ? WE DONT ACTUALLY WANT THIS?
+#' @param iso_13C source carbon isotopic value is available numeric
+#' @param iso_15N source nitrogen isotopic value is available numeric
 #' @param phylogeny The full phylogenetic tree or set of trees as a
 #'   (multi-)phylo object.
 #'   

@@ -1,4 +1,17 @@
+#' Matches phylogenies to data and creates multree object.
+#' @param new.data data for species to be imputed see setTefEst
+#' @param species_col_name name of column contining binomial species names
+#' @param trees phylogeny of phylo/multiphylo class
+#' @param isotope for which discrimination factor is to be imputed
+#' @param taxonomic.class the class of species as a character string, either 
+#' "mammalia" or "aves"
+#' @param random.terms an object of class "formula" decribing the random effects.
 
+#' @return multree object
+#' @param phy phylogeny of phylo/multiphylo class matching data
+#' @param data data.frame object matching phylogeny
+#'
+#' @export
 	
 tefMulClean <- function(new.data = c(), 
                         data = data, 
