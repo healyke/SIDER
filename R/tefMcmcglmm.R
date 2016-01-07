@@ -43,6 +43,8 @@ tefMcmcglmm <- function(mulTree.data ,
 
 	
 ####this checks if there is a prior. If there is no prior and the formula is the same as the one we use it uses the same prior as we use.
+mulTree.data$random.term <- random.terms
+
 		if((is.null(prior) & formula == "delta13C ~ source.iso.15N + diet.type + habitat" & mulTree.data$random.term == "~animal + species + tissue") == TRUE){
 			
 			prior_tef <- list(R = list(V = 1/4, nu=0.002), G = list(G1=list(V = 1/4, nu=0.002),G2=list(V = 1/4, nu=0.002), G3=list(V = 1/4, 										nu=0.002)))
