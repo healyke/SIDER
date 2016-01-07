@@ -24,7 +24,7 @@ bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package 
 
 # TG: I just created a subsample of the BIG trees (all sp) to make it faster
 #combine them together
-combined_trees <- rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)
+combined_trees <- tree.bind (x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)
 
 # Select the species and tissue type to be estimated using FestR. 
 # This function also checks that the species is in the tree.
