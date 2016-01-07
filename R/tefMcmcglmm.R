@@ -43,7 +43,7 @@ tefMcmcglmm <- function(mulTree.data ,
 
 	
 ####this checks if there is a prior. If there is no prior and the formula is the same as the one we use it uses the same prior as we use.
-		if((is.null(prior) & formula == "delta13C ~ source.iso.15N + diet.type + habitat" & tef_data_badger.c$random.term == "~animal + species + tissue") == TRUE){
+		if((is.null(prior) & formula == "delta13C ~ source.iso.15N + diet.type + habitat" & mulTree.data$random.term == "~animal + species + tissue") == TRUE){
 			
 			prior_tef <- list(R = list(V = 1/4, nu=0.002), G = list(G1=list(V = 1/4, nu=0.002),G2=list(V = 1/4, nu=0.002), G3=list(V = 1/4, 										nu=0.002)))
 			} else{
@@ -52,7 +52,7 @@ tefMcmcglmm <- function(mulTree.data ,
 					
 	parameters <- c(nitt, thin, burnin)
 	
-	 tef_data_badger.c$random.terms <- random.terms
+	 mulTree.data$random.terms <- random.terms
 
 ########run the analysis
 
