@@ -22,7 +22,7 @@ tefMulClean <- function(new.data = c(),
                         random = ~ animal + species + tissue) {
 		
 
-#new.data = new.data_badge.c
+#new.data = new.data_kea.c
 #data = mydata
 #species_col_name = "species"
 #trees =  combined_trees
@@ -55,8 +55,7 @@ tefMulClean <- function(new.data = c(),
 			dropC <- names(data) %in% c("source.iso.13C","delta13C")
 			iso_data_class  <- iso_data_class[!dropC]
 			
-						dropnewC <- names(new.data) %in% 
-						c("source.iso.13C","delta_13C")
+						dropnewC <- names(new.data) %in% c("source.iso.13C","delta13C")
 		new.data_sub  <- new.data[!dropnewC]
 			
 			}
