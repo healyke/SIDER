@@ -22,7 +22,7 @@ tefMulClean <- function(new.data = c(),
                         random = ~ animal + species + tissue) {
 		
 
-#new.data = new.data_kea.c
+#new.data = new_data_test
 #data = mydata
 #species_col_name = "species"
 #trees =  combined_trees
