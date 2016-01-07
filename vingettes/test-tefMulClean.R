@@ -50,10 +50,10 @@ tef_data_kea.n <- tefMulClean(new.data = new_data_test, data = mydata, species_c
 # define the model to be used for prediction
 formula.c <- delta13C ~ source.iso.13C + diet.type + habitat
 formula.n <- delta15N ~ source.iso.15N + diet.type + habitat
+random.terms = ~ animal + sp.col + tissue
 
-# Run the model that performs imputation as part of model fitting.
-Tef_est.c <- tefMcmcglmm(mulTree.data = tef_data_kea.c, formula = formula.c)
-Tef_est.n <- tefMcmcglmm(mulTree.data = tef_data_kea.n, formula = formula.n)
+Tef_est.c <- tefMcmcglmm(mulTree.data = tef_data_kea.c, formula = formula.c, random.terms = random.terms)
+Tef_est.n <- tefMcmcglmm(mulTree.data = tef_data_kea.n, formula = formula.n, random.terms = random.terms)
 
 median(Tef_est.c$tef_global)
 median(Tef_est.n$tef_global)
