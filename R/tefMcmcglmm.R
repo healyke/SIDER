@@ -28,11 +28,11 @@
 
 
 tefMcmcglmm <- function(mulTree.data , 
-                         formula = delta13C ~ source.iso.15N + diet.type + habitat ,
+                         formula = delta13C ~ diet.type + habitat ,
                          random.terms = ~ animal + species + tissue,
-                         nitt = c(12000), 
-                         thin = c(10), 
-                         burnin = c(2000), 
+                         nitt = c(120000), 
+                         thin = c(50), 
+                         burnin = c(20000), 
                          prior = NULL, 
                          no.chains = c(2), 
                          convergence = c(1.1), 

@@ -1,10 +1,12 @@
 
 # Test document. To be used as an example etc.
 
+##this is only required while Thomas updates his Multree code
 library(FestR)
-library(devtools)
-#devtools::install_github('TGuillerme/mulTree', ref='master')
+if(!require(devtools)) install.packages("devtools")
+install_github("TGuillerme/mulTree", ref = "clunky-mulTree")
 library(mulTree)
+
 
 
 #read in the data

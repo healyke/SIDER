@@ -1,0 +1,2 @@
+load("/Users/kevinhealy/Desktop/Enrichment_factors/FestR/teff_output_tree1_chain1.rda")
+summary(model)
