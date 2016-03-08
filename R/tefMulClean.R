@@ -83,11 +83,11 @@ tefMulClean <- function(new.data = c(),
 
 #####this needs to be fixed so that it actually removes the dataset.
 
-			clean_iso <-	as.mulTree(species = species_col_name, data = iso_data_com, trees = trees, clean.data = TRUE)
+			clean_iso <-	as.mulTree(taxa = species_col_name, data = iso_data_com, tree = trees,  clean.data = TRUE)
 		
 		
 		##this was there to make it work with only one tree should be good now.
-		#clean_iso <- clean.data(species_col_name, iso_data_com, trees)
+		#clean_iso <- clean.data(species_col_name, iso_data_com, trees, rand.terms)
 	
 		
 		

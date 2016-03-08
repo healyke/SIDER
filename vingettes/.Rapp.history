@@ -215,7 +215,6 @@ new_data_test <- setTefEst(species = "Nestor_notabilis", #
                            source.iso.15N = c(3.97), #
                            phylogeny = combined_trees)
 tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "nitrogen")
-tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "nitrogen")
 new_data_test
 tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "carbon")
 tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "nitrogen")
