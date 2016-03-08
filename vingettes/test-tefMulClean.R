@@ -7,6 +7,7 @@ if(!require(devtools)) install.packages("devtools")
 install_github("TGuillerme/mulTree", ref = "release")
 library(mulTree)
 
+
 #read in the data
 mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),
                  header=T, stringsAsFactors = F)
