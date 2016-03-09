@@ -4,7 +4,7 @@
 ##this is only required while Thomas updates his Multree code
 library(FestR)
 if(!require(devtools)) install.packages("devtools")
-install_github("TGuillerme/mulTree", ref = "release")
+install_github("TGuillerme/mulTree", ref = "master")
 library(mulTree)
 
 

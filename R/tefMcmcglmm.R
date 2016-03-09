@@ -66,7 +66,7 @@ mulTree.data$random.terms = random.terms
 				
 	#na.row <-  which(row(is.na(data)) == T)[1]
 
-tef_Liabs_raw <- read.mulTree(mulTree.mcmc="teff_output", extract = "Liab")
+tef_Liabs_raw <- read.mulTree(mulTree.chain="teff_output", extract = "Liab")
 
 #}
 #else{
