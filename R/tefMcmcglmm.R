@@ -22,6 +22,7 @@
 #' @return list containing Posterior Distributions of imputed discrimination factors  
 #' including a posterior distribution for each indavidual chain in Tef.est and
 #' a combined chain in Tef.global.
+#' @param output The name of the output files
 #'
 #' @export
 
@@ -36,7 +37,8 @@ tefMcmcglmm <- function(mulTree.data ,
                          prior = NULL, 
                          no.chains = c(2), 
                          convergence = c(1.1), 
-                         ESS = c(1000)){
+                         ESS = c(1000),
+                         output = teff_output){
 
 
 
@@ -62,11 +64,11 @@ mulTree.data$random.terms = random.terms
 
 #if((class(mulTree.data$phy) == "multiPhylo") == TRUE){
 	
-		mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=TRUE, prior = prior_tef, chains = no.chains, convergence = convergence, ESS = ESS,output="teff_output" )
+		mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=TRUE, prior = prior_tef, chains = no.chains, convergence = convergence, ESS = ESS,output= teff_output )
 				
 	#na.row <-  which(row(is.na(data)) == T)[1]
 
-tef_Liabs_raw <- read.mulTree(mulTree.chain="teff_output", extract = "Liab")
+tef_Liabs_raw <- read.mulTree(mulTree.chain= teff_output, extract = "Liab")
 
 #}
 #else{
