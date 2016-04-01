@@ -8,7 +8,7 @@ and runs a MCMCglmm analysis on multiple trees using [MulTree] (https://github.c
 ## Installing FestR
 ```r
 if(!require(devtools)) install.packages("devtools")
-install_github("healyke/Fester", ref = "master")
+install_github("healyke/FestR", ref = "master")
 install_github("TGuillerme/mulTree", ref = "master")
 library(mulTree)
 library(FestR)
