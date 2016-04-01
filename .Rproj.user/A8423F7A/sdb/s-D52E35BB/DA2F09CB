@@ -1,0 +1,18 @@
+{
+    "contents" : "Tef.hist.plot <- function(diff.data.ind = c(),\n                          diff.data.spc = c(),\n                          diff.mam.ind.c = c(),\n                          diff.mam.ind.n = c(),\n                          diff.aves.ind.c = c(),\n                          diff.aves.ind.n = c(),\n                          diff.mam.spc.c = c(),\n                          diff.mam.spc.n = c(),\n                          diff.aves.spc.c = c(),\n                          diff.aves.spc.n = c(),\n                          xlim = c(-5,5),\n                          taxa = c(Aves, Mammalia),\n                          isotope = c(carbon, nitrogen),\n                          type = c(isotope, full)){\n  if(type == \"isotope\"){\ndev.new()\npar(mfrow=c(2,2))\n\nhdr.den(as.vector(unlist(diff.data.ind$diff_mean)), main = cat(\"Estimate:observed difference\", taxa, isotope), xlab = \"individual replacement\", cex = 0.5, xlim= c(-5,5))\nhdr.den(as.vector(unlist(diff.data.ind$diff_int)/2), cex = 0.5,main = cat(\"95% interval range\", taxa, isotope), xlab = \"individual replacement\")\n#hdr.den(as.vector(unlist(nmam_diff_ind_int50[])), cex = 0.5,main = \"50% interval range Mammalia Nitrogen\", xlab = \"individual replacement\")\n\nhdr.den(as.vector(unlist(diff.data.spc$diff_mean)), main = cat(\"Estimate:observed difference\", taxa, isotope),  xlab = \"species replacement\",cex = 0.5,  xlim= c(-5,5))\nhdr.den(as.vector(unlist(diff.data.spc$diff_int)/2),cex = 0.5,main = cat(\"95% interval range\", taxa, isotope), xlab = \"species replacement\")\n#hdr.den(as.vector(unlist(nmam_diff_sp_int50[])),cex = 0.5,main = \"50% interval range Mammalia Nitrogen\", xlab = \"species replacement\")\n  } else{\n    dev.new()\n    par(mfrow=c(2,4))\n\n#####indavidual level\n    hdr.den(as.vector(unlist(diff.aves.ind.c$diff_mean)), xlab = \"aves carbon\", ylab = \"individual replacement\", cex = 0.5, xlim= c(-5,5))\n    hdr.den(as.vector(unlist(diff.aves.ind.n$diff_mean)), xlab = \"aves nitrogen\", cex = 0.5, xlim= c(-5,5))\n    hdr.den(as.vector(unlist(diff.mam.ind.c$diff_mean)), xlab =  \"mammalia carbon\", cex = 0.5, xlim= c(-5,5))\n    hdr.den(as.vector(unlist(diff.mam.ind.n$diff_mean)), xlab = \"mammalia nitrogen\", cex = 0.5, xlim= c(-5,5))\n\n#####species level\n    hdr.den(as.vector(unlist(diff.aves.spc.c$diff_mean)), xlab = \"aves carbon\",  ylab = \"species replacement\",cex = 0.5,  xlim= c(-5,5))\n    hdr.den(as.vector(unlist(diff.aves.spc.c$diff_mean)), xlab = \"aves nitrogen\",cex = 0.5,  xlim= c(-5,5))\n    hdr.den(as.vector(unlist(diff.mam.spc.c$diff_mean)), xlab = \"mammalia carbon\",cex = 0.5,  xlim= c(-5,5))\n    hdr.den(as.vector(unlist(diff.mam.spc.c$diff_mean)), xlab = \"mammalia nitrogen\",cex = 0.5,  xlim= c(-5,5))\n    \n  }\n\n}\n",
+    "created" : 1458926426182.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "174454022",
+    "id" : "DA2F09CB",
+    "lastKnownWriteTime" : 1459170663,
+    "path" : "~/Desktop/FestR_replacement_tests/Tef_hist_plot.R",
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

@@ -1,0 +1,17 @@
+{
+    "contents" : "MultiDisPlot<-function(data.list, probs=c(95, 50), col=\"black\", xlim=\"auto\", ...) {\n  #Sanitizing\n  \n  #require\n  require(hdrcde)\n  \n  #data.list\n  if(class(data.list) != \"list\") {\n    stop(\"'data.list' must be a list of numerical values.\")\n  }\n  \n  #probs\n  if(class(probs) != \"numeric\") {\n    stop(\"'probs' must be a numeric.\")\n  }\n  \n  #col\n  if(class(col) != \"character\") {\n    stop(\"'col' must be a character string.\")\n  } \n  \n  #Calculate the y limits (optional\n  if(xlim == \"auto\") {\n    xlim<-c(min(unlist(data.list), na.rm=TRUE) - 0.01*min(unlist(data.list), na.rm=TRUE), max(unlist(data.list), na.rm=TRUE) + 0.01*(max(unlist(data.list), na.rm=TRUE)))\n  }\n  \n  #Calculating the hdr\n  hdr.results<-lapply(data.list, hdr, prob=probs)\n  \n  #Empty plot\n  plot(1,1, ylim= c(1,length(data.list)), xlim=xlim, col=\"white\", ...)\n  \n  #Adding the lines\n  for (j in 1:length(data.list)) {\n    temp <- hdr.results[[j]]\n    shift=0\n    #border=\"black\"\n    \n    for (k in 1:length(probs)) {\n      #Plot the probabilities distribution\n      temp2 <- temp$hdr[k, ]\n      \n      #Lines options\n      lines(c(j+shift,j+shift)~ c(min(temp2[!is.na(temp2)]), max(temp2[!is.na(temp2)])), lwd=1+(k*2-2), lty=(length(probs)-(k-1)), col=col)  \n      points(j+shift~temp$mode,pch=19, col=col)\n    }\n  }\n  \n}\n",
+    "created" : 1457787885697.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1269792774",
+    "id" : "5B4F88A2",
+    "lastKnownWriteTime" : 1457896830,
+    "path" : "~/Desktop/FestR_replacement_tests/MultiDisPlot.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

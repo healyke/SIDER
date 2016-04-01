@@ -1,0 +1,18 @@
+{
+    "contents" : "\nread_tef <- function(chain.name = c(),\n         Tef.data = c(),\n         no.chains = c(2),\n         no.trees = c(10)){\n\nt_Liabs <- list()\n\nmodel_grab <- list.files()\nmodel_gsub <- list()\nmodel_grab2 <- gsub(\"-tree.*\\\\.*\",\"\",model_grab,perl = TRUE)\nmodel_grab_chain_name <- grep(c(chain.name),model_grab2,perl = TRUE)\nmodel_grab_chain_name <- model_grab2[model_grab_chain_name]\nun_gsub <- unique(model_grab_chain_name)\n\n#reorder the\norder_sub <- list()\nfor(t in 1:(length(unique(Tef.data$data$animal)))){\n  \n  order_sub[[t]] <- un_gsub[grep(unique(Tef.data$data$animal)[t],un_gsub)]\n  }\norder_sub <- unlist(order_sub)\n\n\nt_Liabs <- list()\nt_chains <- list()\nfor(i in 1:(length(order_sub))){\n  \n  temp <-\tread.mulTree(mulTree.chain= order_sub[i], extract = \"Liab\")\n  for(j in 1:(length(no.chains*no.trees))){\n    t_chains[[j]] <- temp[[j]][,1]\n  }\n  t_Liabs[[i]] <- as.mcmc(unlist(t_chains))\n}\n\nreturn(t_Liabs = t_Liabs)\n}\n",
+    "created" : 1459348958028.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1729952505",
+    "id" : "2C62A7D0",
+    "lastKnownWriteTime" : 1458840363,
+    "path" : "~/Desktop/FestR_replacement_tests/read_tef.R",
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

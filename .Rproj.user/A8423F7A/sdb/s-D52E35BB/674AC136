@@ -1,0 +1,18 @@
+{
+    "contents" : "###Plots\n#set up a list with the rigth order of factors.\n\nTef_plot <- function(tef_data,\n                     ind.output, \n                     spc.output,\n                     title.main = c('TEF'),\n                     xlim = c(-4,8),\n                     direct = \"FALSE\",\n                     isotope = c(\"carbon\", \"nitrogen\")){\n  \nplot.lists <- plot_list(tef_data, isotope = isotope)\n\nind.plot <- ind.output\nif(direct == TRUE){\nspc.plot <- as.list(as.data.frame(spc.output$mod_full))\n} else{\n  spc.plot <- spc.output\n  \n}\n\n###needs to finished\ndev.new()\npar(mfrow=c(3,2))\npar(mfrow=c(1,3), oma = c(0.1,0.1,2,0.1) )\npar(mar=c(0.1, 0.1, 5, 0.1) + 0.1)\nplot.new()\npar(mar=c(0.1, 3, 5, 0.1) + 0.1)\n\nMultiDisPlot(ind.plot,  axes=FALSE ,ylab = \"\", bty = \"n\", xlim = xlim)\naxis(side = 3)\nmtext(c(\"individual replacment\"), side = c(3),cex =0.7, line=2.3)\n#add actual estimates\npoints(seq(1:(length(unlist(plot.lists$delta.plot.list))))~ unlist(plot.lists$delta.plot.list), col = \"red\", pch = 16)\n\nmtext(as.vector(unlist(plot.lists$species.plot.list)), side = c(2), at = c(seq(1:(length(unlist(plot.lists$species.plot.list))))),cex =0.5, line=12, las  = 1)\nmtext(\"Species\", side = c(2), at = c(length(unlist(plot.lists$habitat.plot.list)) +2.5), cex =0.5, line=12, font=2, las =1)\n\nmtext(as.vector(unlist(plot.lists$diet.plot.list)), side = c(2), at = c(seq(1:(length(unlist(plot.lists$diet.plot.list))))),cex =0.5, line=8, las  = 1)\nmtext(\"Diet\", side = c(2), at = c(length(unlist(plot.lists$diet.plot.list)) +2.5), cex =0.5, line=8, font=2, las =1)\n\nmtext(as.vector(unlist(plot.lists$tissue.plot.list)), side = c(2), at = c(seq(1:(length(unlist(plot.lists$tissue.plot.list))))),cex =0.5, line=5, las  = 1)\nmtext(\"Tissue\", side = c(2), at = c(length(unlist(plot.lists$tissue.plot.list)) +2.5), cex =0.5, line=5, font=2, las =1)\n\nmtext(as.vector(unlist(plot.lists$habitat.plot.list)), side = c(2), at = c(seq(1:(length(unlist(plot.lists$habitat.plot.list))))),cex =0.5, line=1, las  = 1)\nmtext(\"Habitat\", side = c(2), at = c(length(unlist(plot.lists$habitat.plot.list)) +2.5), cex =0.5, line=1, font=2, las =1)\n\npar(mar=c(0.1, 2, 5, 1) + 0.1)\n#(bottem, left, top, rigth)\nMultiDisPlot(spc.plot,  axes=FALSE ,ylab = \"\", bty = \"n\", xlim = xlim)\naxis(side = 3)\nmtext(c(\"species replacment\"), side = c(3),cex =0.7, line=2.3)\npoints(seq(1:(length(unlist(plot.lists$delta.plot.list))))~ unlist(plot.lists$delta.plot.list), col = \"red\", pch = 16)\n\nmtext(title.main, side = c(3), cex =1, font=2, outer = TRUE)\n\n}\n\n",
+    "created" : 1458818941128.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3383830152",
+    "id" : "674AC136",
+    "lastKnownWriteTime" : 1458841109,
+    "path" : "~/Desktop/FestR_replacement_tests/Tef_plot.R",
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

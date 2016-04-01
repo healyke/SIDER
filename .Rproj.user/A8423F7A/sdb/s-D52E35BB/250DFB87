@@ -1,0 +1,17 @@
+{
+    "contents" : "plot_list <- function(tef_data,\n                      isotope = c(\"carbon\", \"nitrogen\")){\n\nspecies.plot.list <- list()\ndiet.plot.list <- list()\ntissue.plot.list <- list()\ndelta.plot.list <- list()\nhabitat.plot.list <- list()\n\ntaxa_list <- unique(tef_data$data$animal)\n\n\nfor(i in 1:length(levels(as.factor(taxa_list)))){\n\n\tspec_list <- taxa_list\n\t\n\t#remove the entire species\n\ttef_data_na      <- tef_data\n\ttef_data_na$data <- tef_data_na$data[tef_data_na$data$animal != spec_list[i],]\n\ttef_data_dropped <- tef_data$data[tef_data$data$animal == spec_list[i],]\n\n\tfor(j in 1:(length(tef_data_dropped[,1]))){\n\ttef_data_comb_na <- rbind(tef_data_dropped[j,] , tef_data_na$data)\n\t\t\n\t\n\tspecies.plot.list[[spec_list[i]]][j] <-list(tef_data_comb_na[1,\"animal\"])\n\tdiet.plot.list[[spec_list[i]]][j] <-list(tef_data_comb_na[1,\"diet.type\"])\n\ttissue.plot.list[[spec_list[i]]][j] <-list(tef_data_comb_na[1,\"tissue\"])\n\tif(isotope == \"carbon\"){\n\t  delta.plot.list[[spec_list[i]]][j] <-list(tef_data_comb_na[1,\"delta13C\"])\n\t} else {\n\tdelta.plot.list[[spec_list[i]]][j] <-list(tef_data_comb_na[1,\"delta15N\"])}\n\thabitat.plot.list[[spec_list[i]]][j] <-list(tef_data_comb_na[1,\"habitat\"])\n\n\t}\t\n}\n\nreturn(list(species.plot.list = species.plot.list, diet.plot.list = diet.plot.list, \n\t\t\ttissue.plot.list = tissue.plot.list, delta.plot.list = delta.plot.list, habitat.plot.list = habitat.plot.list))\n}\n",
+    "created" : 1458735426820.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2753165984",
+    "id" : "250DFB87",
+    "lastKnownWriteTime" : 1458841116,
+    "path" : "~/Desktop/FestR_replacement_tests/plot_list.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
