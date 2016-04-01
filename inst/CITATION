@@ -4,18 +4,18 @@ citEntry(entry = "Article",
   title        = "Fractionation Estimation in R",
   author       = personList(as.person(""),
                    as.person("Kevin Healy"), 
-                   as.person("Sean Kelly"),
+                   as.person("Sean B.A Kelly"),
+                   as.person("Thomas Guillerme"),
                    as.person("Andrew L Jackson")),
   journal      = "Journal of Somewhere",
-  year         = "2015",
+  year         = "2016”,
   number       = "",
   pages        = "",
   url          = "",
 
   textVersion  =
-  paste("Andrew L Jackson, Andrew C Parnell,
-        Richard Inger and Stuart Bearhop (2011).",
-        "Comparing isotopic niche widths among and within communities:           SIBER - Stable Isotope Bayesian Ellipses in R",
-        "Journal of Animal Ecology, 80, 595-602.",
-        "URL http://dx.doi.org/10.1111/j.1365-2656.2011.01806.x.")
+  paste(“Kevin Healy,Sean B.A Kelly, Thomas Guillerme, Richard Inger, Stuart Bearhop and  Andrew L Jackson (2016).”,
+        "Predicting trophic enrichment factors using Bayesian inference and phylogenetic, ecological and physiological data. FestR: Fractionation estimation using R.",
+        “PeerJ, some issue, some pages.”,
+        "URL.")
 )
