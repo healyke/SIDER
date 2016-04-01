@@ -1,3 +1,81 @@
+<<<<<<< HEAD
+=======
+if( (class(phylogeny) == "phylo") == T){#
+		if(any(phylogeny$tip.label == species) == T){#
+			cat(species, "present in phylogeny")#
+			}#
+			else{cat(species, "not present in phylogeny")}#
+			 }#
+		else {"vv"}
+if( (class(phylogeny) == "multiphylo") == T){#
+		if(any(phylogeny[[1]]$tip.label == species) == T){#
+			cat(species, "present in phylogeny")#
+			}#
+			else{cat(species, "not present in phylogeny")}#
+			 }
+if( (class(phylogeny) == "phylo") == T){#
+		if(any(phylogeny[[1]]$tip.label == species) == T){#
+			cat(species, "present in phylogeny")#
+			}#
+			else{cat(species, "not present in phylogeny")}#
+			 }
+combined_trees<-rTreeBind(x=mammal_trees, y=bird_trees, sample=2, root.age=250)
+combined_trees
+class(combined_trees)
+phylogeny[[1]]$tip.label
+phylogeny <- combined_trees
+phylogeny[[1]]$tip.label
+check if the species is in the phylogeny#
+	if( (class(phylogeny) == "phylo") == T){#
+		if(any(phylogeny$tip.label == species) == T){#
+			cat(species, "present in phylogeny")#
+			}#
+			else{cat(species, "not present in phylogeny")}#
+			 }#
+		else {#
+				if( (class(phylogeny) == "multiPhylo") == T){#
+		if(any(phylogeny[[1]]$tip.label == species) == T){#
+			cat(species, "present in phylogeny")#
+			}#
+			else{cat(species, "not present in phylogeny")}#
+			 }}
+check if the species is in the phylogeny#
+	if( (class(phylogeny) == "phylo") == T){#
+		if(any(phylogeny$tip.label == species) == T){#
+			cat(species, "present in phylogeny")#
+			}#
+			else{cat(species, "not present in phylogeny")}#
+			 }#
+		else {#
+				if( (class(phylogeny) == "multiPhylo") == T){#
+		if(any(phylogeny[[1]]$tip.label == species) == T){#
+			cat(species, "present in phylogeny")#
+			}#
+			else{cat(species, "not present in phylogeny")}#
+			 }}	if( ){#
+		if(){#
+			}#
+			else{}#
+			 }#
+		else {#
+				if(){#
+		if(){			}#
+			else{}#
+			 }#
+			 }
+if( ){#
+		if(){#
+			}#
+			else{}#
+			 }#
+		else {#
+				if(){#
+		if(){			}#
+			else{}#
+			 }#
+			 }
+if( )
+>>>>>>> andrew-tidying
 if( ){}
 {cat(species, "not present in phylogeny")
 }
@@ -984,6 +1062,7 @@ tef_Liabs[[i]] <-	(tef_Liabs_raw[[i]][,1])#
 tef_global  <- as.mcmc(unlist(tef_Liabs))#
 return(list(tef_estimates = tef_Liabs, tef_global = tef_global))#
 }
+<<<<<<< HEAD
 #library(MCMCglmm)#
 #library(modeest)#
 #library(caper)#
@@ -1025,3 +1104,8 @@ tef_data_badger.c <- tef.mul.clean(new.data = new_data_test, data = data, specie
 # TG: That should work now!
 new_data_test
 tef_data_badger.c <- tef.mul.clean(new.data = new_data_test, data = data, species_col_name = "species", trees =  combined_trees, class = "mammalia", isotope = "carbon" )
+=======
+load("/Users/kevinhealy/Desktop/Enrichment_factors/FestR/mulTree.out_tree1_chain2.rda")
+library(MCMCglmm)
+summary(model)
+>>>>>>> andrew-tidying

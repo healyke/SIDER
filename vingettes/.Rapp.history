@@ -1,0 +1,594 @@
+load("/Users/kevinhealy/Desktop/Enrichment_factors/FestR/teff_output_tree1_chain1.rda")
+summary(model)
+library(FestR)#
+if(!require(devtools)) install.packages("devtools")#
+install_github("TGuillerme/mulTree", ref = "clunky-mulTree")#
+library(mulTree)
+#read in the data#
+mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),#
+                 header=T, stringsAsFactors = F)#
+#
+# re-order it into species#
+mydata <- mydata[order(mydata$species),]
+#read in the two trees#
+# These two are the original as bundled with FestR#
+mammal_trees <- read.tree(system.file("extdata", "3firstFritzTrees.tre", package = "FestR"))#
+bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package = "FestR"))#
+#
+# TG: I just created a subsample of the BIG trees (all sp) to make it faster#
+#combine them together#
+combined_trees <- rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)#
+#
+# Select the species and tissue type to be estimated using FestR. #
+# This function also checks that the species is in the tree.#
+new_data_test <- setTefEst(species = "Meles_meles", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "mammalia", #
+                           tissue = "blood", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.1), #
+                           source.iso.15N = c(7.0), #
+                           phylogeny = combined_trees )#
+# Matches the t
+tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon")
+class(tef_data_badger.c)
+formula.c <- delta13C ~ diet.type + habitat#
+#
+# Run the model that performs imputation as part of model fitting.#
+Tef_est <- tefMcmcglmm(mulTree.data = tef_data_badger.c, formula = formula.c)
+##this is only required while Thomas updates his Multree code#
+library(FestR)#
+if(!require(devtools)) install.packages("devtools")#
+install_github("TGuillerme/mulTree", ref = "clunky-mulTree")#
+library(mulTree)#
+#read in the data#
+mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),#
+                 header=T, stringsAsFactors = F)#
+#
+# re-order it into species#
+mydata <- mydata[order(mydata$species),]#
+#
+# ----------------------------------------------------------------#
+#read in the two trees#
+# These two are the original as bundled with FestR#
+mammal_trees <- read.tree(system.file("extdata", "3firstFritzTrees.tre", package = "FestR"))#
+bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package = "FestR"))#
+#
+# TG: I just created a subsample of the BIG trees (all sp) to make it faster#
+#combine them together#
+combined_trees <- rTreeBind(x = mammal_trees, y = bird_trees, sample = 1, root.age = 250)
+# Select the species and tissue type to be estimated using FestR. #
+# This function also checks that the species is in the tree.#
+new_data_test <- setTefEst(species = "Meles_meles", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "mammalia", #
+                           tissue = "blood", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.1), #
+                           source.iso.15N = c(7.0), #
+                           phylogeny = combined_trees )#
+# Matches the tree to the data, and prunes the tree of species for which we dont#
+# have isotope or other data,  removes the unecessary isotope, and removes data #
+# for which we dont have phylogenetic data.#
+# It returns a mulTree class object which is required by the imputation #
+# algorithm.#
+tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon")#
+#
+# define the model to be used for prediction#
+formula.c <- delta13C ~ diet.type + habitat#
+#
+# Run the model that performs imputation as part of model fitting.#
+Tef_est <- tefMcmcglmm(mulTree.data = tef_data_badger.c, formula = formula.c)#
+#
+# Plot the aggregated posteriors of the estimated TEF from all chains,#
+# as a MCMC line trace (left panel) and as a posterior density kernel #
+# (right panel)#
+plot(Tef_est$tef_global)
+? tefMcmcglmm
+120000-20000
+(120000-20000)/50
+?tefMulClean
+getwd()
+# Test document. To be used as an example etc.#
+#
+##this is only required while Thomas updates his Multree code#
+library(FestR)#
+if(!require(devtools)) install.packages("devtools")#
+install_github("TGuillerme/mulTree", ref = "clunky-mulTree")#
+library(mulTree)#
+#read in the data#
+mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),#
+                 header=T, stringsAsFactors = F)#
+#
+# re-order it into species#
+mydata <- mydata[order(mydata$species),]#
+#
+# ----------------------------------------------------------------#
+#read in the two trees#
+# These two are the original as bundled with FestR#
+mammal_trees <- read.tree(system.file("extdata", "3firstFritzTrees.tre", package = "FestR"))#
+bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package = "FestR"))#
+#
+# TG: I just created a subsample of the BIG trees (all sp) to make it faster#
+#combine them together#
+combined_trees <- rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)#
+#
+# Select the species and tissue type to be estimated using FestR. #
+# This function also checks that the species is in the tree.#
+new_data_test <- setTefEst(species = "Meles_meles", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "mammalia", #
+                           tissue = "blood", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.1), #
+                           source.iso.15N = c(7.0), #
+                           phylogeny = combined_trees )#
+# Matches the tree to the data, and prunes the tree of species for which we dont#
+# have isotope or other data,  removes the unecessary isotope, and removes data #
+# for which we dont have phylogenetic data.#
+# It returns a mulTree class object which is required by the imputation #
+# algorithm.#
+tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon")#
+#
+# define the model to be used for prediction#
+formula.c <- delta13C ~ diet.type + habitat#
+#
+# Run the model that performs imputation as part of model fitting.#
+Tef_est <- tefMcmcglmm(mulTree.data = tef_data_badger.c, formula = formula.c)#
+#
+# Plot the aggregated posteriors of the estimated TEF from all chains,#
+# as a MCMC line trace (left panel) and as a posterior density kernel #
+# (right panel)#
+plot(Tef_est$tef_global)
+new_data_test <- setTefEst(species = "Nestor_notabilis", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "aves", #
+                           tissue = "feather", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.83), #
+                           source.iso.15N = c(3.97), #
+                           phylogeny = combined_trees)
+tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon")
+formula.c <- delta13C ~ diet.type + habitat
+Tef_est <- tefMcmcglmm(mulTree.data = tef_data_badger.c, formula = formula.c)
+mean()
+mean(Tef_est$tef_global)
+formula.c <- delta13C ~ source.iso.13C + diet.type + habitat
+Tef_est <- tefMcmcglmm(mulTree.data = tef_data_badger.c, formula = formula.c)
+mean(Tef_est$tef_global)
+##this is only required while Thomas updates his Multree code#
+library(FestR)#
+if(!require(devtools)) install.packages("devtools")#
+install_github("TGuillerme/mulTree", ref = "clunky-mulTree")#
+library(mulTree)#
+#read in the data#
+mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),#
+                 header=T, stringsAsFactors = F)#
+#
+# re-order it into species#
+mydata <- mydata[order(mydata$species),]#
+#
+# ----------------------------------------------------------------#
+#read in the two trees#
+# These two are the original as bundled with FestR#
+mammal_trees <- read.tree(system.file("extdata", "3firstFritzTrees.tre", package = "FestR"))#
+bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package = "FestR"))#
+#
+# TG: I just created a subsample of the BIG trees (all sp) to make it faster#
+#combine them together#
+combined_trees <- rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)#
+#
+# Select the species and tissue type to be estimated using FestR. #
+# This function also checks that the species is in the tree.#
+##use example of kea parrot Greer et al 2015. Methods in Ecology and Evolution.#
+new_data_test <- setTefEst(species = "Nestor_notabilis", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "aves", #
+                           tissue = "feather", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.83), #
+                           source.iso.15N = c(3.97), #
+                           phylogeny = combined_trees)#
+# Matches the tree to the data, and prunes the tree of species for which we dont#
+# have isotope or other data,  removes the unecessary isotope, and removes data #
+# for which we dont have phylogenetic data.#
+# It returns a mulTree class object which is required by the imputation #
+# algorithm.#
+tef_data_badger.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon")
+formula.c <- delta13C ~ source.iso.13C + diet.type + habitat#
+#
+# Run the model that performs imputation as part of model fitting.#
+Tef_est <- tefMcmcglmm(mulTree.data = tef_data_badger.c, formula = formula.c)
+median(Tef_est$tef_global)
+mean(Tef_est$tef_global)
+tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "carbon")
+formula.c <- delta13C ~ source.iso.13C + diet.type + habitat
+Tef_est <- tefMcmcglmm(mulTree.data = tef_data_kea.c, formula = formula.c)
+median(Tef_est$tef_global)
+tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "nitrogen")
+new_data_test <- setTefEst(species = "Nestor_notabilis", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "aves", #
+                           tissue = "feather", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.83), #
+                           source.iso.15N = c(3.97), #
+                           phylogeny = combined_trees)
+tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "nitrogen")
+new_data_test
+tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "carbon")
+tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "nitrogen")
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% #
+						c("source.iso.13C","delta_13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+isotope <- "nitrogen"
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% #
+						c("source.iso.13C","delta_13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+new.data = new.data_kea.c#
+data = mydata#
+species_col_name = "species"#
+trees =  combined_trees#
+taxonomic.class = "aves"#
+isotope = "nitrogen"
+if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]#
+	} else {#
+		if((taxonomic.class == "aves") == T){ iso_data_class <- data[data$taxonomic.class == "aves",]#
+		}#
+		else{ iso_data_class <- data}#
+	}
+iso_data_class
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% #
+						c("source.iso.13C","delta_13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% c("source.iso.13C","delta_13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+dropC <- names(data) %in% c("source.iso.13C","delta13C")
+dropC
+iso_data_class  <- iso_data_class[!dropC]
+head(iso_data_class)
+#####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.#
+#
+	if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]#
+	} else {#
+		if((taxonomic.class == "aves") == T){ iso_data_class <- data[data$taxonomic.class == "aves",]#
+		}#
+		else{ iso_data_class <- data}#
+	}
+head(iso_data_class)
+dropC <- names(data) %in% c("source.iso.13C","delta13C")
+iso_data_class  <- iso_data_class[!dropC]
+iso_data_class
+dropnewC <- names(new.data) %in% c("source.iso.13C","delta_13C")
+new.data = new.data_kea.c
+new_data <- setTefEst(species = "Nestor_notabilis", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "aves", #
+                           tissue = "feather", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.83), #
+                           source.iso.15N = c(3.97), #
+                           phylogeny = combined_trees)
+new_data
+dropnewC <- names(new.data) %in% c("source.iso.13C","delta_13C")
+dropnewC <- names(new_data) %in% c("source.iso.13C","delta_13C")
+dropnewC
+new.data_sub  <- new_data[!dropnewC]
+new.data_sub
+#####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.#
+#
+	if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]#
+	} else {#
+		if((taxonomic.class == "aves") == T){ iso_data_class <- data[data$taxonomic.class == "aves",]#
+		}#
+		else{ iso_data_class <- data}#
+	}#
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% c("source.iso.13C","delta13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+new.data = new.data_kea.c#
+data = mydata#
+species_col_name = "species"#
+trees =  combined_trees#
+taxonomic.class = "aves"#
+isotope = "nitrogen"
+#####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.#
+#
+	if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]#
+	} else {#
+		if((taxonomic.class == "aves") == T){ iso_data_class <- data[data$taxonomic.class == "aves",]#
+		}#
+		else{ iso_data_class <- data}#
+	}#
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% c("source.iso.13C","delta13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+new.data = new.data_kea.c#
+data = mydata#
+species_col_name = "species"#
+trees =  combined_trees#
+taxonomic.class = "aves"#
+isotope = "nitrogen"
+new_data <- setTefEst(species = "Nestor_notabilis", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "aves", #
+                           tissue = "feather", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.83), #
+                           source.iso.15N = c(3.97), #
+                           phylogeny = combined_trees)
+#####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.#
+#
+	if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]#
+	} else {#
+		if((taxonomic.class == "aves") == T){ iso_data_class <- data[data$taxonomic.class == "aves",]#
+		}#
+		else{ iso_data_class <- data}#
+	}#
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% c("source.iso.13C","delta13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+new.data <- setTefEst(species = "Nestor_notabilis", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "aves", #
+                           tissue = "feather", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.83), #
+                           source.iso.15N = c(3.97), #
+                           phylogeny = combined_trees)
+#####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.#
+#
+	if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]#
+	} else {#
+		if((taxonomic.class == "aves") == T){ iso_data_class <- data[data$taxonomic.class == "aves",]#
+		}#
+		else{ iso_data_class <- data}#
+	}#
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% c("source.iso.13C","delta13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+##this is only required while Thomas updates his Multree code#
+library(FestR)#
+if(!require(devtools)) install.packages("devtools")#
+install_github("TGuillerme/mulTree", ref = "clunky-mulTree")#
+library(mulTree)#
+#read in the data#
+mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),#
+                 header=T, stringsAsFactors = F)#
+#
+# re-order it into species#
+mydata <- mydata[order(mydata$species),]#
+#
+# ----------------------------------------------------------------#
+#read in the two trees#
+# These two are the original as bundled with FestR#
+mammal_trees <- read.tree(system.file("extdata", "3firstFritzTrees.tre", package = "FestR"))#
+bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package = "FestR"))#
+#
+# TG: I just created a subsample of the BIG trees (all sp) to make it faster#
+#combine them together#
+combined_trees <- rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)#
+#
+# Select the species and tissue type to be estimated using FestR. #
+# This function also checks that the species is in the tree.#
+##use example of kea parrot Greer et al 2015. Methods in Ecology and Evolution.#
+new_data_test <- setTefEst(species = "Nestor_notabilis", #
+                           habitat = "terrestrial", #
+                           taxonomic.class = "aves", #
+                           tissue = "feather", #
+                           diet.type = "omnivore", #
+                           source.iso.13C = c(-24.83), #
+                           source.iso.15N = c(3.97), #
+                           phylogeny = combined_trees)
+tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "carbon")
+tef_data_kea.n <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", trees =  combined_trees, taxonomic.class = "aves", isotope = "nitrogen")
+new.data = new_data_test
+new.data = new_data_kea.c#
+data = mydata#
+species_col_name = "species"#
+trees =  combined_trees#
+taxonomic.class = "mammalia"#
+isotope = "carbon"
+new.data = new_data_test
+if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]#
+	} else {#
+		if((taxonomic.class == "aves") == T){ iso_data_class <- data[data$taxonomic.class == "aves",]#
+		}#
+		else{ iso_data_class <- data}#
+	}
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% c("source.iso.13C","delta13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+########get rid on NAs so that the only NAs are for the new data#
+#
+		iso_data_sub_na <-  na.omit(iso_data_class)#
+#
+######## Include the new data, I bind it so its at the top and hence easier to read.#
+	if(is.null(new.data) == T){#
+		iso_data_com <- iso_data_sub_na#
+	} else{ #
+			iso_data_com  <- rbind(new.data_sub , iso_data_sub_na)#
+		}
+#####this needs to be fixed so that it actually removes the dataset.#
+#
+			clean_iso <-	as.mulTree(species = species_col_name, data = iso_data_com, trees = trees, clean.data = TRUE)#
+		##this was there to make it work with only one tree should be good now.#
+		#clean_iso <- clean.data(species_col_name, iso_data_com, trees)#
+#####fix that random term by checking if any of the random terms are the same as the species colume and replacing that with sp.col as the Multre function does#
+#		if(any(grep(species_col_name ,random)) == TRUE){#
+#			clean_iso$random.terms <-as.formula( gsub("species","sp.col", random))#
+#			} else{ clean_iso$random.terms <-as.formula( random)	#
+#			}
+clean_iso
+isotope = "nitrogen"
+new.data = new_data_kea.c#
+data = mydata#
+species_col_name = "species"#
+trees =  combined_trees#
+taxonomic.class = "mammalia"#
+isotope = "nitrogen"
+new.data
+if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]#
+	} else {#
+		if((taxonomic.class == "aves") == T){ iso_data_class <- data[data$taxonomic.class == "aves",]#
+		}#
+		else{ iso_data_class <- data}#
+	}
+#####decide on the isotope####
+  ## AJ - the column names in these dataset are a mess!!#
+	if((isotope == "carbon") == T){#
+		dropN <- names(data) %in% c("source.iso.15N","delta15N")#
+		iso_data_class  <- iso_data_class[!dropN]#
+				dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")#
+		new.data_sub  <- new.data[!dropnewN]#
+	} else{ #
+		if((isotope == "nitrogen") == T){#
+			dropC <- names(data) %in% c("source.iso.13C","delta13C")#
+			iso_data_class  <- iso_data_class[!dropC]#
+						dropnewC <- names(new.data) %in% c("source.iso.13C","delta13C")#
+		new.data_sub  <- new.data[!dropnewC]#
+			}#
+		}
+new.data_sub
+########get rid on NAs so that the only NAs are for the new data#
+#
+		iso_data_sub_na <-  na.omit(iso_data_class)#
+#
+######## Include the new data, I bind it so its at the top and hence easier to read.#
+	if(is.null(new.data) == T){#
+		iso_data_com <- iso_data_sub_na#
+	} else{ #
+			iso_data_com  <- rbind(new.data_sub , iso_data_sub_na)#
+		}
+#####this needs to be fixed so that it actually removes the dataset.#
+#
+			clean_iso <-	as.mulTree(species = species_col_name, data = iso_data_com, trees = trees, clean.data = TRUE)#
+		##this was there to make it work with only one tree should be good now.#
+		#clean_iso <- clean.data(species_col_name, iso_data_com, trees)
+clean_iso
+##this is only required while Thomas updates his Multree code#
+library(FestR)#
+if(!require(devtools)) install.packages("devtools")#
+install_github("TGuillerme/mulTree", ref = "clunky-mulTree")#
+library(mulTree)
+load("/Users/kevinhealy/Desktop/Enrichment_factors/FestR/teff_output_tree1_chain1.rda")
+summary(model)
+formula.c <- delta13C ~ source.iso.13C#
+formula.n <- delta15N ~ source.iso.15N
+Tef_est.c <- tefMcmcglmm(mulTree.data = tef_data_kea.c, formula = formula.c, random.terms = random.terms)#
+Tef_est.n <- tefMcmcglmm(mulTree.data = tef_data_kea.n, formula = formula.n, random.terms = random.terms)#
+#
+median(Tef_est.c$tef_global)#
+median(Tef_est.n$tef_global)
