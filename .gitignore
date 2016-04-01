@@ -1,2 +1,4 @@
 *.Rapp.history
 *.Rhistory
+*.doc*
+*.docx
