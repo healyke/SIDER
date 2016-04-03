@@ -1,21 +1,22 @@
-#' Specify the observation to be imputed.
+#' @title Specifying observations to be imputed.
+#' 
+#' @description Specifies which observation to impute. 
 #' 
 #' @param species a binomial species name as a character string.
-#' @param habitat a character string of either "marine" or "terrestrial"
-#' @param taxonomic.class the class of species as a character string, either "mammalia" or
-#'   "aves"
-#' @param tissue the tissue type as a character string taking one of
-#'   \code{c("blood", "claws", "collagen", "ceather", "hair", "kidney", "liver",
-#'   "milk", "muscle")}
-#' @param diet.type the diet type as a character string taking one of
-#'   \code{c("carnivore", "herbivore", "omnivore",  "pellet")}
-#' @param iso_13C source carbon isotopic value is available numeric
-#' @param iso_15N source nitrogen isotopic value is available numeric
-#' @param phylogeny The full phylogenetic tree or set of trees as a
-#'   (multi-)phylo object.
+#' @param habitat a character string of either \code{"marine"} or \code{"terrestrial"}.
+#' @param taxonomic.class the class of species as a character string, either \code{"mammalia"} or \code{"aves"}.
+#' @param tissue the tissue type. Can be one of the following: \code{c("blood", "claws", "collagen", "ceather", "hair", "kidney", "liver", "milk", "muscle")}.
+#' @param diet.type the diet type. Can be one of the following: \code{c("carnivore", "herbivore", "omnivore",  "pellet")}.
+#' @param source.iso.13C the source carbon isotopic value (must be \code{numeric}).
+#' @param source.iso.15N the source nitrogen isotopic value (must be \code{numeric}).
+#' @param tree a \code{phylo} or \code{multiPhylo} object.
 #'   
-#' @return A dataframe object of row length 1 comprising a checked species for
-#'   imputation.
+#' @return A \code{data.frame} object with one row being a checked species for imputation.
+#' 
+#' @author Kevin Healy
+#' 
+#' @example
+#' ##
 #'   
 #' @export
 
@@ -32,7 +33,7 @@ setTefEst <- function(species = c(),
                                     "omnivore",  "pellet", NA), 
                       source.iso.13C = c(), 
                       source.iso.15N = c(), 
-                      phylogeny = c()){
+                      tree = c()){
 	
 
 
@@ -80,12 +81,12 @@ if(is.null(source.iso.13C)|is.null(source.iso.15N) == TRUE){
 				
 	
 ###check if there is a tree and what type of tree it is
-if(is.null(phylogeny) == TRUE){	 
+if(is.null(tree) == TRUE){	 
 	cat("phylo missing: species presence in phylogeny not checked")
-}	else if((class(phylogeny) == "multiPhylo") == TRUE){
-	phylo_test <- phylogeny[[1]]
-}		else if((class(phylogeny) == "phylo") == TRUE){
-	phylo_test <- phylogeny
+}	else if((class(tree) == "multiPhylo") == TRUE){
+	phylo_test <- tree[[1]]
+}		else if((class(tree) == "phylo") == TRUE){
+	phylo_test <- tree
 }	else{cat("phylo not a phlyo or multiPhylo object: species presence in 
 	           phylogeny not checked")}	
 	

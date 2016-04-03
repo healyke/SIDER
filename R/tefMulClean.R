@@ -1,31 +1,37 @@
-#' Matches phylogenies to data and creates multree object.
-#' @param new.data data for species to be imputed see setTefEst
-#' @param species_col_name name of column contining binomial species names
-#' @param trees phylogeny of phylo/multiphylo class
-#' @param isotope for which discrimination factor is to be imputed
-#' @param taxonomic.class the class of species as a character string, either 
-#' "mammalia" or "aves"
-#' @param random.terms an object of class "formula" decribing the random effects.
-
-#' @return multree object
-#' @param phy phylogeny of phylo/multiphylo class matching data
-#' @param data data.frame object matching phylogeny
+#' @title Matching phylogenies and data frames
+#' 
+#' @description Matches phylogenies and data into a \code{mulTree} object.
+#' 
+#' @param new.data data for species to be imputed (see \code{\link{setTefEst}}).
+#' @param data a \code{data.frame} object matching phylogeny.
+#' @param species.col.name name of column containing binomial species names.
+#' @param tree a \code{phylo} or \code{multiPhylo} object.
+#' @param isotope the isotope for which discrimination factor is to be imputed, either \code{"carbon"} or \code{"nitrogen"}.
+#' @param taxonomic.class the class of species as a character string, either \code{"mammalia"} or \code{"aves"}.
+#' @param random.terms an object of class \code{formula} describing the random effects.
 #'
+#' @return A \code{mulTree} object.
+#'
+#' @example
+#' ##
+#' 
+#' @authors Kevin Healy
+#' 
 #' @export
 	
 tefMulClean <- function(new.data = c(), 
                         data = data, 
-                        species_col_name = c("species"), 
-                        trees, 
+                        species.col.name = c("species"), 
+                        tree, 
                         isotope = c("carbon","nitrogen"), 
                         taxonomic.class =  c("mammalia","aves") , 
-                        random = ~ animal + species + tissue) {
+                        random.terms = ~ animal + species + tissue) {
 		
 
 #new.data = new_data_test
 #data = mydata
-#species_col_name = "species"
-#trees =  combined_trees
+#species.col.name = "species"
+#tree =  combined_tree
 #taxonomic.class = "mammalia"
 #isotope = "carbon"
 
@@ -83,15 +89,15 @@ tefMulClean <- function(new.data = c(),
 
 #####this needs to be fixed so that it actually removes the dataset.
 
-			clean_iso <-	as.mulTree(taxa = species_col_name, data = iso_data_com, tree = trees, clean.data = TRUE)
+			clean_iso <-	as.mulTree(taxa = species.col.name, data = iso_data_com, tree = tree, clean.data = TRUE)
 		
 		##this was there to make it work with only one tree should be good now.
-		#clean_iso <- clean.data(species_col_name, iso_data_com, trees, rand.terms)
+		#clean_iso <- clean.data(species.col.name, iso_data_com, tree, rand.terms)
 	
 		
 		
 #####fix that random term by checking if any of the random terms are the same as the species colume and replacing that with sp.col as the Multre function does
-#		if(any(grep(species_col_name ,random)) == TRUE){
+#		if(any(grep(species.col.name ,random)) == TRUE){
 #			clean_iso$random.terms <-as.formula( gsub("species","sp.col", random))
 #			} else{ clean_iso$random.terms <-as.formula( random)	
 #			}
