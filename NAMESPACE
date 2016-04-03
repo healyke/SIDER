@@ -3,3 +3,5 @@
 export(setTefEst)
 export(tefMcmcglmm)
 export(tefMulClean)
+import(ape)
+import(mulTree)
