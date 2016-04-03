@@ -36,7 +36,7 @@ tefMulClean <- function(new.data = c(),
 #isotope = "carbon"
 
 		
-#####decide on which class##### I think this will be a good thing to include as it will edge people towards an approapriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.
+#####decide on which class##### I think this will be a good thing to include as it will edge people towards an appropriate analysis (i.e. avoid the fact that feathers and hair will already divide the data into these groups but in a less interpreatable way) #need to fix this to be open.
 
 	if((taxonomic.class== "mammalia") == T){ iso_data_class <- data[data$taxonomic.class == "mammalia",]
 	} else {
