@@ -1,0 +1,17 @@
+{
+    "contents" : "---\ntitle: \"Introduction to FestR\"\nauthor: \"Andrew L Jackson\"\ndate: \"22 December 2015\"\noutput: html_document\n---\n\nRun the example for FestR. **_Vignette to be finished!!_**\n\n## Install mulTree package if required\n\n```{r}\n# Install devtools if required\n#install.packages(\"devtools\")\n#devtools::install_github(\"TGuillerme/mulTree\", ref=\"release\")\n\nlibrary(FestR)\nlibrary(mulTree)\n\n```\n\n## Read in the data\n\n```{r}\n\n\n\n#read in the data\nmydata<-read.csv(file=system.file(\"extdata\", \"FestR_data.csv\", package = \"FestR\"),\n header=T, stringsAsFactors = F)\n\n# re-oprder it into species\nmydata <- mydata[order(mydata$species),]\n\n# ----------------------------------------------------------------\n#read in the two trees\nmammal_trees <- read.tree(system.file(\"extdata\", \"3firstFritzTrees.tre\", package = \"FestR\"))\nbird_trees   <- read.tree(system.file(\"extdata\", \"3firstJetzTrees.tre\", package = \"FestR\"))\n\n# TG: I just created a subsample of the BIG trees (all sp) to make it faster\n#combine them together\ncombined_trees<-rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)\n\n\n```\n\n## Process the data\n\n```{r}\n#####function that checks the dat for some species we want to estimate TEF for\nnew_data_test <- setTefEst(species = \"Meles_meles\", \n                             habitat = \"terrestrial\", \n                             Class = \"mammalia\", \n                             tissue = \"blood\", \n                             diet_type = \"omnivore\", \n                             iso_13C = c(-24.1), \n                             iso_15N = c(7.0), \n                             phylogeny = combined_trees )\n\n\n# There is a bug in this!\n# tef_data_badger.c <- tefMulClean(new.data = new_data_test, \n#                                    data = mydata, \n#                                    species_col_name = \"species\", \n#                                    trees =  combined_trees, \n#                                    class = \"mammalia\", \n#                                    isotope = \"carbon\" )\n\n\n\n```\n",
+    "created" : 1459510922066.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3922502351",
+    "id" : "D04EB076",
+    "lastKnownWriteTime" : 1459508626,
+    "path" : "~/Desktop/Enrichment_factors/FestR/vingettes/Introduction-to-FestR.Rmd",
+    "project_path" : "vingettes/Introduction-to-FestR.Rmd",
+    "properties" : {
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "type" : "r_markdown"
+}
