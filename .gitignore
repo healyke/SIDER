@@ -2,3 +2,4 @@
 *.Rhistory
 *.doc*
 *.docx
+.Rproj.user
