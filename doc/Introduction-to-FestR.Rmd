@@ -1,29 +1,36 @@
 ---
 title: "Introduction to FestR"
-author: "Andrew L Jackson"
-date: "22 December 2015"
-output: html_document
+author: "Kevin Healy, Thomas Guillerme & Andrew L Jackson"
+date: "6 April 2016"
+output: pdf_document
 ---
 
-Run the example for FestR. **_Vignette to be finished!!_**
 
-## Install mulTree package if required
+This package is based on the \href{http://cran.r-project.org/web/packages/MCMCglmm/index.html}{\texttt{MCMCglmm} package} and runs a MCMCglmm analysis on multiple trees using the
+\href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package}.
 
-```{r}
-# Install devtools if required
-#install.packages("devtools")
-#devtools::install_github("TGuillerme/mulTree", ref="release")
+\section{Installation}
+To install \texttt{FestR} its dependancy \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
 
-library(FestR)
+```{r install_mulTree, results="hide", message=FALSE}
+if(!require(devtools)) install.packages("devtools")
+install_github("TGuillerme/mulTree", ref = "master")
+```
+
+
+Follwong this you can then install \texttt{FestR} directly from GitHub using the following:
+```{r install_FestR, results="hide", message=FALSE}
+install_github("healyke/FestR", ref = "master")
+```
+
+And load in the data
+```{r load_pakages, results="hide", message=FALSE, warning=FALSE}
 library(mulTree)
-
+library(FestR)
 ```
 
 ## Read in the data
-
 ```{r}
-
-
 
 #read in the data
 mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),
@@ -32,40 +39,68 @@ mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"
 # re-oprder it into species
 mydata <- mydata[order(mydata$species),]
 
-# ----------------------------------------------------------------
-#read in the two trees
+#read in the phylogentic information
+#first the mammal trees
 mammal_trees <- read.tree(system.file("extdata", "3firstFritzTrees.tre", package = "FestR"))
+#than the bird trees
 bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package = "FestR"))
 
-# TG: I just created a subsample of the BIG trees (all sp) to make it faster
-#combine them together
-combined_trees<-rTreeBind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)
-
-
+#combine them together using the tree.bind function from the mulTree package
+combined_trees<-tree.bind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)
 ```
 
-## Process the data
+\subsection{Testing the new data: \texttt{set.tef.est}}
+In order to estimate a trophic enrichment factor for a new species we need to 
+check that the species is already present in our phylogeny and check what data is available
+for the new species.
 
+This data set.tef.est checks for includes:
+
+tissue type ("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle"), 
+
+habitat ("terrestial", "marine"), 
+
+diet.type ("carnivore", "herbivore", "omnivore", "pellet"), 
+
+and the isotopic ratios of the food sources for carbon 
+
+(source.iso.13C) 
+
+and nitrogen 
+
+(source.iso.15N).
 ```{r}
 #####function that checks the dat for some species we want to estimate TEF for
-new_data_test <- setTefEst(species = "Meles_meles", 
+new.data.test <- setTefEst(species = "Meles_meles", 
                              habitat = "terrestrial", 
-                             Class = "mammalia", 
+                             taxonomic.class = "mammalia", 
                              tissue = "blood", 
-                             diet_type = "omnivore", 
-                             iso_13C = c(-24.1), 
-                             iso_15N = c(7.0), 
-                             phylogeny = combined_trees )
-
-
-# There is a bug in this!
-# tef_data_badger.c <- tefMulClean(new.data = new_data_test, 
-#                                    data = mydata, 
-#                                    species_col_name = "species", 
-#                                    trees =  combined_trees, 
-#                                    class = "mammalia", 
-#                                    isotope = "carbon" )
-
-
-
+                             diet.type = "omnivore", 
+                             source.iso.13C = c(-24.1), 
+                             source.iso.15N = c(7.0), 
+                             tree = combined_trees)
 ```
+
+If the species is not in the phylogeny already such as the Komodo dragon (Varanus komodoensis), or we are missing on of the values, in this case diet.type we get warning messages to indicate what is missing from our data.
+```{r, echo=FALSE}
+#####function that checks the dat for some species we want to estimate TEF for
+new.data.dummy <- setTefEst(species = "Varanus_komodoensis", 
+                             habitat = "terrestrial", 
+                             taxonomic.class = "mammalia", 
+                             tissue = "blood", 
+                             diet.type = "omnivore", 
+                             source.iso.13C = c(-24.1), 
+                             source.iso.15N = c(7.0), 
+                             tree = combined_trees)
+```
+
+Note that future veriosn of FestR will allow the analysis to be run with missing data for isotopic ratio, diet.type and habitat. 
+
+
+\subsection{Formating the new data: \texttt{tef.mul.clean}}
+We now need to format the data by combining both the isotpic data already avialbe within the package and the data from the new species and matching these species to the included phylogeny. We also include what isotope we want to estimate a trophic discrimination value for (either "carbon" or "nitrogen").
+
+```{r, echo=FALSE}
+tef_data_c <- tefMulClean(new.data = new.data.test, data = mydata, species.col.name = "species", tree =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon" )
+```
+
