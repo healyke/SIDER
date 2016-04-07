@@ -44,9 +44,9 @@ new_data_test <- setTefEst(species = "Nestor_notabilis",
 # for which we dont have phylogenetic data.
 # It returns a mulTree class object which is required by the imputation 
 # algorithm.
-tef_data_kea.c <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", 
+tef_data_kea.c <- tefMulClean(new.data = new.data.test, data = mydata, species.col.name = "species", 
 							  trees =  combined_trees, taxonomic.class = "aves", isotope = "carbon")
-tef_data_kea.n <- tefMulClean(new.data = new_data_test, data = mydata, species_col_name = "species", 
+tef_data_kea.n <- tefMulClean(new.data = new.data.test, data = mydata, species.col.name = "species", 
 							  trees =  combined_trees, taxonomic.class = "aves", isotope = "nitrogen")
 
 # define the model to be used for prediction
