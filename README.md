@@ -15,7 +15,7 @@ library(FestR)
 ```
 
 #### Vignettes
-*  The package manual 
+*  The package manual is abvailable [here in .Rmd](https://github.com/healyke/FestR/blob/master/vingettes/Introduction-to-FestR.Rmd) and [here in .pdf](https://github.com/healyke/FestR/blob/master/vingettes/Introduction-to-FestR.pdf)
 
 
 Authors
