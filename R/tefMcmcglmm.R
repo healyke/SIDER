@@ -65,7 +65,7 @@ mulTree.data$random.terms = random.terms
 
 #if((class(mulTree.data$phy) == "multiPhylo") == TRUE){
 	
-		mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=TRUE, prior = prior_tef, chains = no.chains, convergence = convergence, ESS = ESS, output= output )
+		mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=TRUE, prior = prior, chains = no.chains, convergence = convergence, ESS = ESS, output= output )
 				
 	#na.row <-  which(row(is.na(data)) == T)[1]
 

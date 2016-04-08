@@ -1,16 +1,16 @@
 ---
-title: "Introduction to FestR"
+title: "FestR: Trophic Discrimination Factor estimation in R"
 author: "Kevin Healy, Thomas Guillerme & Andrew L Jackson"
-date: "6 April 2016"
+date: "8 April 2016"
 output: pdf_document
 ---
 
 
-This package is based on the \href{http://cran.r-project.org/web/packages/MCMCglmm/index.html}{\texttt{MCMCglmm} package} and runs a MCMCglmm analysis on multiple trees using the
+This package estimates Trophic Discrimination Factors (TDF) based on the imputation function within the \href{http://cran.r-project.org/web/packages/MCMCglmm/index.html}{\texttt{MCMCglmm} package} and includes the error associated with building phylogenetic  trees using the
 \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package}.
 
 \section{Installation}
-To install \texttt{FestR} its dependancy \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
+To install \texttt{FestR} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
 
 ```{r install_mulTree, results="hide", message=FALSE}
 if(!require(devtools)) install.packages("devtools")
@@ -18,7 +18,7 @@ install_github("TGuillerme/mulTree", ref = "master")
 ```
 
 
-Follwong this you can then install \texttt{FestR} directly from GitHub using the following:
+Following this you can then install \texttt{FestR} directly from GitHub using the following:
 ```{r install_FestR, results="hide", message=FALSE}
 install_github("healyke/FestR", ref = "master")
 ```
@@ -33,13 +33,12 @@ library(FestR)
 ```{r}
 
 #read in the data
-mydata<-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),
+festR.data <-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),
  header=T, stringsAsFactors = F)
 
-# re-oprder it into species
-mydata <- mydata[order(mydata$species),]
+head(festR.data)
 
-#read in the phylogentic information
+#read in the phylogenetic information
 #first the mammal trees
 mammal_trees <- read.tree(system.file("extdata", "3firstFritzTrees.tre", package = "FestR"))
 #than the bird trees
@@ -48,27 +47,18 @@ bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package 
 #combine them together using the tree.bind function from the mulTree package
 combined_trees<-tree.bind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)
 ```
+As may we want to include the error associated with building phylogenies into our analysis we take a sample of the possible trees (See \href{http://rspb.royalsocietypublishing.org/content/281/1784/20140298}Healy et al 2014). In this case we combine the mammal and bird phylogenies at a rooted age of 250 mya and take a sample of two possible trees.
+
 
 \subsection{Testing the new data: \texttt{set.tef.est}}
-In order to estimate a trophic enrichment factor for a new species we need to 
-check that the species is already present in our phylogeny and check what data is available
-for the new species.
+In order to estimate a trophic enrichment factor for a new species we need to check that the species is already present in our phylogeny and check what data is available for the new species.
 
-This data set.tef.est checks for includes:
-
-tissue type ("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle"), 
-
-habitat ("terrestial", "marine"), 
-
-diet.type ("carnivore", "herbivore", "omnivore", "pellet"), 
-
-and the isotopic ratios of the food sources for carbon 
-
-(source.iso.13C) 
-
-and nitrogen 
-
-(source.iso.15N).
+textb{set.tef.est} checks for the presence of the following data:
+\textb{tissue} type ("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle"), 
+\textb{habitat} ("terrestrial", "marine"), 
+\textb{diet.type} ("carnivore", "herbivore", "omnivore", "pellet"), 
+and the isotopic ratios of the food sources for carbon (\textb{source.iso.13C}) 
+and nitrogen (\textb{source.iso.15N}).
 ```{r}
 #####function that checks the dat for some species we want to estimate TEF for
 new.data.test <- setTefEst(species = "Meles_meles", 
@@ -81,13 +71,13 @@ new.data.test <- setTefEst(species = "Meles_meles",
                              tree = combined_trees)
 ```
 
-If the species is not in the phylogeny already such as the Komodo dragon (Varanus komodoensis), or we are missing on of the values, in this case diet.type we get warning messages to indicate what is missing from our data.
+If the species is not in the phylogeny already, such as say the Komodo dragon (Varanus komodoensis), or we are missing values as donated by NA, say tissue type, we get warning messages to indicate what is missing from our data.
 ```{r, echo=FALSE}
 #####function that checks the dat for some species we want to estimate TEF for
 new.data.dummy <- setTefEst(species = "Varanus_komodoensis", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
-                             tissue = "blood", 
+                             tissue = "NA", 
                              diet.type = "omnivore", 
                              source.iso.13C = c(-24.1), 
                              source.iso.15N = c(7.0), 
@@ -95,25 +85,29 @@ new.data.dummy <- setTefEst(species = "Varanus_komodoensis",
 ```
 
 
-\subsection{Formating the new data: \texttt{tef.mul.clean}}
-We now need to format the data by combining both the isotpic data already avialbe within the package and the data from the new species and matching these species to the included phylogeny. We also include what isotope we want to estimate a trophic discrimination value for (either "carbon" or "nitrogen").
+\subsection{Formatting the new data: \texttt{tef.mul.clean}}
+We now need to format the data by combining both the isotopic data already available within the package and the data from the new species and matching these species to the included phylogeny. We also include what isotope we want to estimate a trophic discrimination value for (either "carbon" or "nitrogen").
 
 ```{r}
-tef_data_c <- tefMulClean(new.data = new.data.test, data = mydata, species.col.name = "species", tree =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon" )
+tdf_data_c <- tefMulClean(new.data = new.data.test, data = festR.data, species.col.name = "species", tree =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon" )
 ```
 
-We now have a mulTree class object, which is required by the imputation analysis, that contains the matched phylogeny and a dataset containting isotpic data with the new species for which you want to estimate a trophic enrichment factor at the top with a NA for either delta13C or delta15N depending on isotope.
+We now have a mulTree class object, which is required by the imputation analysis. It contains the matched phylogenies, in this case two phylogenies
 
 ```{r}
-tef_data_c$phy
-head(tef_data_c$data)
+tdf_data_c$phy
 ```
+and a dataset containing TDF and related data with the new species for which you want to estimate a trophic enrichment factor at the top with a NA for either delta13C or delta15N depending on isotope.
+```{r}
+head(tdf_data_c$data)
+```
+
 
 
 \subsection{Running the analysis: \texttt{tef.mul.clean}}
 
-With the data formated as a mulTree object we now need to set up the model. In this case we will run the full model to esstimate delta13C with the fixed factors
-of source isotpic ratio, diet type and habitat type.
+With the data formatted as a mulTree object we now need to set up the model. In this case we will run the full model to estimate delta13C with the fixed factors
+of source isotopic ratio, diet type and habitat type.
 ```{r}
 formula.c <- delta13C ~ source.iso.13C + diet.type + habitat
 ```
@@ -123,32 +117,43 @@ and random terms that includes the "animal" term which is required to include ph
 random.terms = ~ animal + sp.col + tissue
 ```
 
-As we rely on Bayesian imputation to estimate the missing value we also need to speciafy a prior, in this case we follow the standard prior from MCMCglmm
+As we rely on Bayesian imputation to estimate the missing value we also need to specify a prior, in this case we use a non-informative prior as recommended in the \href{guidelines.https://cran.r-project.org/web/packages/MCMCglmm/vignettes/CourseNotes.pdf}{MCMCglmm guidelines}.
 
 ```{r}
 prior_tef <- list(R = list(V = 1/4, nu=0.002), G = list(G1=list(V = 1/4, nu=0.002),
 					G2=list(V = 1/4, nu=0.002), G3=list(V = 1/4, nu=0.002)))
 ```
-
+along with the number of iterations to run the chain (nitt), the burn-in (burnin), the sampling thinning (thin), the number of chains to run (no.chains). (\href{guidelines.https://cran.r-project.org/web/packages/MCMCglmm/vignettes/CourseNotes.pdf}{See MCMCglmm guidelines}.) 
+```{r}
+nitt <- c(1200000)
+burnin <- c(200000)
+thin <- c(500)
+no.chains <- c(2)
+```
+We need to check that our MCMC chains are converging so we use the Gelman and Rubin diagnostic to check the convergence and also check that the estimated parameters have an effective sample size >1000.
+```{r}
+convergence =  c(1.1)
+ESS = c(1000)
+```
 finally we can run the analysis
 ```{r}
-Tef_est.c <- tefMcmcglmm(mulTree.data = tef_data_c, 
+TDF_est.c <- tefMcmcglmm(mulTree.data = tdf_data_c, 
                          formula = formula.c, 
                          random.terms = random.terms, 
                          prior = prior_tef, 
                          output = "test_c_run", 
-                         nitt = c(1200000),  
-                         thin = c(500),
-                         burnin = c(200000), 
-                         no.chains = c(2), 
-                         convergence =  c(1.1), 
-                         ESS = c(1000))
+                         nitt = nitt,  
+                         thin = thin,
+                         burnin = burnin, 
+                         no.chains = no.chains, 
+                         convergence =  convergence, 
+                         ESS = ESS)
 ```
 
-explain what is going on here
 
+The output is the posterior distribution of the estimated TDF. Hence we can now look at a summary of this distribution or plot what it looks like. 
 ```{r}
-hist(Tef_est.c$tef_global)
-median(Tef_est.c$tef_global)
+summary(TDF_est.c$tef_global)
+hist(TDF_est.c$tef_global)
 ```
 
