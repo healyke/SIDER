@@ -1,7 +1,7 @@
 # FestR
-Fractionation estimation in R package
+Trophic Discrimination Factor estimation in R
 
-This package allows users to estimate Fractionation values for stable isotope dietary analysis using Bayesian imputation. 
+This package allows users to estimate Trophic Discrimination Factors (TDF) for species with no current measured TDF values using Bayesian imputation. 
 This package is based on the [MCMCglmm](http://cran.r-project.org/web/packages/MCMCglmm/index.html) package
 and runs a MCMCglmm analysis on multiple trees using [MulTree] (https://github.com/TGuillerme/mulTree)
 
