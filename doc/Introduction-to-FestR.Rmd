@@ -40,9 +40,13 @@ head(festR.data)
 
 #read in the phylogenetic information
 #first the mammal trees
-mammal_trees <- read.tree(system.file("extdata", "3firstFritzTrees.tre", package = "FestR"))
+mammal_trees <- read.tree(system.file("extdata", 
+                                      "3firstFritzTrees.tre", 
+                                      package = "FestR"))
 #than the bird trees
-bird_trees   <- read.tree(system.file("extdata", "3firstJetzTrees.tre", package = "FestR"))
+bird_trees   <- read.tree(system.file("extdata", 
+                                      "3firstJetzTrees.tre", 
+                                      package = "FestR"))
 
 #combine them together using the tree.bind function from the mulTree package
 combined_trees<-tree.bind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)
@@ -89,7 +93,13 @@ new.data.dummy <- setTefEst(species = "Varanus_komodoensis",
 We now need to format the data by combining both the isotopic data already available within the package and the data from the new species and matching these species to the included phylogeny. We also include what isotope we want to estimate a trophic discrimination value for (either "carbon" or "nitrogen").
 
 ```{r}
-tdf_data_c <- tefMulClean(new.data = new.data.test, data = festR.data, species.col.name = "species", tree =  combined_trees, taxonomic.class = "mammalia", isotope = "carbon")
+tdf_data_c <- tefMulClean(new.data = new.data.test, 
+                          data = festR.data, 
+                          species.col.name = "species", 
+                          tree =  
+                          combined_trees, 
+                          taxonomic.class = "mammalia", 
+                          isotope = "carbon")
 ```
 
 We now have a mulTree class object, which is required by the imputation analysis. It contains the matched phylogenies, in this case two phylogenies
@@ -107,9 +117,11 @@ head(tdf_data_c$data)
 
 With the data formatted as a mulTree object we now need to set up the model. In this case we will run the full model to estimate delta13C with the fixed factors
 of source isotopic ratio, diet type and habitat type.
+
 ```{r}
 formula.c <- delta13C ~ source.iso.13C + diet.type + habitat
 ```
+
 and random terms that includes the "animal" term which is required to include phylogeny into the analysis, sp.col to allow multiple species entries into the analysis and account for variation within a species, and tissue type.
 
 ```{r}
@@ -119,8 +131,10 @@ random.terms = ~ animal + sp.col + tissue
 As we rely on Bayesian imputation to estimate the missing value we also need to specify a prior, in this case we use a non-informative prior as recommended in the \href{guidelines.https://cran.r-project.org/web/packages/MCMCglmm/vignettes/CourseNotes.pdf}{MCMCglmm guidelines}.
 
 ```{r}
-prior <- list(R = list(V = 1/4, nu=0.002), G = list(G1=list(V = 1/4, nu=0.002),
-					G2=list(V = 1/4, nu=0.002), G3=list(V = 1/4, nu=0.002)))
+prior <- list(R = list(V = 1/4, nu=0.002), 
+              G = list(G1=list(V = 1/4, nu=0.002),
+                       G2=list(V = 1/4, nu=0.002), 
+                       G3=list(V = 1/4, nu=0.002)))
 ```
 along with the number of iterations to run the chain (nitt), the burn-in (burnin), the sampling thinning (thin), the number of chains to run (no.chains). (\href{guidelines.https://cran.r-project.org/web/packages/MCMCglmm/vignettes/CourseNotes.pdf}{See MCMCglmm guidelines}.) 
 ```{r}

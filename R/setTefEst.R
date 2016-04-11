@@ -45,14 +45,16 @@ if(is.null(species) == TRUE){stop("species missing")}
 ##check habitat data
 if(is.null(habitat) == TRUE){warning("Data for habitat missing")
 	} else if(any( habitat == c("marine", "terrestrial")) != TRUE){
-			warning("habitat levels do not match dataset from Healy et al 2016")}
+			warning("habitat levels do not match dataset 
+			from Healy et al 2016")}
 
 ##check class data
 if(is.null(taxonomic.class) == TRUE){
 	warning("Data for taxonomic.class missing")
 	
 	} else if(any(taxonomic.class == c("mammalia", "aves")) != TRUE){
-			warning("taxonomic.class levels do not match dataset 
+			warning(
+			"taxonomic.class levels do not match dataset 
 			from Healy et al 2016")}
 			
 ##check tissue data
@@ -60,14 +62,16 @@ if(is.null(tissue) == TRUE){warning("Data for tissue missing")
 	} else if(any( tissue == c("blood", "claws", "collagen", 
 		"feather", "hair", "kidney", "liver", "milk", "muscle")) 
 		!= TRUE){
-		warning("tissue levels do not match dataset from 
-		Healy et al 2016")}
+		warning(
+		"tissue levels do not match dataset 
+		from Healy et al 2016")}
 			
 ##check diet_type data
 if(is.null(diet.type) == TRUE){warning("Data for diet.type missing")
 	} else if(any( diet.type == c("carnivore", "herbivore", 
 	                              "omnivore",  "pellet")) != TRUE){
-		warning("diet.type levels do not match dataset from 
+		warning(
+		"diet.type levels do not match dataset from 
 		Healy et al 2016")}
 
 ##check iso data is there. This only checks one of the cases.
@@ -76,7 +80,8 @@ if(is.null(source.iso.13C)|is.null(source.iso.15N) == TRUE){
 	source.iso.13C <- NA
 	source.iso.15N <- NA
 	} else if(any(c(class(source.iso.13C),class(source.iso.15N)) == "numeric") != TRUE){
-			warning("source isotopic data not numeric")}
+			warning(
+			"source isotopic data not numeric")}
 	
 				
 	
@@ -87,8 +92,8 @@ if(is.null(tree) == TRUE){
 	phylo_test <- tree[[1]]
 }		else if((class(tree) == "phylo") == TRUE){
 	phylo_test <- tree
-}	else{cat("phylo not a phlyo or multiPhylo object: species presence in 
-	           phylogeny not checked")}	
+}	else{cat("phylo not a phlyo or multiPhylo object: 
+	species presence in phylogeny not checked")}	
 	
 #check if the species is in the tree
 if(any(phylo_test $tip.label == species) == TRUE){
