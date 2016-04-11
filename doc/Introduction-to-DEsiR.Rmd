@@ -1,5 +1,5 @@
 ---
-title: "FestR: Trophic Discrimination Factor estimation in R"
+title: "DEsiR: Discrimination Estimation in R"
 author: "Kevin Healy, Thomas Guillerme & Andrew L Jackson"
 date: "8 April 2016"
 output: pdf_document
@@ -10,7 +10,7 @@ This package estimates Trophic Discrimination Factors (TDF) based on the imputat
 \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package}.
 
 \section{Installation}
-To install \texttt{FestR} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
+To install \texttt{DEsiR} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
 
 ```{r install_mulTree, results="hide", message=FALSE}
 if(!require(devtools)) install.packages("devtools")
@@ -18,35 +18,35 @@ install_github("TGuillerme/mulTree", ref = "master")
 ```
 
 
-Following this you can then install \texttt{FestR} directly from GitHub using the following:
-```{r install_FestR, results="hide", message=FALSE}
-install_github("healyke/FestR", ref = "master")
+Following this you can then install \texttt{DEsiR} directly from GitHub using the following:
+```{r install_DEsiR, results="hide", message=FALSE}
+install_github("healyke/DEsiR", ref = "master")
 ```
 
 And load in the data
 ```{r load_pakages, results="hide", message=FALSE, warning=FALSE}
 library(mulTree)
-library(FestR)
+library(DEsiR)
 ```
 
 ## Read in the data
 ```{r}
 
 #read in the data
-festR.data <-read.csv(file=system.file("extdata", "FestR_data.csv", package = "FestR"),
+DEsiR.data <-read.csv(file=system.file("extdata", "DEsiR_data.csv", package = "DEsiR"),
  header=T, stringsAsFactors = F)
 
-head(festR.data)
+head(DEsiR.data)
 
 #read in the phylogenetic information
 #first the mammal trees
 mammal_trees <- read.tree(system.file("extdata", 
                                       "3firstFritzTrees.tre", 
-                                      package = "FestR"))
+                                      package = "DEsiR"))
 #than the bird trees
 bird_trees   <- read.tree(system.file("extdata", 
                                       "3firstJetzTrees.tre", 
-                                      package = "FestR"))
+                                      package = "DEsiR"))
 
 #combine them together using the tree.bind function from the mulTree package
 combined_trees<-tree.bind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)
@@ -94,7 +94,7 @@ We now need to format the data by combining both the isotopic data already avail
 
 ```{r}
 tdf_data_c <- tefMulClean(new.data = new.data.test, 
-                          data = festR.data, 
+                          data = DEsiR.data, 
                           species.col.name = "species", 
                           tree =  
                           combined_trees, 
