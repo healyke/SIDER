@@ -53,7 +53,7 @@ mulTree.data$random.terms = random.terms
 			
 			prior_tef <- list(R = list(V = 1/4, nu=0.002), G = list(G1=list(V = 1/4, nu=0.002),G2=list(V = 1/4, nu=0.002), G3=list(V = 1/4, 										nu=0.002)))
 			} else{
-			prior_tef <-  prior
+			prior <-  prior
 					}
 					
 	parameters <- c(nitt, thin, burnin)
