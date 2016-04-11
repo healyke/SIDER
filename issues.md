@@ -1,5 +1,5 @@
 To do list:
- * In `FestR-package.R` :
+ * In `DEsiR-package.R` :
     * Check all the authors emails + affiliations. I've checked mine (and yours is alright as well I guess) but I don't which ones Sean and Andrew wants (also not sure how to do it but Sean needs he's flippidyfloping accent on his "e" as well).
     * Add reference
     * Add keywords

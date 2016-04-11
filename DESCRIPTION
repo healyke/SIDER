@@ -1,5 +1,5 @@
-Package: FestR
-Title: Fractionation Estimation Using Phylogenetic Inference
+Package: DEsiR
+Title: Discrimination Estimation Using Phylogenetic Inference
 Version: 0.0.0.9000
 Authors@R: c(person("Kevin", "Healy", email = "healyke@tcd.ie", role = c("aut", "cre")),
              person("Thomas", "Guillerme", role = c("aut")),

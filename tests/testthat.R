@@ -1,5 +1,5 @@
 library(testthat)
-library(FestR)
+library(DEsiR)
 
-test_check("FestR")
+test_check("DEsiR")
 

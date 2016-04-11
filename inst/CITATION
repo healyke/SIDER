@@ -1,7 +1,7 @@
 citHeader("To cite FestR in publications use:")
 
 citEntry(entry = "Article",
-  title        = "Fractionation Estimation in R",
+  title        = "DEsiR: Discrimination Estimation in R",
   author       = personList(as.person(""),
                    as.person("Kevin Healy"), 
                    as.person("Sean B.A Kelly"),
@@ -15,7 +15,7 @@ citEntry(entry = "Article",
 
   textVersion  =
   paste(“Kevin Healy,Sean B.A Kelly, Thomas Guillerme, Richard Inger, Stuart Bearhop and  Andrew L Jackson (2016).”,
-        "Predicting trophic enrichment factors using Bayesian inference and phylogenetic, ecological and physiological data. FestR: Fractionation estimation using R.",
+        "Predicting trophic enrichment factors using Bayesian inference and phylogenetic, ecological and physiological data. DEsiR: Discrimination Estimation in R.",
         “PeerJ, some issue, some pages.”,
         "URL.")
 )
