@@ -24,4 +24,4 @@ Authors
 
 Citation
 -------
-If you are using this package, please cite: Coming to a preprint near you April 4th-8th
+If you are using this package, please cite: Healy K, Kelly SBA, Guillerme T, Inger R, Bearhop S, Jackson AL. (2016) Predicting trophic discrimination factor using Bayesian inference and phylogenetic, ecological and physiological data. DEsIR: Discrimination Estimation in R. PeerJ Preprints 4:e1950v1 https://doi.org/10.7287/peerj.preprints.1950v1
