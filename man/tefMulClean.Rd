@@ -17,11 +17,14 @@ tefMulClean(new.data = c(), data = data, species.col.name = c("species"),
 
 \item{tree}{a \code{phylo} or \code{multiPhylo} object.}
 
-\item{isotope}{the isotope for which discrimination factor is to be imputed, either \code{"carbon"} or \code{"nitrogen"}.}
+\item{isotope}{the isotope for which discrimination factor is to be imputed,
+either \code{"carbon"} or \code{"nitrogen"}.}
 
-\item{taxonomic.class}{the class of species as a character string, either \code{"mammalia"} or \code{"aves"}.}
+\item{taxonomic.class}{the class of species as a character string, either
+\code{"mammalia"} or \code{"aves"}.}
 
-\item{random.terms}{an object of class \code{formula} describing the random effects.}
+\item{random.terms}{an object of class \code{formula} describing the random
+effects.}
 }
 \value{
 A \code{mulTree} object.

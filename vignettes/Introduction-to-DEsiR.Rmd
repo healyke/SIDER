@@ -1,8 +1,12 @@
 ---
-title: "DEsiR: Discrimination Estimation in R"
-author: "Kevin Healy, Thomas Guillerme & Andrew L Jackson"
-date: "8 April 2016"
-output: pdf_document
+title: "Introduction to DEsiR"
+author: "Kevin Healy"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to DEsiR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
@@ -14,18 +18,18 @@ To install \texttt{DEsiR} its dependency \href{https://github.com/TGuillerme/mul
 
 ```{r install_mulTree, results="hide", message=FALSE}
 if(!require(devtools)) install.packages("devtools")
-install_github("TGuillerme/mulTree", ref = "master")
+if(!require(mulTree)) devtools::install_github("TGuillerme/mulTree", ref = "master")
 ```
 
 
 Following this you can then install \texttt{DEsiR} directly from GitHub using the following:
 ```{r install_DEsiR, results="hide", message=FALSE}
-install_github("healyke/DEsiR", ref = "master")
+if(!require(DEsiR)) devtools::install_github("healyke/DEsiR", ref = "master")
 ```
 
 And load in the data
 ```{r load_pakages, results="hide", message=FALSE, warning=FALSE}
-library(mulTree)
+#library(mulTree)
 library(DEsiR)
 ```
 
@@ -43,7 +47,7 @@ head(DEsiR.data)
 mammal_trees <- read.tree(system.file("extdata", 
                                       "3firstFritzTrees.tre", 
                                       package = "DEsiR"))
-#than the bird trees
+#then the bird trees
 bird_trees   <- read.tree(system.file("extdata", 
                                       "3firstJetzTrees.tre", 
                                       package = "DEsiR"))
@@ -64,7 +68,7 @@ diet.type ("carnivore", "herbivore", "omnivore", "pellet"),
 and the isotopic ratios of the food sources for carbon (source.iso.13C) 
 and nitrogen (source.iso.15N).
 ```{r}
-#####function that checks the dat for some species we want to estimate TEF for
+#####function that checks the data for some species we want to estimate TEF for
 new.data.test <- setTefEst(species = "Meles_meles", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
@@ -138,9 +142,15 @@ prior <- list(R = list(V = 1/4, nu=0.002),
 ```
 along with the number of iterations to run the chain (nitt), the burn-in (burnin), the sampling thinning (thin), the number of chains to run (no.chains). (\href{guidelines.https://cran.r-project.org/web/packages/MCMCglmm/vignettes/CourseNotes.pdf}{See MCMCglmm guidelines}.) 
 ```{r}
-nitt <- c(1200000)
-burnin <- c(200000)
-thin <- c(500)
+# nitt <- c(1200000)
+# burnin <- c(200000)
+# thin <- c(500)
+# no.chains <- c(2)
+
+# NB settings only for testing. need to change
+nitt <- c(10)
+burnin <- c(1)
+thin <- c(1)
 no.chains <- c(2)
 ```
 We need to check that our MCMC chains are converging so we use the Gelman and Rubin diagnostic to check the convergence and also check that the estimated parameters have an effective sample size >1000.
