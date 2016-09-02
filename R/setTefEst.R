@@ -77,7 +77,8 @@ if(is.null(source.iso.13C)|is.null(source.iso.15N) == TRUE){
 	warning("No source isotopic data")
 	source.iso.13C <- NA
 	source.iso.15N <- NA
-	} else if(any(c(class(source.iso.13C),class(source.iso.15N)) == "numeric") != TRUE){
+	} else if(any(c(class(source.iso.13C), 
+	                class(source.iso.15N)) == "numeric") != TRUE){
 			warning(
 			"source isotopic data not numeric")}
 	
@@ -85,15 +86,15 @@ if(is.null(source.iso.13C)|is.null(source.iso.15N) == TRUE){
 	
 ###check if there is a tree and what type of tree it is
 if(is.null(tree) == TRUE){	 
-	cat("phylo missing: species presence in phylogeny not checked")
+	cat("phylogeny is missing: species presence in phylogeny not checked")
 }	else if((class(tree) == "multiPhylo") == TRUE){
 	phylo_test <- tree[[1]]
 }		else if((class(tree) == "phylo") == TRUE){
 	phylo_test <- tree
-}	else{cat("phylo not a phlyo or multiPhylo object: 
+}	else{cat("phylogeny is not a phylo or multiPhylo object: 
 	species presence in phylogeny not checked")}	
 	
-#check if the species is in the tree
+#check if the species is in the tree and report finding.
 if(any(phylo_test $tip.label == species) == TRUE){
 			cat(species, "present in phylogeny")
 } else{cat(species, "not present in phylogeny")}

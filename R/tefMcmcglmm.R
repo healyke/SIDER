@@ -60,9 +60,13 @@ tefMcmcglmm <- function(mulTree.data ,
 
 mulTree.data$random.terms = random.terms
 
-		if((is.null(prior) & mulTree.data$random.term == "~animal + sp.col + tissue") == TRUE){
-			
-			prior_tef <- list(R = list(V = 1/4, nu=0.002), G = list(G1=list(V = 1/4, nu=0.002),G2=list(V = 1/4, nu=0.002), G3=list(V = 1/4, 										nu=0.002)))
+# set priors to default values if not specified 
+		if((is.null(prior) & 
+		    mulTree.data$random.term == "~animal + sp.col + tissue") == TRUE) { 
+		      prior_tef <- list(R = list(V = 1/4, nu=0.002), 
+		                        G = list(G1=list(V = 1/4, nu=0.002),
+		                                G2=list(V = 1/4, nu=0.002), 
+		                                G3=list(V = 1/4, nu=0.002)))
 			} else{
 			prior <-  prior
 					}
@@ -76,7 +80,15 @@ mulTree.data$random.terms = random.terms
 
 #if((class(mulTree.data$phy) == "multiPhylo") == TRUE){
 	
-		mulTree::mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=TRUE, prior = prior, chains = no.chains, convergence = convergence, ESS = ESS, output= output )
+		mulTree::mulTree(mulTree.data  = mulTree.data , 
+		                 formula = formula, 
+		                 parameters = parameters, 
+		                 pl = TRUE, 
+		                 prior = prior, 
+		                 chains = no.chains, 
+		                 convergence = convergence, 
+		                 ESS = ESS, 
+		                 output = output )
 				
 	#na.row <-  which(row(is.na(data)) == T)[1]
 
@@ -98,14 +110,15 @@ tef_Liabs_raw <- mulTree::read.mulTree(mulTree.chain= output, extract = "Liab")
 #### I think this loop is for the MulTree function so need to come back and fix this.
 #####as the NA row is placed first in the matrix we only want the first column of Liab as the rest are fixed.
 	tef_Liabs <- list()
-for(i in 1:(length(names(tef_Liabs_raw)))){
+  for(i in 1:(length(names(tef_Liabs_raw)))){
 
-tef_Liabs[[i]] <-	(tef_Liabs_raw[[i]][,1])
-}
+    tef_Liabs[[i]] <-	(tef_Liabs_raw[[i]][,1])
+  }
 	
-tef_global  <- coda::as.mcmc(unlist(tef_Liabs))
+  tef_global  <- coda::as.mcmc(unlist(tef_Liabs))
 	
-return(list(tef_estimates = tef_Liabs, tef_global = tef_global))
+  # return the output as a list
+  return(list(tef_estimates = tef_Liabs, tef_global = tef_global))
 			
 }
 

@@ -19,6 +19,9 @@ Some problems:
  * are the data binaries associated with the vignette supposed to be in `/vignettes/`? 
  * i have an old comment in tefMulClean.R line 52 that the isotope column names are a mess; is this still the case? I think we fixed this. If so i need to remove this comment
  * in tefMulClean.R on line 95 there is a comment "_this needs to be fixed so that it actually removes the dataset._". Need to check if this remains to be fixed
+ * in tefMulClean.R check commented out lines 102 - 112: can we just delete these?
+ * lots of commented out lines and seemingly superfluous comments in refMcmcglmm.R. Needs to be cleaned.
+ * Check comment regarding the loop in refMcmcglmm.R at line 110 onwards. In any case, it needs a comment that explains what these lines are actually doing.
  
  
  
