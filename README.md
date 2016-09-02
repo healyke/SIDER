@@ -8,8 +8,8 @@ and runs a MCMCglmm analysis on multiple trees using [MulTree] (https://github.c
 ## Installing DEsiR
 ```r
 if(!require(devtools)) install.packages("devtools")
+install_github("TGuillerme/mulTree", ref = "release")
 install_github("healyke/DEsiR", ref = "master")
-install_github("TGuillerme/mulTree", ref = "master")
 library(mulTree)
 library(DEsiR)
 ```
@@ -24,6 +24,6 @@ Authors
 
 Citation
 -------
-If you are using this package, please cite:
+If you are using this package, please cite this pre-print until we finalise the paper and have it peer-reviewed:
 
 Healy K, Kelly SBA, Guillerme T, Inger R, Bearhop S, Jackson AL. (2016) Predicting trophic discrimination factor using Bayesian inference and phylogenetic, ecological and physiological data. DEsIR: Discrimination Estimation in R. PeerJ Preprints 4:e1950v1 https://doi.org/10.7287/peerj.preprints.1950v1
