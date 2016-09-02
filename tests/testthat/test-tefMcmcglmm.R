@@ -92,7 +92,7 @@ for(i in 1:(length(names(tef_Liabs_raw)))){
 tef_Liabs[[i]] <-	(tef_Liabs_raw[[i]][,1])
 }
 	
-tef_global  <- as.mcmc(unlist(tef_Liabs))
+tef_global  <- coda::as.mcmc(unlist(tef_Liabs))
 	
 return(list(tef_estimates = tef_Liabs, tef_global = tef_global))
 			

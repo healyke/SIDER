@@ -2,41 +2,38 @@
 % Please edit documentation in R/setTefEst.R
 \name{setTefEst}
 \alias{setTefEst}
-\title{Specify the observation to be imputed.}
+\title{Specifying observations to be imputed.}
 \usage{
 setTefEst(species = c(), habitat = c("marine", "terrestrial", NA),
   taxonomic.class = c("mammalia", "aves", NA), tissue = c("blood", "claws",
   "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle", NA),
   diet.type = c("carnivore", "herbivore", "omnivore", "pellet", NA),
-  source.iso.13C = c(), source.iso.15N = c(), phylogeny = c())
+  source.iso.13C = c(), source.iso.15N = c(), tree = c())
 }
 \arguments{
 \item{species}{a binomial species name as a character string.}
 
-\item{habitat}{a character string of either "marine" or "terrestrial"}
+\item{habitat}{a character string of either \code{"marine"} or \code{"terrestrial"}.}
 
-\item{taxonomic.class}{the class of species as a character string, either "mammalia" or
-"aves"}
+\item{taxonomic.class}{the class of species as a character string, either \code{"mammalia"} or \code{"aves"}.}
 
-\item{tissue}{the tissue type as a character string taking one of
-\code{c("blood", "claws", "collagen", "ceather", "hair", "kidney", "liver",
-"milk", "muscle")}}
+\item{tissue}{the tissue type. Can be one of the following: \code{c("blood", "claws", "collagen", "ceather", "hair", "kidney", "liver", "milk", "muscle")}.}
 
-\item{diet.type}{the diet type as a character string taking one of
-\code{c("carnivore", "herbivore", "omnivore",  "pellet")}}
+\item{diet.type}{the diet type. Can be one of the following: \code{c("carnivore", "herbivore", "omnivore",  "pellet")}.}
 
-\item{phylogeny}{The full phylogenetic tree or set of trees as a
-(multi-)phylo object.}
+\item{source.iso.13C}{the source carbon isotopic value (must be \code{numeric}).}
 
-\item{iso_13C}{source carbon isotopic value is available numeric}
+\item{source.iso.15N}{the source nitrogen isotopic value (must be \code{numeric}).}
 
-\item{iso_15N}{source nitrogen isotopic value is available numeric}
+\item{tree}{a \code{phylo} or \code{multiPhylo} object.}
 }
 \value{
-A dataframe object of row length 1 comprising a checked species for
-  imputation.
+A \code{data.frame} object with one row being a checked species for imputation.
 }
 \description{
-Specify the observation to be imputed.
+Specifies which observation to impute.
+}
+\author{
+Kevin Healy
 }
 

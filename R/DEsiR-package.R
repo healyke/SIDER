@@ -18,11 +18,13 @@
 #################
 # PACKAGE IMPORTS 
 #################
-#'
-#' @import ape
-NULL
-#' @import mulTree
-NULL
+# -- AJ --
+#' #'
+#' #' @import ape
+#' NULL
+#' #' @import mulTree
+#' NULL
+# -- AJ --
 # #' @importFrom caper comparative.data
 # NULL
 # #' @importFrom coda as.mcmc

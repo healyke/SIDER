@@ -1,31 +1,42 @@
 #' @title Running MCMCglmm
-#' 
-#' @description Runs a \code{\link[MCMCglmm]{MCMCglmm model}} model to impute delta
-#' 
-#' @param mulTree.data output from \code{\link{tefMulClean}} containing data and phylogeny as a \code{mulTree} object.
-#' @param formula an object of class \code{formula} describing the fixed effects.
-#' @param random.terms an object of class "formula" decribing the random effects.
+#'   
+#' @description Runs a \code{\link[MCMCglmm]{MCMCglmm}} model to impute
+#'   delta
+#'   
+#' @param mulTree.data output from \code{\link{tefMulClean}} containing data and
+#'   phylogeny as a \code{mulTree} object.
+#' @param formula an object of class \code{formula} describing the fixed
+#'   effects.
+#' @param random.terms an object of class "formula" decribing the random
+#'   effects.
 #' @param nitt number of MCMC iterations
 #' @param thin thinning interval of MCMC chain
 #' @param burnin number of iterations to discard at begining of chain
 #' @param prior optional list of prior specifications (see details).
 #' @param no.chains The number of MCMC chains for each run.
-#' @param convergence limits set for the point estimates of the potential scale reduction factor (see \code{link[coda]{gelman.diag}}.
+#' @param convergence limits set for the point estimates of the potential scale
+#'   reduction factor (see \code{link[coda]{gelman.diag}}.
 #' @param ESS effective sample size of MCMC iterations for each model estimate.
 #' @param output The name of the output files
+#'   
+#' @details The \code{priors} argument must be of 3 possible elements: R
+#' (R-structure) G (G-structure) and B (fixed effects). B is a list containing
+#' the expected value (mu) and a (co)variance matrix (V) representing the
+#' strength of belief: the defaults are \code{B$mu = 0} and \code{B$V =
+#' I*1e+10}, where where I is an identity matrix of appropriate dimension. The
+#' priors for the variance structures (R and G) are lists with the expected
+#' (co)variances (V) and degree of belief parameter (nu) for the
+#' inverse-Wishart, and also the mean vector (alpha.mu) and covariance matrix
+#' (alpha.V) for the redundant working parameters. The defaults are \code{nu =
+#' 0}, \code{V = 1}, \code{alpha.mu = 0}, and \code{alpha.V = 0}. When alpha.V
+#' is non-zero, parameter expanded algorithms are used.
 #' 
-#' @details
-#' The \code{priors} argument must be of 3 possible elements: R (R-structure) G (G-structure) and B (fixed effects). B is a list containing the expected value (mu) and a (co)variance matrix (V) representing the strength of belief: the defaults are \code{B$mu = 0} and \code{B$V = I*1e+10}, where where I is an identity matrix of appropriate dimension. The priors for the variance structures (R and G) are lists with the expected (co)variances (V) and degree of belief parameter (nu) for the inverse-Wishart, and also the mean vector (alpha.mu) and covariance matrix (alpha.V) for the redundant working parameters. The defaults are \code{nu = 0}, \code{V = 1}, \code{alpha.mu = 0}, and \code{alpha.V = 0}. When alpha.V is non-zero, parameter expanded algorithms are used.
-#' 
-#' @return list containing Posterior Distributions of imputed discrimination factors  
-#' including a posterior distribution for each indavidual chain in Tef.est and
-#' a combined chain in Tef.global.
-#' 
+#' @return list containing Posterior Distributions of imputed discrimination
+#'   factors including a posterior distribution for each indavidual chain in
+#'   Tef.est and a combined chain in Tef.global.
+#'   
 #' @author Kevin Healy
-#' 
-#' @example
-#' ##
-#' 
+#'   
 #' @export
 
 
@@ -65,11 +76,11 @@ mulTree.data$random.terms = random.terms
 
 #if((class(mulTree.data$phy) == "multiPhylo") == TRUE){
 	
-		mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=TRUE, prior = prior, chains = no.chains, convergence = convergence, ESS = ESS, output= output )
+		mulTree::mulTree(mulTree.data  = mulTree.data , formula = formula, parameters = parameters, pl=TRUE, prior = prior, chains = no.chains, convergence = convergence, ESS = ESS, output= output )
 				
 	#na.row <-  which(row(is.na(data)) == T)[1]
 
-tef_Liabs_raw <- read.mulTree(mulTree.chain= output, extract = "Liab")
+tef_Liabs_raw <- mulTree::read.mulTree(mulTree.chain= output, extract = "Liab")
 
 #}
 #else{
@@ -92,7 +103,7 @@ for(i in 1:(length(names(tef_Liabs_raw)))){
 tef_Liabs[[i]] <-	(tef_Liabs_raw[[i]][,1])
 }
 	
-tef_global  <- as.mcmc(unlist(tef_Liabs))
+tef_global  <- coda::as.mcmc(unlist(tef_Liabs))
 	
 return(list(tef_estimates = tef_Liabs, tef_global = tef_global))
 			

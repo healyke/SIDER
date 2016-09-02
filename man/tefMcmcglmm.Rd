@@ -2,20 +2,22 @@
 % Please edit documentation in R/tefMcmcglmm.R
 \name{tefMcmcglmm}
 \alias{tefMcmcglmm}
-\title{Run the MCMCglmm models to imput delta.}
+\title{Running MCMCglmm}
 \usage{
-tefMcmcglmm(mulTree.data, formula = delta13C ~ source.iso.15N + diet.type +
-  habitat, random.terms = ~animal + species + tissue, nitt = c(12000),
-  thin = c(10), burnin = c(2000), prior = NULL, no.chains = c(2),
-  convergence = c(1.1), ESS = c(1000))
+tefMcmcglmm(mulTree.data, formula = delta13C ~ diet.type + habitat,
+  random.terms = ~animal + sp.col + tissue, nitt = c(120000),
+  thin = c(50), burnin = c(20000), prior = NULL, no.chains = c(2),
+  convergence = c(1.1), ESS = c(1000), output = "teff_output")
 }
 \arguments{
-\item{mulTree.data}{output from tefMulClean containing data and phylogeny 
-as a mulTree object.}
+\item{mulTree.data}{output from \code{\link{tefMulClean}} containing data and
+phylogeny as a \code{mulTree} object.}
 
-\item{formula}{an object of class "formula" decribing the fixed effects.}
+\item{formula}{an object of class \code{formula} describing the fixed
+effects.}
 
-\item{random.terms}{an object of class "formula" decribing the random effects.}
+\item{random.terms}{an object of class "formula" decribing the random
+effects.}
 
 \item{nitt}{number of MCMC iterations}
 
@@ -23,27 +25,40 @@ as a mulTree object.}
 
 \item{burnin}{number of iterations to discard at begining of chain}
 
-\item{prior}{optional list of prior specifications having 3 possible elements: R (R-structure) G (G-structure)
-and B (fixed effects). B is a list containing the expected value (mu) and a (co)variance matrix (V) representing
-the strength of belief: the defaults are B$mu=0 and B$V=I*1e+10, where where I is an identity matrix of 
-appropriate dimension. The priors for the variance structures (R and G) are lists with the expected 
-(co)variances (V) and degree of belief parameter (nu) for the inverse-Wishart, and also the mean vector 
-(alpha.mu) and covariance matrix (alpha.V) for the redundant working parameters. The defaults are 
-nu=0, V=1, alpha.mu=0, and alpha.V=0. When alpha.V is non-zero, parameter expanded algorithms 
-are used.}
+\item{prior}{optional list of prior specifications (see details).}
 
 \item{no.chains}{The number of MCMC chains for each run.}
 
-\item{convergence}{limits set for the point estimates of the potential scale reduction factor
-see gelman.diag {coda}.
-ESS effective sample size of MCMC iterations for each model estimate.}
+\item{convergence}{limits set for the point estimates of the potential scale
+reduction factor (see \code{link[coda]{gelman.diag}}.}
+
+\item{ESS}{effective sample size of MCMC iterations for each model estimate.}
+
+\item{output}{The name of the output files}
 }
 \value{
-list containing Posterior Distributions of imputed discrimination factors  
-including a posterior distribution for each indavidual chain in Tef.est and
-a combined chain in Tef.global.
+list containing Posterior Distributions of imputed discrimination
+  factors including a posterior distribution for each indavidual chain in
+  Tef.est and a combined chain in Tef.global.
 }
 \description{
-Run the MCMCglmm models to imput delta.
+Runs a \code{\link[MCMCglmm]{MCMCglmm}} model to impute
+  delta
+}
+\details{
+The \code{priors} argument must be of 3 possible elements: R
+(R-structure) G (G-structure) and B (fixed effects). B is a list containing
+the expected value (mu) and a (co)variance matrix (V) representing the
+strength of belief: the defaults are \code{B$mu = 0} and \code{B$V =
+I*1e+10}, where where I is an identity matrix of appropriate dimension. The
+priors for the variance structures (R and G) are lists with the expected
+(co)variances (V) and degree of belief parameter (nu) for the
+inverse-Wishart, and also the mean vector (alpha.mu) and covariance matrix
+(alpha.V) for the redundant working parameters. The defaults are \code{nu =
+0}, \code{V = 1}, \code{alpha.mu = 0}, and \code{alpha.V = 0}. When alpha.V
+is non-zero, parameter expanded algorithms are used.
+}
+\author{
+Kevin Healy
 }
 

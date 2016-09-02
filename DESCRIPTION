@@ -3,8 +3,8 @@ Title: Discrimination Estimation Using Phylogenetic Inference
 Version: 0.0.0.9000
 Authors@R: c(person("Kevin", "Healy", email = "healyke@tcd.ie", role = c("aut", "cre")),
              person("Thomas", "Guillerme", role = c("aut")),
-             person("Sean", "B.A", "Kelly", role = c("aut")),
-             person("Andrew", "L", "Jackson", role = c("aut")))
+             person("Sean B.A", "Kelly", role = c("aut")),
+             person("Andrew L", "Jackson", role = c("aut")))
 Description: Uses Bayesian Inference to impute (predict) a tissue fractionation
     value for an individual based on phylogeny and tissue type.
 Depends:
@@ -15,6 +15,7 @@ Suggests:
     testthat
 Imports:
     mulTree,
+    coda,
     stats,
     graphics
 RoxygenNote: 5.0.1

@@ -1,2 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+
+# AJ added
+DEsiR.experience.R
+issues.md
+doc/

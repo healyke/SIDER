@@ -11,3 +11,8 @@ To do list:
 Some problems:
  * It calls many functions from mulTree (yay!) but it's not a CRAN package. Therefore, there's no way to properly import them!
  
+ AJ notes 01-Sep-2016
+ * i had to comment out the entire contents of `tests\testthat\test_data_structure.R` as the object `tef_data_badger.c` is not found.
+ * I have used the :: syntax to accesss functions within packages, thereby avoiding having to import them entirely in the NAMESPACE. This is recommended by Wickham.
+ * I deleted the CITATION file as it was causing problems with non-ASCII characters and/or invalid syntax. I couldnt debug it so just deleted it as its not essential.
+ 

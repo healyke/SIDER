@@ -15,8 +15,6 @@
 #' 
 #' @author Kevin Healy
 #' 
-#' @example
-#' ##
 #'   
 #' @export
 

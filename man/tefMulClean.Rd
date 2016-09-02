@@ -2,34 +2,31 @@
 % Please edit documentation in R/tefMulClean.R
 \name{tefMulClean}
 \alias{tefMulClean}
-\title{Matches phylogenies to data and creates multree object.}
+\title{Matching phylogenies and data frames}
 \usage{
-tefMulClean(new.data = c(), data = data, species_col_name = c("species"),
-  trees, isotope = c("carbon", "nitrogen"), taxonomic.class = c("mammalia",
-  "aves"), random = ~animal + species + tissue)
+tefMulClean(new.data = c(), data = data, species.col.name = c("species"),
+  tree, isotope = c("carbon", "nitrogen"), taxonomic.class = c("mammalia",
+  "aves"), random.terms = ~animal + species + tissue)
 }
 \arguments{
-\item{new.data}{data for species to be imputed see setTefEst}
+\item{new.data}{data for species to be imputed (see \code{\link{setTefEst}}).}
 
-\item{data}{data.frame object matching phylogeny}
+\item{data}{a \code{data.frame} object matching phylogeny.}
 
-\item{species_col_name}{name of column contining binomial species names}
+\item{species.col.name}{name of column containing binomial species names.}
 
-\item{trees}{phylogeny of phylo/multiphylo class}
+\item{tree}{a \code{phylo} or \code{multiPhylo} object.}
 
-\item{isotope}{for which discrimination factor is to be imputed}
+\item{isotope}{the isotope for which discrimination factor is to be imputed, either \code{"carbon"} or \code{"nitrogen"}.}
 
-\item{taxonomic.class}{the class of species as a character string, either 
-"mammalia" or "aves"}
+\item{taxonomic.class}{the class of species as a character string, either \code{"mammalia"} or \code{"aves"}.}
 
-\item{random.terms}{an object of class "formula" decribing the random effects.}
-
-\item{phy}{phylogeny of phylo/multiphylo class matching data}
+\item{random.terms}{an object of class \code{formula} describing the random effects.}
 }
 \value{
-multree object
+A \code{mulTree} object.
 }
 \description{
-Matches phylogenies to data and creates multree object.
+Matches phylogenies and data into a \code{mulTree} object.
 }
 

@@ -11,11 +11,6 @@
 #' @param random.terms an object of class \code{formula} describing the random effects.
 #'
 #' @return A \code{mulTree} object.
-#'
-#' @example
-#' ##
-#' 
-#' @authors Kevin Healy
 #' 
 #' @export
 	
@@ -72,7 +67,7 @@ tefMulClean <- function(new.data = c(),
 		
 ########get rid on NAs so that the only NAs are for the new data
 
-		iso_data_sub_na <-  na.omit(iso_data_class)
+		iso_data_sub_na <-  stats::na.omit(iso_data_class)
 
 ######## Include the new data, I bind it so its at the top and hence easier to read.
 	
@@ -89,7 +84,7 @@ tefMulClean <- function(new.data = c(),
 
 #####this needs to be fixed so that it actually removes the dataset.
 
-			clean_iso <-	as.mulTree(taxa = species.col.name, data = iso_data_com, tree = tree, clean.data = TRUE)
+			clean_iso <-	mulTree::as.mulTree(taxa = species.col.name, data = iso_data_com, tree = tree, clean.data = TRUE)
 		
 		##this was there to make it work with only one tree should be good now.
 		#clean_iso <- clean.data(species.col.name, iso_data_com, tree, rand.terms)
