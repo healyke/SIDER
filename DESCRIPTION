@@ -12,10 +12,13 @@ Depends:
 License: GPL-3
 LazyData: true
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    devtools
 Imports:
     mulTree,
     coda,
     stats,
     graphics
+VignetteBuilder: knitr
 RoxygenNote: 5.0.1
