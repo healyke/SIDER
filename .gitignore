@@ -3,3 +3,4 @@
 *.doc*
 *.docx
 .Rproj.user
+\vignettes\*.rda

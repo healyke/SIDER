@@ -1,9 +1,9 @@
 ## ----install_mulTree, results="hide", message=FALSE----------------------
 if(!require(devtools)) install.packages("devtools")
-if(!require(mulTree)) install_github("TGuillerme/mulTree", ref = "master")
+if(!require(mulTree)) devtools::install_github("TGuillerme/mulTree", ref = "master")
 
 ## ----install_DEsiR, results="hide", message=FALSE------------------------
-if(!require(DEsiR)) install_github("healyke/DEsiR", ref = "master")
+if(!require(DEsiR)) devtools::install_github("healyke/DEsiR", ref = "master")
 
 ## ----load_pakages, results="hide", message=FALSE, warning=FALSE----------
 #library(mulTree)
