@@ -4,8 +4,8 @@
 #' 
 #' Uses Bayesian Inference to impute (predict) a tissue fractionation value for an individual based on phylogeny and tissue type.
 #' 
-#' @name FestR-package
-#' @aliases FestR
+#' @name TESIR-package
+#' @aliases TESIR
 #'
 #' @docType package
 #'
