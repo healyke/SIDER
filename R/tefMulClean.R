@@ -111,8 +111,9 @@ tefMulClean <- function(new.data = c(),
   #			} else{ clean_iso$random.terms <-as.formula( random)	
   #			}
   
+  # AJ dont think we need to force the class as thats what as.mulTree returns.
   # set the class of the object to mulTree
-  class(clean_iso) <- 'mulTree'
+  # class(clean_iso) <- 'mulTree'
   
   # return the created object
   return(clean_iso)		

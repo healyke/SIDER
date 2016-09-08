@@ -1,10 +1,10 @@
 ---
-title: "Introduction to DEsiR"
+title: "Introduction to TESIR"
 author: "Kevin Healy"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to DEsiR}
+  %\VignetteIndexEntry{Introduction to TESIR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,7 @@ This package estimates Trophic Discrimination Factors (TDF) based on the imputat
 \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package}.
 
 \section{Installation}
-To install \texttt{DEsiR} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
+To install \texttt{TESIR} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
 
 ```{r install_mulTree, results = "hide", message = FALSE, eval = FALSE}
 # check if you have devools and install if you do not
@@ -25,10 +25,10 @@ if(!require(mulTree)) devtools::install_github("TGuillerme/mulTree", ref = "mast
 ```
 
 
-Following this you can then install \texttt{DEsiR} directly from GitHub using the following:
-```{r install_DEsiR, results = "hide", message=FALSE, eval = FALSE}
-# Check if you have DEsiR and install from github if you do not
-if(!require(DEsiR)) devtools::install_github("healyke/DEsiR", ref = "master")
+Following this you can then install \texttt{TESIR} directly from GitHub using the following:
+```{r install_TESIR, results = "hide", message=FALSE, eval = FALSE}
+# Check if you have TESIR and install from github if you do not
+if(!require(TESIR)) devtools::install_github("healyke/TESIR", ref = "master")
 ```
 
 Load the package
@@ -36,7 +36,7 @@ Load the package
 # You could load mulTree if you want, but you do not need to as you can
 # call is functions using e.g. mulTree::tree.bind as below.
 #library(mulTree)
-library(DEsiR)
+library(TESIR)
 ```
 
 ## Read in the data
@@ -44,24 +44,24 @@ And load in the data
 ```{r read_data}
 
 #read in the data
-DEsiR.data <- read.csv(file = system.file("extdata", 
-                                          "DEsiR_data.csv", 
-                                          package = "DEsiR"), 
+TESIR.data <- read.csv(file = system.file("extdata", 
+                                          "TESIR_data.csv", 
+                                          package = "TESIR"), 
                        header = TRUE,
                        stringsAsFactors = FALSE)
 
 # view the first 10 rows of the dataframe
-head(DEsiR.data)
+head(TESIR.data)
 
 #read in the phylogenetic information
 #first the mammal trees
 mammal_trees <- ape::read.tree(system.file("extdata", 
                                       "3firstFritzTrees.tre", 
-                                      package = "DEsiR"))
+                                      package = "TESIR"))
 #then the bird trees
 bird_trees   <- ape::read.tree(system.file("extdata", 
                                       "3firstJetzTrees.tre", 
-                                      package = "DEsiR"))
+                                      package = "TESIR"))
 
 #combine them together using the tree.bind function from the mulTree package
 combined_trees <- mulTree::tree.bind(x = mammal_trees, 
@@ -112,10 +112,9 @@ We now need to format the data by combining both the isotopic data already avail
 
 ```{r format_data}
 tdf_data_c <- tefMulClean(new.data = new.data.test, 
-                          data = DEsiR.data, 
+                          data = TESIR.data, 
                           species.col.name = "species", 
-                          tree =  
-                          combined_trees, 
+                          tree = combined_trees, 
                           taxonomic.class = "mammalia", 
                           isotope = "carbon")
 ```
@@ -143,7 +142,7 @@ formula.c <- delta13C ~ source.iso.13C + diet.type + habitat
 and random terms that includes the "animal" term which is required to include phylogeny into the analysis, sp.col to allow multiple species entries into the analysis and account for variation within a species, and tissue type.
 
 ```{r random_effects}
-random.terms = ~ animal + sp.col + tissue
+random.terms <- ~ animal + sp.col + tissue
 ```
 
 As we rely on Bayesian imputation to estimate the missing value we also need to specify a prior, in this case we use a non-informative prior as recommended in the \href{guidelines.https://cran.r-project.org/web/packages/MCMCglmm/vignettes/CourseNotes.pdf}{MCMCglmm guidelines}.

@@ -1,5 +1,5 @@
 To do list:
- * In `DEsiR-package.R` :
+ * In `TESIR-package.R` :
     * Check all the authors emails + affiliations. I've checked mine (and yours is alright as well I guess) but I don't which ones Sean and Andrew wants (also not sure how to do it but Sean needs he's flippidyfloping accent on his "e" as well).
     * Add reference
     * Add keywords
@@ -9,7 +9,7 @@ To do list:
 
 
 Some problems:
- * It calls many functions from mulTree (yay!) but it's not a CRAN package. Therefore, there's no way to properly import them!
+ * ~~It calls many functions from mulTree (yay!) but it's not a CRAN package. Therefore, there's no way to properly import them!~~ I don't think this is a problem at all as we now call them using :: syntax [AJ].
  
  AJ notes 01-Sep-2016: Kevin / Thomas please ~~strikethrough~~ those that are relevant to you.
  * i had to comment out the entire contents of `tests\testthat\test_data_structure.R` as the object `tef_data_badger.c` is not found.
@@ -22,6 +22,9 @@ Some problems:
  * in tefMulClean.R check commented out lines 102 - 112: can we just delete these?
  * lots of commented out lines and seemingly superfluous comments in refMcmcglmm.R. Needs to be cleaned.
  * Check comment regarding the loop in refMcmcglmm.R at line 110 onwards. In any case, it needs a comment that explains what these lines are actually doing.
+ * i think lines 114-116 in tefMulClean are redundant. Currently commented out. Can we delete?
+ * A bigger issue is that im not sure the current structure for the vignettes makes it as easy for people as it could be. We could hide the dataset from the user and simply load it, and the phylogenies internally and just skip the whole first part of the vignette. Of course we would retain the ability to override the default by loading it oneself and manipulating or altering as one requires... just a thought...
+ * i think the summary statistics could do with some additional work. We should probably used hdrcde::hdr() to calculate credible intervals, rather than just throwing summary() and hist() at it.
  
  
  
