@@ -26,6 +26,7 @@ NULL
 #' This is a dataset containing lifespan data from 192 species of birds and mammals.
 #'
 #' @name isotope_data
+#' @aliases TESIR_data
 #' @docType data
 #'
 #' @format a \code{data.frame} containing isotopic data derived from controlled feeding trials on birds and mammals.

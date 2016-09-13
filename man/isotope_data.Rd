@@ -2,6 +2,7 @@
 % Please edit documentation in R/TESIR.R
 \docType{data}
 \name{isotope_data}
+\alias{TESIR_data}
 \alias{isotope_data}
 \title{Example Aves and Mammalia lifespan for the mulTree package}
 \format{a \code{data.frame} containing isotopic data derived from controlled feeding trials on birds and mammals.
