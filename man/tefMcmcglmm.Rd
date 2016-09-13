@@ -16,14 +16,14 @@ phylogeny as a \code{mulTree} object.}
 \item{formula}{an object of class \code{formula} describing the fixed
 effects.}
 
-\item{random.terms}{an object of class "formula" decribing the random
+\item{random.terms}{an object of class "formula" describing the random
 effects.}
 
 \item{nitt}{number of MCMC iterations}
 
 \item{thin}{thinning interval of MCMC chain}
 
-\item{burnin}{number of iterations to discard at begining of chain}
+\item{burnin}{number of iterations to discard at beginning of chain}
 
 \item{prior}{optional list of prior specifications (see details).}
 
@@ -38,7 +38,7 @@ reduction factor (see \code{link[coda]{gelman.diag}}.}
 }
 \value{
 list containing Posterior Distributions of imputed discrimination
-  factors including a posterior distribution for each indavidual chain in
+  factors including a posterior distribution for each individual chain in
   Tef.est and a combined chain in Tef.global.
 }
 \description{

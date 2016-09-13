@@ -17,7 +17,7 @@ setTefEst(species = c(), habitat = c("marine", "terrestrial", NA),
 
 \item{taxonomic.class}{the class of species as a character string, either \code{"mammalia"} or \code{"aves"}.}
 
-\item{tissue}{the tissue type. Can be one of the following: \code{c("blood", "claws", "collagen", "ceather", "hair", "kidney", "liver", "milk", "muscle")}.}
+\item{tissue}{the tissue type. Can be one of the following: \code{c("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle")}.}
 
 \item{diet.type}{the diet type. Can be one of the following: \code{c("carnivore", "herbivore", "omnivore",  "pellet")}.}
 

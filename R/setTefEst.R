@@ -5,7 +5,7 @@
 #' @param species a binomial species name as a character string.
 #' @param habitat a character string of either \code{"marine"} or \code{"terrestrial"}.
 #' @param taxonomic.class the class of species as a character string, either \code{"mammalia"} or \code{"aves"}.
-#' @param tissue the tissue type. Can be one of the following: \code{c("blood", "claws", "collagen", "ceather", "hair", "kidney", "liver", "milk", "muscle")}.
+#' @param tissue the tissue type. Can be one of the following: \code{c("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle")}.
 #' @param diet.type the diet type. Can be one of the following: \code{c("carnivore", "herbivore", "omnivore",  "pellet")}.
 #' @param source.iso.13C the source carbon isotopic value (must be \code{numeric}).
 #' @param source.iso.15N the source nitrogen isotopic value (must be \code{numeric}).

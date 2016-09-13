@@ -7,11 +7,11 @@
 #'   phylogeny as a \code{mulTree} object.
 #' @param formula an object of class \code{formula} describing the fixed
 #'   effects.
-#' @param random.terms an object of class "formula" decribing the random
+#' @param random.terms an object of class "formula" describing the random
 #'   effects.
 #' @param nitt number of MCMC iterations
 #' @param thin thinning interval of MCMC chain
-#' @param burnin number of iterations to discard at begining of chain
+#' @param burnin number of iterations to discard at beginning of chain
 #' @param prior optional list of prior specifications (see details).
 #' @param no.chains The number of MCMC chains for each run.
 #' @param convergence limits set for the point estimates of the potential scale
@@ -32,7 +32,7 @@
 #' is non-zero, parameter expanded algorithms are used.
 #' 
 #' @return list containing Posterior Distributions of imputed discrimination
-#'   factors including a posterior distribution for each indavidual chain in
+#'   factors including a posterior distribution for each individual chain in
 #'   Tef.est and a combined chain in Tef.global.
 #'   
 #' @author Kevin Healy

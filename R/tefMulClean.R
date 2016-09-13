@@ -31,7 +31,7 @@ tefMulClean <- function(new.data = c(),
   # Decide on which animal class. I think this will be a good thing to 
   # include as it will edge people towards an appropriate analysis 
   # (i.e. avoid the fact that feathers and hair will already divide the 
-  # data into these groups but in a less interpreatable way) 
+  # data into these groups but in a less interpretable way) 
   # Currently this is hard-coded to be either "mammalia" or "aves". 
   # Foreseeable additions would be fish and herps. But ultimately, it
   # could be coded to be open, thereby allowing a tree and appropriate 
@@ -105,13 +105,13 @@ tefMulClean <- function(new.data = c(),
   
   
   #####fix that random term by checking if any of the random terms are the same 
-  # as the species colume and replacing that with sp.col as the Multre function does
+  # as the species column and replacing that with sp.col as the mulTree function does
   #		if(any(grep(species.col.name ,random)) == TRUE){
   #			clean_iso$random.terms <-as.formula( gsub("species","sp.col", random))
   #			} else{ clean_iso$random.terms <-as.formula( random)	
   #			}
   
-  # AJ dont think we need to force the class as thats what as.mulTree returns.
+  # AJ don't think we need to force the class as that what as.mulTree returns.
   # set the class of the object to mulTree
   # class(clean_iso) <- 'mulTree'
   
