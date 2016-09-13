@@ -4,7 +4,7 @@
 \name{isotope_data}
 \alias{TESIR_data}
 \alias{isotope_data}
-\title{Example Aves and Mammalia lifespan for the mulTree package}
+\title{Isotope data set}
 \format{a \code{data.frame} containing isotopic data derived from controlled feeding trials on birds and mammals.
 \describe{
        \item{species}{The species binomial name.}
@@ -17,7 +17,7 @@
        \item{delta15N}{The tropic discrimination factor for delta 15N}
 }}
 \description{
-This is a dataset containing lifespan data from 192 species of birds and mammals.
+This is a dataset containing isotope data collected for the \code{TESIR} package.
 }
 \references{
 [ADD REFERENCES]
