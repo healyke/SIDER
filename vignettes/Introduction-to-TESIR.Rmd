@@ -72,7 +72,7 @@ combined_trees <- mulTree::tree.bind(x = mammal_trees,
 As may we want to include the error associated with building phylogenies into our analysis we take a sample of the possible trees (See \href{http://rspb.royalsocietypublishing.org/content/281/1784/20140298}{Healy et al 2014}). In this case we combine the mammal and bird phylogenies at a rooted age of 250 mya and take a sample of two possible trees.
 
 
-\section{Testing the new data: \texttt{set.tef.est}}
+\section{Testing the new data: \texttt{setTefEst}}
 In order to estimate a trophic enrichment factor for a new species we need to check that the species is already present in our phylogeny and check what data is available for the new species.
 
 setTefEst checks for the presence of the following data:
@@ -83,7 +83,7 @@ and the isotopic ratios of the food sources for carbon (source.iso.13C)
 and nitrogen (source.iso.15N).
 ```{r check_species}
 #####function that checks the data for some species we want to estimate TEF for
-new.data.test <- setTefEst(species = "Meles_meles", 
+new.data.test <- setTdfEst(species = "Meles_meles", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
                              tissue = "blood", 
@@ -96,7 +96,7 @@ new.data.test <- setTefEst(species = "Meles_meles",
 If the species is not in the phylogeny already, such as say the Komodo dragon (Varanus komodoensis), or we are missing values as donated by NA, say tissue type, we get warning messages to indicate what is missing from our data.
 ```{r species_absent, echo=FALSE}
 #####function that checks the dat for some species we want to estimate TEF for
-new.data.dummy <- setTefEst(species = "Varanus_komodoensis", 
+new.data.dummy <- setTdfEst(species = "Varanus_komodoensis", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
                              tissue = "NA", 
@@ -107,11 +107,11 @@ new.data.dummy <- setTefEst(species = "Varanus_komodoensis",
 ```
 
 
-\section{Formatting the new data: \texttt{tef.mul.clean}}
+\section{Formatting the new data: \texttt{tdfMulClean}}
 We now need to format the data by combining both the isotopic data already available within the package and the data from the new species and matching these species to the included phylogeny. We also include what isotope we want to estimate a trophic discrimination value for (either "carbon" or "nitrogen").
 
 ```{r format_data}
-tdf_data_c <- tefMulClean(new.data = new.data.test, 
+tdf_data_c <- tdfMulClean(new.data = new.data.test, 
                           data = TESIR.data, 
                           species.col.name = "species", 
                           tree = combined_trees, 
@@ -130,7 +130,7 @@ head(tdf_data_c$data)
 ```
 
 
-\section{Running the analysis: \texttt{tef.mul.clean}}
+\section{Running the analysis: \texttt{tdfMulClean}}
 
 With the data formatted as a mulTree object we now need to set up the model. In this case we will run the full model to estimate delta13C with the fixed factors
 of source isotopic ratio, diet type and habitat type.
@@ -181,7 +181,7 @@ list.files()
 finally we can run the analysis. This model will take approximatly 5 min but for larger nitt or larger samples of phylogentic trees it will take longer.
 
 ```{r eval_glmm}
-TDF_est.c <- tefMcmcglmm(mulTree.data = tdf_data_c, 
+TDF_est.c <- tdfMcmcglmm(mulTree.data = tdf_data_c, 
                          formula = formula.c, 
                          random.terms = random.terms, 
                          prior = prior, 
@@ -206,7 +206,7 @@ All these models can be seperatly imported into R using read.mulTree(). However,
 
 ```{r summarise_results}
 names(TDF_est.c)
-summary(TDF_est.c$tef_global)
-hist(TDF_est.c$tef_global)
+summary(TDF_est.c$tdf_global)
+hist(TDF_est.c$tdf_global)
 ```
 

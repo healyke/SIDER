@@ -2,7 +2,7 @@
 #'   
 #' @description Matches phylogenies and data into a \code{mulTree} object.
 #'   
-#' @param new.data data for species to be imputed (see \code{\link{setTefEst}}).
+#' @param new.data data for species to be imputed (see \code{\link{setTdfEst}}).
 #' @param data a \code{data.frame} object matching phylogeny.
 #' @param species.col.name name of column containing binomial species names.
 #' @param tree a \code{phylo} or \code{multiPhylo} object.
@@ -17,7 +17,7 @@
 #'   
 #' @export
 	
-tefMulClean <- function(new.data = c(), 
+tdfMulClean <- function(new.data = c(), 
                         data = data, 
                         species.col.name = c("species"), 
                         tree, 

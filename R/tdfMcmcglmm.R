@@ -3,7 +3,7 @@
 #' @description Runs a \code{\link[MCMCglmm]{MCMCglmm}} model to impute
 #'   delta
 #'   
-#' @param mulTree.data output from \code{\link{tefMulClean}} containing data and
+#' @param mulTree.data output from \code{\link{tdfMulClean}} containing data and
 #'   phylogeny as a \code{mulTree} object.
 #' @param formula an object of class \code{formula} describing the fixed
 #'   effects.
@@ -40,7 +40,7 @@
 #' @export
 
 
-tefMcmcglmm <- function(mulTree.data , 
+tdfMcmcglmm <- function(mulTree.data , 
                          formula = delta13C ~ diet.type + habitat ,
                          random.terms = ~ animal + sp.col + tissue,
                          nitt = c(120000), 
@@ -92,7 +92,7 @@ mulTree.data$random.terms = random.terms
 				
 	#na.row <-  which(row(is.na(data)) == T)[1]
 
-tef_Liabs_raw <- mulTree::read.mulTree(mulTree.chain= output, extract = "Liab")
+tdf_Liabs_raw <- mulTree::read.mulTree(mulTree.chain= output, extract = "Liab")
 
 #}
 #else{
@@ -110,15 +110,15 @@ tef_Liabs_raw <- mulTree::read.mulTree(mulTree.chain= output, extract = "Liab")
 #### I think this loop is for the MulTree function so need to come back and fix this.
 #####as the NA row is placed first in the matrix we only want the first column of Liab as the rest are fixed.
 	tef_Liabs <- list()
-  for(i in 1:(length(names(tef_Liabs_raw)))){
+  for(i in 1:(length(names(tdf_Liabs_raw)))){
 
-    tef_Liabs[[i]] <-	(tef_Liabs_raw[[i]][,1])
+    tef_Liabs[[i]] <-	(tdf_Liabs_raw[[i]][,1])
   }
 	
-  tef_global  <- coda::as.mcmc(unlist(tef_Liabs))
+  tdf_global  <- coda::as.mcmc(unlist(tdf_Liabs))
 	
   # return the output as a list
-  return(list(tef_estimates = tef_Liabs, tef_global = tef_global))
+  return(list(tdf_estimates = tdf_Liabs, tdf_global = tdf_global))
 			
 }
 
