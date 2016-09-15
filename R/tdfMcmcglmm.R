@@ -109,10 +109,10 @@ tdf_Liabs_raw <- mulTree::read.mulTree(mulTree.chain= output, extract = "Liab")
 	
 #### I think this loop is for the MulTree function so need to come back and fix this.
 #####as the NA row is placed first in the matrix we only want the first column of Liab as the rest are fixed.
-	tef_Liabs <- list()
+	tdf_Liabs <- list()
   for(i in 1:(length(names(tdf_Liabs_raw)))){
 
-    tef_Liabs[[i]] <-	(tdf_Liabs_raw[[i]][,1])
+    tdf_Liabs[[i]] <-	(tdf_Liabs_raw[[i]][,1])
   }
 	
   tdf_global  <- coda::as.mcmc(unlist(tdf_Liabs))
