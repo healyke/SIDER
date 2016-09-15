@@ -10,7 +10,7 @@ tdfMcmcglmm(mulTree.data, formula = delta13C ~ diet.type + habitat,
   convergence = c(1.1), ESS = c(1000), output = "teff_output")
 }
 \arguments{
-\item{mulTree.data}{output from \code{\link{tefMulClean}} containing data and
+\item{mulTree.data}{output from \code{\link{tdfMulClean}} containing data and
 phylogeny as a \code{mulTree} object.}
 
 \item{formula}{an object of class \code{formula} describing the fixed

@@ -5,9 +5,11 @@
 \alias{combined_tree}
 \alias{combined_trees}
 \title{Avian and mammalian trees}
-\format{Contains a \code{multiPhylo} object of two randomly combined trees of birds and mammals.}
+\format{Contains a \code{multiPhylo} object of two randomly combined trees of
+  birds and mammals.}
 \description{
-This is a dataset containing trees from birds (Jetz et al, 2012) and mammals (Kuhn et al, 2011).
+This is a dataset containing trees from birds (Jetz et al, 2012) and mammals
+(Kuhn et al, 2011).
 }
 \references{
 [ADD REFERENCES]

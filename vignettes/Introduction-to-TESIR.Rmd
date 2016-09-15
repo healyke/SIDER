@@ -76,11 +76,7 @@ As may we want to include the error associated with building phylogenies into ou
 In order to estimate a trophic enrichment factor for a new species we need to check that the species is already present in our phylogeny and check what data is available for the new species.
 
 setTefEst checks for the presence of the following data:
-tissue type ("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle"), 
-habitat ("terrestrial", "marine"), 
-diet.type ("carnivore", "herbivore", "omnivore", "pellet"), 
-and the isotopic ratios of the food sources for carbon (source.iso.13C) 
-and nitrogen (source.iso.15N).
+tissue type ("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle"), habitat ("terrestrial", "marine"), and diet.type ("carnivore", "herbivore", "omnivore", "pellet").
 ```{r check_species}
 #####function that checks the data for some species we want to estimate TEF for
 new.data.test <- setTdfEst(species = "Meles_meles", 
@@ -88,8 +84,6 @@ new.data.test <- setTdfEst(species = "Meles_meles",
                              taxonomic.class = "mammalia", 
                              tissue = "blood", 
                              diet.type = "omnivore", 
-                             source.iso.13C = c(-24.1), 
-                             source.iso.15N = c(7.0), 
                              tree = combined_trees)
 ```
 
@@ -101,8 +95,6 @@ new.data.dummy <- setTdfEst(species = "Varanus_komodoensis",
                              taxonomic.class = "mammalia", 
                              tissue = "NA", 
                              diet.type = "omnivore", 
-                             source.iso.13C = c(-24.1), 
-                             source.iso.15N = c(7.0), 
                              tree = combined_trees)
 ```
 
@@ -133,10 +125,10 @@ head(tdf_data_c$data)
 \section{Running the analysis: \texttt{tdfMulClean}}
 
 With the data formatted as a mulTree object we now need to set up the model. In this case we will run the full model to estimate delta13C with the fixed factors
-of source isotopic ratio, diet type and habitat type.
+of diet type and habitat type.
 
 ```{r fixed_effects}
-formula.c <- delta13C ~ source.iso.13C + diet.type + habitat
+formula.c <- delta13C ~ diet.type + habitat
 ```
 
 and random terms that includes the "animal" term which is required to include phylogeny into the analysis, sp.col to allow multiple species entries into the analysis and account for variation within a species, and tissue type.

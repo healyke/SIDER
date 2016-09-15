@@ -9,7 +9,7 @@ tdfMulClean(new.data = c(), data = data, species.col.name = c("species"),
   "aves"), random.terms = ~animal + species + tissue)
 }
 \arguments{
-\item{new.data}{data for species to be imputed (see \code{\link{setTefEst}}).}
+\item{new.data}{data for species to be imputed (see \code{\link{setTdfEst}}).}
 
 \item{data}{a \code{data.frame} object matching phylogeny.}
 
