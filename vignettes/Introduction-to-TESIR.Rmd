@@ -147,16 +147,19 @@ prior <- list(R = list(V = 1/4, nu=0.002),
 ```
 along with the number of iterations to run the chain (nitt), the burn-in (burnin), the sampling thinning (thin), the number of chains to run (no.chains). (\href{guidelines.https://cran.r-project.org/web/packages/MCMCglmm/vignettes/CourseNotes.pdf}{See MCMCglmm guidelines}.) 
 ```{r mcmc_parameters}
-# nitt <- c(1200000)
-# burnin <- c(200000)
-# thin <- c(500)
-# no.chains <- c(2)
 
-# NB settings only for testing. need to change
-nitt <- c(10)
-burnin <- c(1)
-thin <- c(1)
+# These produce results that pass convergence and avoid autocorrelation
+# in the chains, but take a while to run.
+nitt <- c(1200000)
+burnin <- c(200000)
+thin <- c(500)
 no.chains <- c(2)
+
+# NB settings only for testing and to build the vignettes quickly
+# nitt <- c(10)
+# burnin <- c(1)
+# thin <- c(1)
+# no.chains <- c(2)
 ```
 We need to check that our MCMC chains are converging so we use the Gelman and Rubin diagnostic to check the convergence and also check that the estimated parameters have an effective sample size >1000.
 ```{r convergence_criteria}
@@ -186,19 +189,36 @@ TDF_est.c <- tdfMcmcglmm(mulTree.data = tdf_data_c,
                          ESS = ESS)
 ```
 
-tefMcmcglmm now runs the selected amount of chains (no.chains) for each of the sampled phylogeny and exports the resulting MCMC chains to the working directory. Hence in this case we have run two chains for each of the two sampled trees so there should be four files in your working directory ending with something like run-tree1_chain2.rda. 
+`tdfMcmcglmm` now runs the selected amount of chains (no.chains) for each of the sampled phylogeny and exports the resulting MCMC chains to the working directory. Hence in this case we have run two chains for each of the two sampled trees so there should be four files in your working directory ending with something like run-tree1_chain2.rda. 
 
 ```{r output_files}
 list.files()
 ```
 
-These are the full MCMCglmm model outputs for each of the chains run and can be imported back into the R for full inspection if required using read.mulTree. Notice also the two other files ending with something simlar to run-tree2_conv. These give a discriotion on the convergance diagnostics of the chains for each tree. The results of these diagnostics for each tree are also printed in R after running tefMcmcglmm returing whether the Effective sample size exceded ESS for all estimated paramaters (with the number for each parameter given as a list), and whether al chains converged for each parameter.
+These are the full MCMCglmm model outputs for each of the chains run and can be imported back into the R for full inspection if required using read.mulTree. Notice also the two other files ending with something simlar to run-tree2_conv. These give a description of the convergance diagnostics of the chains for each tree. The results of these diagnostics for each tree are also printed in R after running tefMcmcglmm returing whether the Effective sample size exceded ESS for all estimated paramaters (with the number for each parameter given as a list), and whether al chains converged for each parameter.
 
 All these models can be seperatly imported into R using read.mulTree(). However, since we are only intrested in the estimated TDF for our species tefMcmcglmm only imports the imputed posterior distribution of the estimated TDF for our species.
 
+The contents of `TDF_est.c$tdf_global` is the posterior estimate of the imputed TDF aggregated across all chains in the model run (`TDF_est.c$tdf_estimates` is a list containing each posterior chains separately). As a `mcmc` class obect, the many functions of the `coda` package provide options for summarising and plotting the distribution.
+
 ```{r summarise_results}
+# Explore the names of the list created by TESIR::tdfMcmcglmm
 names(TDF_est.c)
+
+# Calculate summary statistics of the posterior. 
+# Specifically, the mean and standard deviation would be
+# taken from here and used in a mixing model analysis using 
+# MixSIAR, MixSIR or SIAR for example.
 summary(TDF_est.c$tdf_global)
-hist(TDF_est.c$tdf_global)
+
+# Credible intervals and the mode of the posterior are obtained 
+# using the hdrcde package
+hdrcde::hdr(TDF_est.c$tdf_global, prob = c(50, 95, 99))
+
+# You can also create density plots of the posterior
+coda::densplot(TDF_est.c$tdf_global)
+
+# Or SIAR / SIBER style density boxplots using the hdrcde package
+hdrcde::hdr.boxplot(TDF_est.c$tdf_global)
 ```
 
