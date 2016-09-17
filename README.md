@@ -9,13 +9,14 @@ and runs a MCMCglmm analysis on multiple trees using [MulTree] (https://github.c
 ```r
 if(!require(devtools)) install.packages("devtools")
 install_github("TGuillerme/mulTree", ref = "release")
-install_github("healyke/TESIR", ref = "master")
+install_github("healyke/TESIR", ref = "andrew-fulbright", 
+  build_vignettes = TRUE)
 library(mulTree)
 library(TESIR)
 ```
 
 #### Vignettes
-*  The package manual is abvailable [here in .Rmd](https://github.com/healyke/TESIR/blob/master/doc/Introduction-to-TESIR.Rmd) and [here in .pdf](https://github.com/healyke/TESIR/blob/master/doc/Introduction-to-TESIR.pdf)
+*  AJ - need to update these links. though ive added build_vignettes to the install instructions above.
 
 
 Authors
