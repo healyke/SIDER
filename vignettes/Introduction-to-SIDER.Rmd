@@ -1,10 +1,10 @@
 ---
-title: "Introduction to TESIR"
+title: "Introduction to SIDER"
 author: "Kevin Healy"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to TESIR}
+  %\VignetteIndexEntry{Introduction to SIDER}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,7 +14,7 @@ This package estimates Trophic Discrimination Factors (TDF) based on the imputat
 \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package}.
 
 \section{Installation}
-To install \texttt{TESIR} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
+To install \texttt{SIDER} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
 
 ```{r install_mulTree, results = "hide", message = FALSE, eval = FALSE}
 # check if you have devools and install if you do not
@@ -25,10 +25,10 @@ if(!require(mulTree)) devtools::install_github("TGuillerme/mulTree", ref = "mast
 ```
 
 
-Following this you can then install \texttt{TESIR} directly from GitHub using the following:
-```{r install_TESIR, results = "hide", message=FALSE, eval = FALSE}
-# Check if you have TESIR and install from github if you do not
-if(!require(TESIR)) devtools::install_github("healyke/TESIR", ref = "master")
+Following this you can then install \texttt{SIDER} directly from GitHub using the following:
+```{r install_SIDER, results = "hide", message=FALSE, eval = FALSE}
+# Check if you have SIDER and install from github if you do not
+if(!require(SIDER)) devtools::install_github("healyke/SIDER", ref = "master")
 ```
 
 Load the package
@@ -36,7 +36,7 @@ Load the package
 # You could load mulTree if you want, but you do not need to as you can
 # call is functions using e.g. mulTree::tree.bind as below.
 #library(mulTree)
-library(TESIR)
+library(SIDER)
 ```
 
 ## Read in the data
@@ -44,24 +44,24 @@ And load in the data
 ```{r read_data}
 
 #read in the data
-TESIR.data <- read.csv(file = system.file("extdata", 
-                                          "TESIR_data.csv", 
-                                          package = "TESIR"), 
+SIDER.data <- read.csv(file = system.file("extdata", 
+                                          "SIDER_data.csv", 
+                                          package = "SIDER"), 
                        header = TRUE,
                        stringsAsFactors = FALSE)
 
 # view the first 10 rows of the dataframe
-head(TESIR.data)
+head(SIDER.data)
 
 #read in the phylogenetic information
 #first the mammal trees
 mammal_trees <- ape::read.tree(system.file("extdata", 
                                       "3firstFritzTrees.tre", 
-                                      package = "TESIR"))
+                                      package = "SIDER"))
 #then the bird trees
 bird_trees   <- ape::read.tree(system.file("extdata", 
                                       "3firstJetzTrees.tre", 
-                                      package = "TESIR"))
+                                      package = "SIDER"))
 
 #combine them together using the tree.bind function from the mulTree package
 combined_trees <- mulTree::tree.bind(x = mammal_trees, 
@@ -104,7 +104,7 @@ We now need to format the data by combining both the isotopic data already avail
 
 ```{r format_data}
 tdf_data_c <- tdfMulClean(new.data = new.data.test, 
-                          data = TESIR.data, 
+                          data = SIDER.data, 
                           species.col.name = "species", 
                           tree = combined_trees, 
                           taxonomic.class = "mammalia", 
@@ -202,7 +202,7 @@ All these models can be seperatly imported into R using read.mulTree(). However,
 The contents of `TDF_est.c$tdf_global` is the posterior estimate of the imputed TDF aggregated across all chains in the model run (`TDF_est.c$tdf_estimates` is a list containing each posterior chains separately). As a `mcmc` class obect, the many functions of the `coda` package provide options for summarising and plotting the distribution.
 
 ```{r summarise_results}
-# Explore the names of the list created by TESIR::tdfMcmcglmm
+# Explore the names of the list created by SIDER::tdfMcmcglmm
 names(TDF_est.c)
 
 # Calculate summary statistics of the posterior. 
