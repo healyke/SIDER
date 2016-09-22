@@ -1,5 +1,5 @@
 library(testthat)
-library(TESIR)
+library(SIDER)
 
-test_check("TESIR")
+test_check("SIDER")
 
