@@ -16,7 +16,8 @@ Suggests:
     testthat,
     knitr,
     ape,
-    devtools
+    devtools,
+    hdrcde
 Imports:
     mulTree,
     coda,
