@@ -1,20 +1,27 @@
-Package: DEsiR
-Title: Discrimination Estimation Using Phylogenetic Inference
+Package: SIDER
+Title: Stable Isotope Discrimination Estimation using R
 Version: 0.0.0.9000
 Authors@R: c(person("Kevin", "Healy", email = "healyke@tcd.ie", role = c("aut", "cre")),
              person("Thomas", "Guillerme", role = c("aut")),
-             person("Sean", "B.A", "Kelly", role = c("aut")),
-             person("Andrew", "L", "Jackson", role = c("aut")))
-Description: Uses Bayesian Inference to impute (predict) a tissue fractionation
-    value for an individual based on phylogeny and tissue type.
+             person("Sean B.A", "Kelly", role = c("aut")),
+             person("Andrew L", "Jackson", role = c("aut")))
+Description: Uses Bayesian Inference to impute (predict) an isotopic 
+              trophic discrimination value for an individual based on 
+              phylogeny and tissue type.
 Depends:
-    R (>= 3.2.1)
+    R (>= 3.3.1)
 License: GPL-3
 LazyData: true
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    ape,
+    devtools,
+    hdrcde
 Imports:
     mulTree,
+    coda,
     stats,
     graphics
+VignetteBuilder: knitr
 RoxygenNote: 5.0.1

@@ -1,21 +1,22 @@
-# DEsiR
+# SIDER
 Trophic Discrimination Factor estimation in R
 
 This package allows users to estimate Trophic Discrimination Factors (TDF) for species with no current measured TDF values using Bayesian imputation. 
 This package is based on the [MCMCglmm](http://cran.r-project.org/web/packages/MCMCglmm/index.html) package
 and runs a MCMCglmm analysis on multiple trees using [MulTree] (https://github.com/TGuillerme/mulTree)
 
-## Installing DEsiR
+## Installing SIDER
 ```r
 if(!require(devtools)) install.packages("devtools")
-install_github("healyke/DEsiR", ref = "master")
-install_github("TGuillerme/mulTree", ref = "master")
+install_github("TGuillerme/mulTree", ref = "release")
+install_github("healyke/SIDER", ref = "andrew-fulbright", 
+  build_vignettes = TRUE)
 library(mulTree)
-library(DEsiR)
+library(SIDER)
 ```
 
 #### Vignettes
-*  The package manual is abvailable [here in .Rmd](https://github.com/healyke/DEsiR/blob/master/doc/Introduction-to-DEsiR.Rmd) and [here in .pdf](https://github.com/healyke/DEsiR/blob/master/doc/Introduction-to-DEsiR.pdf)
+*  AJ - need to update these links. though ive added build_vignettes to the install instructions above.
 
 
 Authors
@@ -24,6 +25,6 @@ Authors
 
 Citation
 -------
-If you are using this package, please cite:
+If you are using this package, please cite this pre-print until we finalise the paper and have it peer-reviewed:
 
-Healy K, Kelly SBA, Guillerme T, Inger R, Bearhop S, Jackson AL. (2016) Predicting trophic discrimination factor using Bayesian inference and phylogenetic, ecological and physiological data. DEsIR: Discrimination Estimation in R. PeerJ Preprints 4:e1950v1 https://doi.org/10.7287/peerj.preprints.1950v1
+Healy K, Kelly SBA, Guillerme T, Inger R, Bearhop S, Jackson AL. (2016) Predicting trophic discrimination factor using Bayesian inference and phylogenetic, ecological and physiological data. SIDER: Discrimination Estimation in R. PeerJ Preprints 4:e1950v1 https://doi.org/10.7287/peerj.preprints.1950v1

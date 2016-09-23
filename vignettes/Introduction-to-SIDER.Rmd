@@ -1,8 +1,12 @@
 ---
-title: "DEsiR: Discrimination Estimation in R"
-author: "Kevin Healy, Thomas Guillerme & Andrew L Jackson"
-date: "8 April 2016"
-output: pdf_document
+title: "Introduction to SIDER"
+author: "Kevin Healy"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to SIDER}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
@@ -10,155 +14,169 @@ This package estimates Trophic Discrimination Factors (TDF) based on the imputat
 \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package}.
 
 \section{Installation}
-To install \texttt{DEsiR} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
+To install \texttt{SIDER} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
 
-```{r install_mulTree, results="hide", message=FALSE}
+```{r install_mulTree, results = "hide", message = FALSE, eval = FALSE}
+# check if you have devools and install if you do not
 if(!require(devtools)) install.packages("devtools")
-install_github("TGuillerme/mulTree", ref = "master")
+
+# check if you have mulTree and install if you do not using devtools
+if(!require(mulTree)) devtools::install_github("TGuillerme/mulTree", ref = "master")
 ```
 
 
-Following this you can then install \texttt{DEsiR} directly from GitHub using the following:
-```{r install_DEsiR, results="hide", message=FALSE}
-install_github("healyke/DEsiR", ref = "master")
+Following this you can then install \texttt{SIDER} directly from GitHub using the following:
+```{r install_SIDER, results = "hide", message=FALSE, eval = FALSE}
+# Check if you have SIDER and install from github if you do not
+if(!require(SIDER)) devtools::install_github("healyke/SIDER", ref = "master")
 ```
 
-And load in the data
+Load the package
 ```{r load_pakages, results="hide", message=FALSE, warning=FALSE}
-library(mulTree)
-library(DEsiR)
+# You could load mulTree if you want, but you do not need to as you can
+# call is functions using e.g. mulTree::tree.bind as below.
+#library(mulTree)
+library(SIDER)
 ```
 
 ## Read in the data
-```{r}
+And load in the data
+```{r read_data}
 
 #read in the data
-DEsiR.data <-read.csv(file=system.file("extdata", "DEsiR_data.csv", package = "DEsiR"),
- header=T, stringsAsFactors = F)
+SIDER.data <- read.csv(file = system.file("extdata", 
+                                          "SIDER_data.csv", 
+                                          package = "SIDER"), 
+                       header = TRUE,
+                       stringsAsFactors = FALSE)
 
-head(DEsiR.data)
+# view the first 10 rows of the dataframe
+head(SIDER.data)
 
 #read in the phylogenetic information
 #first the mammal trees
-mammal_trees <- read.tree(system.file("extdata", 
+mammal_trees <- ape::read.tree(system.file("extdata", 
                                       "3firstFritzTrees.tre", 
-                                      package = "DEsiR"))
-#than the bird trees
-bird_trees   <- read.tree(system.file("extdata", 
+                                      package = "SIDER"))
+#then the bird trees
+bird_trees   <- ape::read.tree(system.file("extdata", 
                                       "3firstJetzTrees.tre", 
-                                      package = "DEsiR"))
+                                      package = "SIDER"))
 
 #combine them together using the tree.bind function from the mulTree package
-combined_trees<-tree.bind(x = mammal_trees, y = bird_trees, sample = 2, root.age = 250)
+combined_trees <- mulTree::tree.bind(x = mammal_trees, 
+                                     y = bird_trees, 
+                                     sample = 2, 
+                                     root.age = 250)
 ```
 As may we want to include the error associated with building phylogenies into our analysis we take a sample of the possible trees (See \href{http://rspb.royalsocietypublishing.org/content/281/1784/20140298}{Healy et al 2014}). In this case we combine the mammal and bird phylogenies at a rooted age of 250 mya and take a sample of two possible trees.
 
 
-\section{Testing the new data: \texttt{set.tef.est}}
+\section{Testing the new data: \texttt{setTefEst}}
 In order to estimate a trophic enrichment factor for a new species we need to check that the species is already present in our phylogeny and check what data is available for the new species.
 
-set.tef.est checks for the presence of the following data:
-tissue type ("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle"), 
-habitat ("terrestrial", "marine"), 
-diet.type ("carnivore", "herbivore", "omnivore", "pellet"), 
-and the isotopic ratios of the food sources for carbon (source.iso.13C) 
-and nitrogen (source.iso.15N).
-```{r}
-#####function that checks the dat for some species we want to estimate TEF for
-new.data.test <- setTefEst(species = "Meles_meles", 
+setTefEst checks for the presence of the following data:
+tissue type ("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle"), habitat ("terrestrial", "marine"), and diet.type ("carnivore", "herbivore", "omnivore", "pellet").
+```{r check_species}
+#####function that checks the data for some species we want to estimate TEF for
+new.data.test <- setTdfEst(species = "Meles_meles", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
                              tissue = "blood", 
                              diet.type = "omnivore", 
-                             source.iso.13C = c(-24.1), 
-                             source.iso.15N = c(7.0), 
                              tree = combined_trees)
 ```
 
 If the species is not in the phylogeny already, such as say the Komodo dragon (Varanus komodoensis), or we are missing values as donated by NA, say tissue type, we get warning messages to indicate what is missing from our data.
-```{r, echo=FALSE}
+```{r species_absent, echo=FALSE}
 #####function that checks the dat for some species we want to estimate TEF for
-new.data.dummy <- setTefEst(species = "Varanus_komodoensis", 
+new.data.dummy <- setTdfEst(species = "Varanus_komodoensis", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
                              tissue = "NA", 
                              diet.type = "omnivore", 
-                             source.iso.13C = c(-24.1), 
-                             source.iso.15N = c(7.0), 
                              tree = combined_trees)
 ```
 
 
-\section{Formatting the new data: \texttt{tef.mul.clean}}
+\section{Formatting the new data: \texttt{tdfMulClean}}
 We now need to format the data by combining both the isotopic data already available within the package and the data from the new species and matching these species to the included phylogeny. We also include what isotope we want to estimate a trophic discrimination value for (either "carbon" or "nitrogen").
 
-```{r}
-tdf_data_c <- tefMulClean(new.data = new.data.test, 
-                          data = DEsiR.data, 
+```{r format_data}
+tdf_data_c <- tdfMulClean(new.data = new.data.test, 
+                          data = SIDER.data, 
                           species.col.name = "species", 
-                          tree =  
-                          combined_trees, 
+                          tree = combined_trees, 
                           taxonomic.class = "mammalia", 
                           isotope = "carbon")
 ```
 
 We now have a mulTree class object, which is required by the imputation analysis. It contains the matched phylogenies, in this case two phylogenies
 
-```{r}
+```{r multi_phlyos}
 tdf_data_c$phy
 ```
 and a dataset containing TDF and related data with the new species for which you want to estimate a trophic enrichment factor at the top with a NA for either delta13C or delta15N depending on isotope.
-```{r}
+```{r head_data}
 head(tdf_data_c$data)
 ```
 
 
-\section{Running the analysis: \texttt{tef.mul.clean}}
+\section{Running the analysis: \texttt{tdfMulClean}}
 
 With the data formatted as a mulTree object we now need to set up the model. In this case we will run the full model to estimate delta13C with the fixed factors
-of source isotopic ratio, diet type and habitat type.
+of diet type and habitat type.
 
-```{r}
-formula.c <- delta13C ~ source.iso.13C + diet.type + habitat
+```{r fixed_effects}
+formula.c <- delta13C ~ diet.type + habitat
 ```
 
 and random terms that includes the "animal" term which is required to include phylogeny into the analysis, sp.col to allow multiple species entries into the analysis and account for variation within a species, and tissue type.
 
-```{r}
-random.terms = ~ animal + sp.col + tissue
+```{r random_effects}
+random.terms <- ~ animal + sp.col + tissue
 ```
 
 As we rely on Bayesian imputation to estimate the missing value we also need to specify a prior, in this case we use a non-informative prior as recommended in the \href{guidelines.https://cran.r-project.org/web/packages/MCMCglmm/vignettes/CourseNotes.pdf}{MCMCglmm guidelines}.
 
-```{r}
+```{r define_priors}
 prior <- list(R = list(V = 1/4, nu=0.002), 
               G = list(G1=list(V = 1/4, nu=0.002),
                        G2=list(V = 1/4, nu=0.002), 
                        G3=list(V = 1/4, nu=0.002)))
 ```
 along with the number of iterations to run the chain (nitt), the burn-in (burnin), the sampling thinning (thin), the number of chains to run (no.chains). (\href{guidelines.https://cran.r-project.org/web/packages/MCMCglmm/vignettes/CourseNotes.pdf}{See MCMCglmm guidelines}.) 
-```{r}
+```{r mcmc_parameters}
+
+# These produce results that pass convergence and avoid autocorrelation
+# in the chains, but take a while to run.
 nitt <- c(1200000)
 burnin <- c(200000)
 thin <- c(500)
 no.chains <- c(2)
+
+# NB settings only for testing and to build the vignettes quickly
+# nitt <- c(10)
+# burnin <- c(1)
+# thin <- c(1)
+# no.chains <- c(2)
 ```
 We need to check that our MCMC chains are converging so we use the Gelman and Rubin diagnostic to check the convergence and also check that the estimated parameters have an effective sample size >1000.
-```{r}
+```{r convergence_criteria}
 convergence =  c(1.1)
 ESS = c(1000)
 ```
 As the function exports the model output to avoid memory issues within R make sure you have set the working directory to somewhere appropriate.
 
-```{r}
+```{r check_wd}
 getwd()
 list.files()
 ```
 
 finally we can run the analysis. This model will take approximatly 5 min but for larger nitt or larger samples of phylogentic trees it will take longer.
 
-```{r}
-TDF_est.c <- tefMcmcglmm(mulTree.data = tdf_data_c, 
+```{r eval_glmm}
+TDF_est.c <- tdfMcmcglmm(mulTree.data = tdf_data_c, 
                          formula = formula.c, 
                          random.terms = random.terms, 
                          prior = prior, 
@@ -171,19 +189,36 @@ TDF_est.c <- tefMcmcglmm(mulTree.data = tdf_data_c,
                          ESS = ESS)
 ```
 
-tefMcmcglmm now runs the selected amount of chains (no.chains) for each of the sampled phylogeny and exports the resulting MCMC chains to the working directory. Hence in this case we have run two chains for each of the two sampled trees so there should be four files in your working directory ending with something like run-tree1_chain2.rda. 
+`tdfMcmcglmm` now runs the selected amount of chains (no.chains) for each of the sampled phylogeny and exports the resulting MCMC chains to the working directory. Hence in this case we have run two chains for each of the two sampled trees so there should be four files in your working directory ending with something like run-tree1_chain2.rda. 
 
-```{r}
+```{r output_files}
 list.files()
 ```
 
-These are the full MCMCglmm model outputs for each of the chains run and can be imported back into the R for full inspection if required using read.mulTree. Notice also the two other files ending with something simlar to run-tree2_conv. These give a discriotion on the convergance diagnostics of the chains for each tree. The results of these diagnostics for each tree are also printed in R after running tefMcmcglmm returing whether the Effective sample size exceded ESS for all estimated paramaters (with the number for each parameter given as a list), and whether al chains converged for each parameter.
+These are the full MCMCglmm model outputs for each of the chains run and can be imported back into the R for full inspection if required using read.mulTree. Notice also the two other files ending with something simlar to run-tree2_conv. These give a description of the convergance diagnostics of the chains for each tree. The results of these diagnostics for each tree are also printed in R after running tefMcmcglmm returing whether the Effective sample size exceded ESS for all estimated paramaters (with the number for each parameter given as a list), and whether al chains converged for each parameter.
 
 All these models can be seperatly imported into R using read.mulTree(). However, since we are only intrested in the estimated TDF for our species tefMcmcglmm only imports the imputed posterior distribution of the estimated TDF for our species.
 
-```{r}
+The contents of `TDF_est.c$tdf_global` is the posterior estimate of the imputed TDF aggregated across all chains in the model run (`TDF_est.c$tdf_estimates` is a list containing each posterior chains separately). As a `mcmc` class obect, the many functions of the `coda` package provide options for summarising and plotting the distribution.
+
+```{r summarise_results}
+# Explore the names of the list created by SIDER::tdfMcmcglmm
 names(TDF_est.c)
-summary(TDF_est.c$tef_global)
-hist(TDF_est.c$tef_global)
+
+# Calculate summary statistics of the posterior. 
+# Specifically, the mean and standard deviation would be
+# taken from here and used in a mixing model analysis using 
+# MixSIAR, MixSIR or SIAR for example.
+summary(TDF_est.c$tdf_global)
+
+# Credible intervals and the mode of the posterior are obtained 
+# using the hdrcde package
+hdrcde::hdr(TDF_est.c$tdf_global, prob = c(50, 95, 99))
+
+# You can also create density plots of the posterior
+coda::densplot(TDF_est.c$tdf_global)
+
+# Or SIAR / SIBER style density boxplots using the hdrcde package
+hdrcde::hdr.boxplot(TDF_est.c$tdf_global)
 ```
 
