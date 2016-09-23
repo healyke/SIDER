@@ -19,7 +19,7 @@ mulTree::tree.bind}
 }
 \value{
 Saves the updated file to ../data/combined_trees.rda for use within 
-  the pacakge
+  the package
 }
 \description{
 Internal utility function for refreshing the combined_trees 
