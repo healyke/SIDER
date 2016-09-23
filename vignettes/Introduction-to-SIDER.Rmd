@@ -150,16 +150,16 @@ along with the number of iterations to run the chain (nitt), the burn-in (burnin
 
 # These produce results that pass convergence and avoid autocorrelation
 # in the chains, but take a while to run.
-nitt <- c(1200000)
-burnin <- c(200000)
-thin <- c(500)
-no.chains <- c(2)
+# nitt <- c(1200000)
+# burnin <- c(200000)
+# thin <- c(500)
+# no.chains <- c(2)
 
 # NB settings only for testing and to build the vignettes quickly
-# nitt <- c(10)
-# burnin <- c(1)
-# thin <- c(1)
-# no.chains <- c(2)
+nitt <- c(10)
+burnin <- c(1)
+thin <- c(1)
+no.chains <- c(2)
 ```
 We need to check that our MCMC chains are converging so we use the Gelman and Rubin diagnostic to check the convergence and also check that the estimated parameters have an effective sample size >1000.
 ```{r convergence_criteria}

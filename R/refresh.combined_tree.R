@@ -14,7 +14,7 @@
 #'   mulTree::tree.bind
 #'   
 #' @return Saves the updated file to ../data/combined_trees.rda for use within 
-#'   the pacakge
+#'   the package
 #'   
 #' @author Thomas Guillerme
 #'   
