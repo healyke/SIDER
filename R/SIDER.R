@@ -1,10 +1,10 @@
-#' TESIR: Estimating isotopic fractionation / trophic discrimination factors
+#' SIDER: Estimating isotopic fractionation / trophic discrimination factors
 #' 
-#' TESIR uses a phylogenetic regression model to estimate the isotopic 
+#' SIDER uses a phylogenetic regression model to estimate the isotopic 
 #' fractionation or trophic enrichment factor depending on ones preference for 
 #' terminology. Estimates are imputed using Bayesian inference, and draw from 
 #' species in close taxonomic proximity as well as including information on the 
-#' tissue type and ecology of the TESIR-ed estimate. The database used to
+#' tissue type and ecology of the SIDER-ed estimate. The database used to
 #' generate these predictions can be updated in the future as more information
 #' becomes available, which will lead to ever more accurate and precise
 #' estimates. Only mammals and birds are currently included in the package, but
@@ -15,18 +15,18 @@
 #' 
 #'   
 #' @docType package
-#' @name TESIR
+#' @name SIDER
 NULL
 #> NULL
 
 
 #' Isotope data set
 #' 
-#' This is a dataset containing isotope data collected for the \code{TESIR}
+#' This is a dataset containing isotope data collected for the \code{SIDER}
 #' package.
 #' 
 #' @name isotope_data
-#' @aliases TESIR_data
+#' @aliases SIDER_data
 #' @docType data
 #'   
 #' @format a \code{data.frame} containing isotopic data derived from controlled
