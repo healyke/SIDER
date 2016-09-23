@@ -4,3 +4,4 @@
 *.docx
 .Rproj.user
 \vignettes\*.rda
+*.DS_store
