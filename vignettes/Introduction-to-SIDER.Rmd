@@ -87,7 +87,7 @@ new.data.test <- setTdfEst(species = "Meles_meles",
                              tree = combined_trees)
 ```
 
-If the species is not in the phylogeny already, such as say the Komodo dragon (Varanus komodoensis), or we are missing values as donated by NA, say tissue type, we get warning messages to indicate what is missing from our data.
+If the species is not in the phylogeny already, such as say the Komodo dragon (*Varanus komodoensis*), or we are missing values as donated by NA, say tissue type, we get warning messages to indicate what is missing from our data.
 ```{r species_absent, echo=FALSE}
 #####function that checks the dat for some species we want to estimate TEF for
 new.data.dummy <- setTdfEst(species = "Varanus_komodoensis", 
