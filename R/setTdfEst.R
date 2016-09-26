@@ -97,20 +97,19 @@ setTdfEst <- function(species = c(),
   ###check if there is a tree and what type of tree it is
   if(is.null(tree)){
       cat("phylogeny is missing: species presence in phylogeny not checked")
-  } else if(class(tree) == "multiPhylo"){
-      phylo_test <- tree[[1]] 
-  } else if(class(tree) == "phylo"){
-      phylo_test <- tree
-  } else{
-      cat("phylogeny is not a phylo or multiPhylo object: species presence 
-          in phylogeny not checked")
-  }
-      
-  #check if the species is in the tree and report finding.
-  if(any(phylo_test $tip.label == species)){
-      cat(species, "present in phylogeny")
+  } else if (!any(class(tree) == "multiPhylo" | class(tree) == "phylo")) {
+      cat("phylogeny is not a phylo or multiPhylo object: species presence in phylogeny not checked")    
   } else {
-      cat(species, "not present in phylogeny")
+    #check if the species is in the tree and report finding.
+    if(class(tree) == "multiPhylo"){
+      test_species <- any(unlist(lapply(tree, function(X) any(X == species))))
+    } 
+    if(class(tree) = "phylo") {
+      test_species <- any(tree$tip.label == species)
+    }
+    if(!test_species) {
+      cat(species, "is not present in the phylogeny.\n")
+    }
   }
 
   ###put it in a data.frame with stringsAsFactors turned off.
