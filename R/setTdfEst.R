@@ -26,14 +26,14 @@
 #'   
 #' @export
 
-setTdfEst <- function(species = c(), 
-                      habitat = c("marine", "terrestrial", NA), 
-                      taxonomic.class = c("mammalia", "aves", NA), 
+setTdfEst <- function(species = c(),
+                      taxonomic.class = c("mammalia", "aves", NA),
                       tissue = c("blood", "claws", "collagen", "feather", 
                                  "hair", "kidney", "liver", "milk", 
                                  "muscle", NA), 
                       diet.type = c("carnivore", "herbivore", 
-                                    "omnivore",  "pellet", NA), 
+                                    "omnivore",  "pellet", NA),
+                      habitat = c("marine", "terrestrial", NA), 
                       source.iso.13C = c(), 
                       source.iso.15N = c(), 
                       tree = c()){
@@ -81,15 +81,18 @@ if(is.null(diet.type) == TRUE){
     warning("diet.type levels do not match dataset from Healy et al 2016")
 }
 
-##check iso data is there. This only checks one of the cases.
-if(is.null(source.iso.13C)|is.null(source.iso.15N) == TRUE){
-    warning("No source isotopic data")
+
+##check iso data is there and warn user if they are going to use it
+  if((is.null(source.iso.13C)|is.null(source.iso.15N)) == TRUE){
     source.iso.13C <- NA
     source.iso.15N <- NA
-} else if(any(c(class(source.iso.13C), class(source.iso.15N)) == "numeric") 
-          != TRUE){
+  } else if(any(c(class(source.iso.13C), class(source.iso.15N)) == "numeric") 
+            != TRUE){
     warning("source isotopic data not numeric")
-}
+    warning("Only include isotopic food isotopic values if derived from controlled dietary settings")
+        } else {
+    warning("Only include isotopic food isotopic values if derived from controlled dietary settings")
+  } 
    
 ###check if there is a tree and what type of tree it is
 if(is.null(tree) == TRUE){     
