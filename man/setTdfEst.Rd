@@ -4,17 +4,11 @@
 \alias{setTdfEst}
 \title{Specifying observations to be imputed.}
 \usage{
-setTdfEst(species = c(), habitat = c("marine", "terrestrial", NA),
-  taxonomic.class = c("mammalia", "aves", NA), tissue = c("blood", "claws",
-  "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle", NA),
-  diet.type = c("carnivore", "herbivore", "omnivore", "pellet", NA),
-  source.iso.13C = c(), source.iso.15N = c(), tree = c())
+setTdfEst(species, taxonomic.class, tissue, diet.type, habitat, source.iso.13C,
+  source.iso.15N, tree)
 }
 \arguments{
 \item{species}{a binomial species name as a character string.}
-
-\item{habitat}{a character string of either \code{"marine"} or
-\code{"terrestrial"}.}
 
 \item{taxonomic.class}{the class of species as a character string, either
 \code{"mammalia"} or \code{"aves"}.}
@@ -25,6 +19,9 @@ setTdfEst(species = c(), habitat = c("marine", "terrestrial", NA),
 
 \item{diet.type}{the diet type. Can be one of the following:
 \code{c("carnivore", "herbivore", "omnivore",  "pellet")}.}
+
+\item{habitat}{a character string of either \code{"marine"} or
+\code{"terrestrial"}.}
 
 \item{source.iso.13C}{the source carbon isotopic value (must be
 \code{numeric}).}
