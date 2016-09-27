@@ -25,9 +25,6 @@ tdfMulClean <- function(new.data = c(),
                         taxonomic.class =  c("mammalia","aves") , 
                         random.terms = ~ animal + species + tissue) {
 		
-
-
-		
   # Decide on which animal class. I think this will be a good thing to 
   # include as it will edge people towards an appropriate analysis 
   # (i.e. avoid the fact that feathers and hair will already divide the 
@@ -48,8 +45,7 @@ tdfMulClean <- function(new.data = c(),
 		
 		
 		
-  #####decide on the isotope names###
-  ## AJ - the column names in these dataset are a mess!!
+  #####decide on the isotope###
   if((isotope == "carbon") == T){
     
     dropN <- names(data) %in% c("source.iso.15N","delta15N")
@@ -91,8 +87,7 @@ tdfMulClean <- function(new.data = c(),
   
   ####Clean the data and match up the tree using the multree function
   
-  
-  #####this needs to be fixed so that it actually removes the dataset.
+
   
   clean_iso <-	mulTree::as.mulTree(taxa = species.col.name, 
                                    data = iso_data_com, 
