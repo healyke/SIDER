@@ -4,32 +4,48 @@
 \alias{tdfMulClean}
 \title{Matching phylogenies and data frames}
 \usage{
-tdfMulClean(new.data = c(), data = data, species.col.name = c("species"),
-  tree, isotope = c("carbon", "nitrogen"), taxonomic.class = c("mammalia",
-  "aves"), random.terms = ~animal + species + tissue)
+tdfMulClean(data.estimate, data.isotope, tree, isotope, random.terms = ~animal
+  + species + tissue)
 }
 \arguments{
-\item{new.data}{data for species to be imputed (see \code{\link{setTdfEst}}).}
+\item{data.estimate}{data for species to be imputed (see \code{\link{setTdfEst}}).}
 
-\item{data}{a \code{data.frame} object matching phylogeny.}
-
-\item{species.col.name}{name of column containing binomial species names.}
+\item{data.isotope}{a \code{data.frame} containing isotope data. If missing
+the \code{\link{isotope_data}} dataset will be used.}
 
 \item{tree}{a \code{phylo} or \code{multiPhylo} object.}
 
 \item{isotope}{the isotope for which discrimination factor is to be imputed,
 either \code{"carbon"} or \code{"nitrogen"}.}
 
-\item{taxonomic.class}{the class of species as a character string, either
-\code{"mammalia"} or \code{"aves"}.}
-
 \item{random.terms}{an object of class \code{formula} describing the random
-effects.}
+effects. By default the random terms are \code{"~ animal + species + tissue"}.
+Note that "animal" designates phylogeny in \code{\link[MCMCglmm]{MCMCglmm}}.}
 }
 \value{
 A \code{mulTree} object.
 }
 \description{
 Matches phylogenies and data into a \code{mulTree} object.
+}
+\examples{
+## Load the combined trees data
+data(combined_trees)
+
+## Initialise the data in the right format
+new.data.test <- setTdfEst(species = "Meles_meles", habitat = "terrestrial", 
+   taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
+   tree = combined_trees)
+
+## Load the isotope data
+data(isotope_data)
+
+## Generate the mulTree object to be passed to tdfMcmcglmm()
+tdf_data_c <- tdfMulClean(data.estimate = new.data.test,
+   data.isotope = isotope_data, tree = combined_trees, isotope = "carbon")
+
+}
+\seealso{
+\code{\link{setTfdEst}}, \code{\link{combined_trees}}, \code{\link{isotope_data}}, \code{\link[mulTree]{as.mulTree}}.
 }
 

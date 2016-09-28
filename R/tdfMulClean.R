@@ -2,29 +2,58 @@
 #'   
 #' @description Matches phylogenies and data into a \code{mulTree} object.
 #'   
-#' @param new.data data for species to be imputed (see \code{\link{setTdfEst}}).
-#' @param data a \code{data.frame} object matching phylogeny.
-#' @param species.col.name name of column containing binomial species names.
+#' @param data.estimate data for species to be imputed (see \code{\link{setTdfEst}}).
+#' @param data.isotope a \code{data.frame} containing isotope data. If missing
+#'   the \code{\link{isotope_data}} dataset will be used.
 #' @param tree a \code{phylo} or \code{multiPhylo} object.
 #' @param isotope the isotope for which discrimination factor is to be imputed,
 #'   either \code{"carbon"} or \code{"nitrogen"}.
-#' @param taxonomic.class the class of species as a character string, either
-#'   \code{"mammalia"} or \code{"aves"}.
 #' @param random.terms an object of class \code{formula} describing the random
-#'   effects.
+#'   effects. By default the random terms are \code{"~ animal + species + tissue"}.
+#'   Note that "animal" designates phylogeny in \code{\link[MCMCglmm]{MCMCglmm}}.
 #'   
 #' @return A \code{mulTree} object.
-#'   
+#' 
+#' @examples
+#' ## Load the combined trees data
+#' data(combined_trees)
+#' 
+#' ## Initialise the data in the right format
+#' new.data.test <- setTdfEst(species = "Meles_meles", habitat = "terrestrial", 
+#'    taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
+#'    tree = combined_trees)
+#' 
+#' ## Load the isotope data
+#' data(isotope_data)
+#' 
+#' ## Generate the mulTree object to be passed to tdfMcmcglmm()
+#' tdf_data_c <- tdfMulClean(data.estimate = new.data.test,
+#'    data.isotope = isotope_data, tree = combined_trees, isotope = "carbon")
+#' 
+#' @seealso \code{\link{setTfdEst}}, \code{\link{combined_trees}}, \code{\link{isotope_data}}, \code{\link[mulTree]{as.mulTree}}.
+#' 
 #' @export
-	
-tdfMulClean <- function(new.data = c(), 
-                        data = data, 
-                        species.col.name = c("species"), 
-                        tree, 
-                        isotope = c("carbon","nitrogen"), 
-                        taxonomic.class =  c("mammalia","aves") , 
-                        random.terms = ~ animal + species + tissue) {
-		
+      
+#DEBUGGING
+# warning("DEBUG - tdfMulClean")
+# data(combined_trees);data(isotope_data)
+# new.data.test <- setTdfEst(species = "Meles_meles", habitat = "terrestrial", 
+#    taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
+#    tree = combined_trees)
+
+# data.estimate <- new.data.test
+# data.isotope <- isotope_data
+# isotope <- "carbon"
+# tree <- combined_trees
+# random.terms = ~ animal + species + tissue
+
+# tdf_data_c <- tdfMulClean(data.estimate = new.data.test, 
+#                           data.isotope = isotope_data, 
+#                           tree = combined_trees,  
+#                           isotope = "carbon")
+
+tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms = ~ animal + species + tissue) {
+            
   # Decide on which animal class. I think this will be a good thing to 
   # include as it will edge people towards an appropriate analysis 
   # (i.e. avoid the fact that feathers and hair will already divide the 
@@ -34,84 +63,120 @@ tdfMulClean <- function(new.data = c(),
   # could be coded to be open, thereby allowing a tree and appropriate 
   # model to be subsetted.
 
-	if((taxonomic.class== "mammalia") == T){ 
-	  iso_data_class <- data[data$taxonomic.class == "mammalia",]
-	} else {
-		if((taxonomic.class == "aves") == T){ 
-		  iso_data_class <- data[data$taxonomic.class == "aves",]
-		}
-		else{ iso_data_class <- data}
-	}
-		
-		
-		
-  #####decide on the isotope###
-  if((isotope == "carbon") == T){
-    
-    dropN <- names(data) %in% c("source.iso.15N","delta15N")
+
+  # SANITIZING
+
+  # data.estimate
+  if(!all(names(data.estimate) == c("species", "habitat", "taxonomic.class", "tissue", "diet.type", "source.iso.13C", "delta13C", "source.iso.15N", "delta15N"))) {
+    stop("data.estimate is not in the right format!\nUse setTdfEst() for setting up the right format.")
+  }
+
+  # data.isotope
+  if(missing(data.isotope)) {
+    # If data.isotope is missing, use the default one from the package
+    data(isotope_data)
+    data.isotope <- isotope_data
+    # And fire a warning!
+    warning("No isotopic data was provided, the default SIDER data set will be use.\nSee ?isotope_data for more information.")
+  } else {
+    # Check if it's the standard format
+    data(isotope_data)
+    # Names must match
+    if(!all(names(isotope_data) == names(data.isotope))) {
+      stop("The isotope dataset must be matching the default SIDER data set.\nSee ?isotope_data for more information.")
+    }
+    # TG: missing a way to check the content of the user's table is correct!
+  }
+
+  # tree
+  if(class(tree) != "phylo") {
+    if(class(tree) != "multiPhylo") {
+      stop("tree argument must be of class 'phylo' or 'multiPhylo'.")
+    }
+  }
+
+  # isotope
+  if(missing(isotope)){
+    warning("Isotope to be imputed is missing.")
+  } else {
+    all_isotopes <- c("carbon", "nitrogen")
+    if(all(is.na(match(isotope, all_isotopes)))) {
+      stop("Isotope argument must be one of the following:\n", paste(all_isotopes, collapse = ", "), ".", sep = "")
+    }
+  }
+
+  # Random terms
+  if(class(random.terms) != "formula") {
+    stop("Random must be a formula with 'animal' as the first element.")
+  } else {
+    if(length(grep("animal", as.character(random.terms)[[2]])) == 0) {
+      stop("Random must be a formula with 'animal' as the first element.")
+    }
+  }
+
+  # Setting up the mulTree data for isotope estimation
+
+  #Setting the isotopic data for the right class
+  if(data.estimate$taxonomic.class == "mammalia" | data.estimate$taxonomic.class == "aves") {
+    iso_data_class <- data.isotope[data.isotope$taxonomic.class == data.estimate$taxonomic.class,]
+  } else {
+    stop("The taxonomic class can only be 'mammalia' or 'aves'.\nSee setTdfEst function for more information.")
+  }
+            
+  #Decide on the isotope
+  if(isotope == "carbon") {
+    dropN <- names(data.isotope) %in% c("source.iso.15N","delta15N")
     iso_data_class  <- iso_data_class[!dropN]
     
-    dropnewN <- names(new.data) %in% c("source.iso.15N","delta15N")
-    new.data_sub  <- new.data[!dropnewN]
+    dropnewN <- names(data.estimate) %in% c("source.iso.15N","delta15N")
+    new.data_sub  <- data.estimate[!dropnewN]
+  }
+
+  if(isotope == "nitrogen"){
     
-  } else{ 
-    if((isotope == "nitrogen") == T){
-      
-      dropC <- names(data) %in% c("source.iso.13C","delta13C")
-      iso_data_class  <- iso_data_class[!dropC]
-      
-      dropnewC <- names(new.data) %in% c("source.iso.13C","delta13C")
-      new.data_sub  <- new.data[!dropnewC]
-      
-    }
+    dropC <- names(data.isotope) %in% c("source.iso.13C","delta13C")
+    iso_data_class  <- iso_data_class[!dropC]
     
-		}
-		
-  
+    dropnewC <- names(data.estimate) %in% c("source.iso.13C","delta13C")
+    new.data_sub  <- data.estimate[!dropnewC]
+    
+  }
   
   # get rid on NAs so that the only NAs are for the new data
   iso_data_sub_na <-  stats::na.omit(iso_data_class)
+    
+  # Include the new data, I bind it so its at the top and hence easier to read.
   
-  # ------------------------------------------------------------------------------
-  
-  # Include the new data, I bind it so its at the top and hence easier 
-  # to read.
-  
-  if(is.null(new.data) == T){
+  if(is.null(data.estimate) == T){
     iso_data_com <- iso_data_sub_na
   } else{ 
     iso_data_com  <- rbind(new.data_sub , iso_data_sub_na)
   }
-  
-  
-  
-  ####Clean the data and match up the tree using the multree function
-  
 
-  
-  clean_iso <-	mulTree::as.mulTree(taxa = species.col.name, 
-                                   data = iso_data_com, 
-                                   tree = tree, 
-                                   clean.data = TRUE)
+  #Clean the data and match up the tree using the multree function
+  #TG: I've added the cleaning function prior to as.mulTree. This way it doesn't polute the console with huge lists of dropped taxa.
+  cleaned_iso_data_com <- mulTree::clean.data("species", iso_data_com, tree)
+  clean_iso <- mulTree::as.mulTree(taxa = "species", 
+                                   data = cleaned_iso_data_com$data, 
+                                   tree = cleaned_iso_data_com$tree)
+  #Forcing the random terms
+  env_tmp <- environment(clean_iso$random.terms)
+  clean_iso$random.terms <- random.terms
+  environment(clean_iso$random.terms) <- env_tmp
   
   ##this was there to make it work with only one tree should be good now.
   #clean_iso <- clean.data(species.col.name, iso_data_com, tree, rand.terms)
   
-  
-  
   #####fix that random term by checking if any of the random terms are the same 
   # as the species column and replacing that with sp.col as the mulTree function does
-  #		if(any(grep(species.col.name ,random)) == TRUE){
-  #			clean_iso$random.terms <-as.formula( gsub("species","sp.col", random))
-  #			} else{ clean_iso$random.terms <-as.formula( random)	
-  #			}
+  #            if(any(grep(species.col.name ,random)) == TRUE){
+  #                  clean_iso$random.terms <-as.formula( gsub("species","sp.col", random))
+  #                  } else{ clean_iso$random.terms <-as.formula( random)      
+  #                  }
   
-  # AJ don't think we need to force the class as that what as.mulTree returns.
-  # set the class of the object to mulTree
-  # class(clean_iso) <- 'mulTree'
   
   # return the created object
-  return(clean_iso)		
+  return(clean_iso)            
   
 }
 
