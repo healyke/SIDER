@@ -23,7 +23,15 @@
 #'   
 #' @author Kevin Healy
 #'   
-#'   
+#' @examples
+#' ## Load the combined trees data
+#' data(combined_trees)
+#' 
+#' ## Initialise the data in the right format
+#' new.data.test <- setTdfEst(species = "Meles_meles", habitat = "terrestrial", 
+#'    taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
+#'    tree = combined_trees)
+#' 
 #' @export
 
 setTdfEst <- function(species, taxonomic.class, tissue, diet.type, habitat, source.iso.13C, source.iso.15N, tree)
