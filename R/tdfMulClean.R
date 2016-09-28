@@ -67,7 +67,7 @@ tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms
   # SANITIZING
 
   # data.estimate
-  if(!all(names(data.estimate) == c("species", "habitat", "taxonomic.class", "tissue", "diet.type", "source.iso.13C", "delta13C", "source.iso.15N", "delta15N"))) {
+  if(any(is.na(match(c("species", "habitat", "taxonomic.class", "tissue", "diet.type", "source.iso.13C", "delta13C", "source.iso.15N", "delta15N"), names(data.estimate))))) {
     stop("data.estimate is not in the right format!\nUse setTdfEst() for setting up the right format.")
   }
 
@@ -82,7 +82,7 @@ tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms
     # Check if it's the standard format
     data(isotope_data)
     # Names must match
-    if(!all(names(isotope_data) == names(data.isotope))) {
+    if(any(is.na(match(names(isotope_data), names(data.isotope))))) {
       stop("The isotope dataset must be matching the default SIDER data set.\nSee ?isotope_data for more information.")
     }
     # TG: missing a way to check the content of the user's table is correct!
@@ -97,7 +97,7 @@ tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms
 
   # isotope
   if(missing(isotope)){
-    warning("Isotope to be imputed is missing.")
+    stop("Isotope to be imputed is missing.")
   } else {
     all_isotopes <- c("carbon", "nitrogen")
     if(all(is.na(match(isotope, all_isotopes)))) {
@@ -107,10 +107,10 @@ tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms
 
   # Random terms
   if(class(random.terms) != "formula") {
-    stop("Random must be a formula with 'animal' as the first element.")
+    stop("Random terms must be a formula with 'animal' as the first element.")
   } else {
     if(length(grep("animal", as.character(random.terms)[[2]])) == 0) {
-      stop("Random must be a formula with 'animal' as the first element.")
+      stop("Random terms must be a formula with 'animal' as the first element.")
     }
   }
 
