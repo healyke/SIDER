@@ -32,6 +32,8 @@
 #'    taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
 #'    tree = combined_trees)
 #' 
+#' @seealso \code{\link{tdfMulClean}}, \code{\link{combined_trees}}.
+#' 
 #' @export
 
 setTdfEst <- function(species, taxonomic.class, tissue, diet.type, habitat, source.iso.13C, source.iso.15N, tree)
@@ -85,17 +87,26 @@ setTdfEst <- function(species, taxonomic.class, tissue, diet.type, habitat, sour
 
 
   ##check iso data is there and warn user if they are going to use it
-  if(is.null(source.iso.13C) | is.null(source.iso.15N)){
+  if(missing(source.iso.13C)) {
     source.iso.13C <- NA
-    source.iso.15N <- NA
-  } else if(any(c(class(source.iso.13C), class(source.iso.15N)) != "numeric")){
-    warning("Source isotopic data not numeric.")
-    warning("Only include isotopic food isotopic values if derived from controlled dietary settings.")
   } else {
-    #TG: is this warning necessary?
-    #warning("Only include isotopic food isotopic values if derived from controlled dietary settings")
-  } 
-   
+    if(class(source.iso.13C) != "numeric") {
+      warning("Source isotopic 13C data is not numeric.")
+      warning("Only include isotopic food values if derived from controlled dietary settings.")
+      source.iso.13C <- NA
+    }
+  }
+
+  if(missing(source.iso.15N)) {
+    source.iso.15N <- NA
+  } else {
+    if(class(source.iso.15N) != "numeric") {
+      warning("Source isotopic data 15N is not numeric.")
+      warning("Only include isotopic food values if derived from controlled dietary settings.")
+      source.iso.15N <- NA
+    }
+  }
+
   ###check if there is a tree and what type of tree it is
   if(is.null(tree)){
       stop("Phylogeny is missing. Use\ndata(combined_trees)\nfor loading mammalian and aves phylogenies.")

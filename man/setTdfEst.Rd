@@ -51,4 +51,7 @@ new.data.test <- setTdfEst(species = "Meles_meles", habitat = "terrestrial",
 \author{
 Kevin Healy
 }
+\seealso{
+\code{\link{tdfMulClean}}, \code{\link{combined_trees}}.
+}
 
