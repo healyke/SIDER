@@ -4,10 +4,9 @@
 \alias{tdfMcmcglmm}
 \title{Running MCMCglmm}
 \usage{
-tdfMcmcglmm(mulTree.data, formula = delta13C ~ diet.type + habitat,
-  random.terms = ~animal + sp.col + tissue, nitt = c(120000),
-  thin = c(50), burnin = c(20000), prior = NULL, no.chains = c(2),
-  convergence = c(1.1), ESS = c(1000), output = "teff_output")
+tdfMcmcglmm(mulTree.data, formula, random.terms, parameters, priors,
+  chains = 2, convergence = 1.1, ESS = 1000, output = "teff_output",
+  save.model = TRUE, verbose = TRUE, ...)
 }
 \arguments{
 \item{mulTree.data}{output from \code{\link{tdfMulClean}} containing data and
@@ -16,25 +15,27 @@ phylogeny as a \code{mulTree} object.}
 \item{formula}{an object of class \code{formula} describing the fixed
 effects.}
 
-\item{random.terms}{an object of class "formula" describing the random
-effects.}
+\item{random.terms}{Optional. An object of class \code{formula} describing the random
+effects. If missing, the formula from \code{mulTree.data$random.terms} is used.}
 
-\item{nitt}{number of MCMC iterations}
+\item{parameters}{a list of three numerical values to be used respectively as: (1) the number of generations, (2) the sampling value, (3) the burnin.}
 
-\item{thin}{thinning interval of MCMC chain}
+\item{priors}{optional list of prior specifications (see details).}
 
-\item{burnin}{number of iterations to discard at beginning of chain}
-
-\item{prior}{optional list of prior specifications (see details).}
-
-\item{no.chains}{The number of MCMC chains for each run.}
+\item{chains}{The number of MCMC for each run (\code{default = 2}).}
 
 \item{convergence}{limits set for the point estimates of the potential scale
-reduction factor (see \code{link[coda]{gelman.diag}}.}
+reduction factor (see \code{link[coda]{gelman.diag}} - \code{default = 1.1}).}
 
-\item{ESS}{effective sample size of MCMC iterations for each model estimate.}
+\item{ESS}{effective sample size of MCMC iterations for each model estimate (\code{default = 1000}).}
 
-\item{output}{The name of the output files}
+\item{output}{The name of the output files (\code{default = "teff_output"})}
+
+\item{save.model}{whether to save the models out of R environment (default) or just get the estimates.}
+
+\item{verbose}{whether to be verbose or not (\code{default = TRUE}).}
+
+\item{...}{any optional arguments to be passed to \code{\link[mulTree]{mulTree}}.}
 }
 \value{
 list containing Posterior Distributions of imputed discrimination
@@ -58,7 +59,13 @@ inverse-Wishart, and also the mean vector (alpha.mu) and covariance matrix
 0}, \code{V = 1}, \code{alpha.mu = 0}, and \code{alpha.V = 0}. When alpha.V
 is non-zero, parameter expanded algorithms are used.
 }
+\examples{
+
+}
 \author{
 Kevin Healy
+}
+\seealso{
+\code{\link{setTfdEst}}, \code{\link{tdfMulClean}}, \code{\link{combined_trees}}, \code{\link{isotope_data}}, \code{\link[mulTree]{as.mulTree}}, \code{\link[mulTree]{mulTree}}, \code{\link[MCMCglmm]{MCMCglmm}}.
 }
 

@@ -7,17 +7,18 @@
 #'   phylogeny as a \code{mulTree} object.
 #' @param formula an object of class \code{formula} describing the fixed
 #'   effects.
-#' @param random.terms an object of class "formula" describing the random
-#'   effects.
-#' @param nitt number of MCMC iterations
-#' @param thin thinning interval of MCMC chain
-#' @param burnin number of iterations to discard at beginning of chain
-#' @param prior optional list of prior specifications (see details).
-#' @param no.chains The number of MCMC chains for each run.
+#' @param random.terms Optional. An object of class \code{formula} describing the random
+#'   effects. If missing, the formula from \code{mulTree.data$random.terms} is used.
+#' @param parameters a list of three numerical values to be used respectively as: (1) the number of generations, (2) the sampling value, (3) the burnin.
+#' @param priors optional list of prior specifications (see details).
+#' @param chains The number of MCMC for each run (\code{default = 2}).
 #' @param convergence limits set for the point estimates of the potential scale
-#'   reduction factor (see \code{link[coda]{gelman.diag}}.
-#' @param ESS effective sample size of MCMC iterations for each model estimate.
-#' @param output The name of the output files
+#'   reduction factor (see \code{link[coda]{gelman.diag}} - \code{default = 1.1}).
+#' @param ESS effective sample size of MCMC iterations for each model estimate (\code{default = 1000}).
+#' @param output The name of the output files (\code{default = "teff_output"})
+#' @param save.model whether to save the models out of R environment (default) or just get the estimates.
+#' @param verbose whether to be verbose or not (\code{default = TRUE}).
+#' @param ... any optional arguments to be passed to \code{\link[mulTree]{mulTree}}.
 #'   
 #' @details The \code{priors} argument must be of 3 possible elements: R
 #' (R-structure) G (G-structure) and B (fixed effects). B is a list containing
@@ -35,104 +36,112 @@
 #'   factors including a posterior distribution for each individual chain in
 #'   Tef.est and a combined chain in Tef.global.
 #'   
+#' 
+#' @examples
+#' 
 #' @author Kevin Healy
 #'   
+#' @seealso \code{\link{setTfdEst}}, \code{\link{tdfMulClean}}, \code{\link{combined_trees}}, \code{\link{isotope_data}}, \code{\link[mulTree]{as.mulTree}}, \code{\link[mulTree]{mulTree}}, \code{\link[MCMCglmm]{MCMCglmm}}.
+#' 
 #' @export
 
+#DEBUGGING
+# warning("DEBUG - tdfMulClean")
+# data(combined_trees);data(isotope_data)
+# new.data.test <- setTdfEst(species = "Meles_meles", habitat = "terrestrial", 
+#    taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
+#    tree = combined_trees)
 
-tdfMcmcglmm <- function(mulTree.data , 
-                         formula = delta13C ~ diet.type + habitat ,
-                         random.terms = ~ animal + sp.col + tissue,
-                         nitt = c(120000), 
-                         thin = c(50), 
-                         burnin = c(20000), 
-                         prior = NULL, 
-                         no.chains = c(2), 
-                         convergence = c(1.1), 
-                         ESS = c(1000),
-                         output = "teff_output"){
+# data.estimate <- new.data.test
+# data.isotope <- isotope_data
+# isotope <- "carbon"
+# tree <- combined_trees
+# random.terms = ~ animal + species + tissue
 
+# mulTree.data <- tdfMulClean(data.estimate = new.data.test, 
+#                           data.isotope = isotope_data, 
+#                           tree = combined_trees,  
+#                           isotope = "carbon")
 
+# formula = delta13C ~ diet.type + habitat
+# parameters = c(1200000, 200000, 500)
+# chains = 2
+# convergence = 1.1
+# ESS = 1000
+# output = "teff_output"
+# save.model = TRUE
+# verbose = TRUE
 
+tdfMcmcglmm <- function(mulTree.data, formula, random.terms, parameters, priors, chains = 2, convergence = 1.1, ESS = 1000, output = "teff_output", save.model = TRUE, verbose = TRUE, ...) {
 
-	
-####this checks if there is a prior. If there is no prior and the formula is the same as the one we use it uses the same prior as we use.
+    # Sanitizing
+    # mulTree.data
+    if(class(mulTree.data) != "mulTree") {
+        stop("mulTree.data must be a mulTree object.\nSee the tdfMulClean() function for more details.")
+    } else {
+        if(length(mulTree.data) != 4) {
+            stop("mulTree.data must be a mulTree object.\nSee the tdfMulClean() function for more details.")
+        } else {
+            if(names(mulTree.data) != c("phy", "data", "random.terms", "taxa.column")) {
+                stop("mulTree.data must be a mulTree object.\nSee the tdfMulClean() function for more details.")
+            }
+        }
+    }
 
-mulTree.data$random.terms = random.terms
+    # formula
+    if(!missing(random.terms)) {
+        mulTree.data$random.terms <- random.terms
+    }
+    # Replace "species" as a random term into sp.col
+    colnames(mulTree.data$data)[1] <- "species"
 
-# set priors to default values if not specified 
-		if((is.null(prior) & 
-		    mulTree.data$random.term == "~animal + sp.col + tissue") == TRUE) { 
-		      prior_tef <- list(R = list(V = 1/4, nu=0.002), 
-		                        G = list(G1=list(V = 1/4, nu=0.002),
-		                                G2=list(V = 1/4, nu=0.002), 
-		                                G3=list(V = 1/4, nu=0.002)))
-			} else{
-			prior <-  prior
-					}
-					
-	parameters <- c(nitt, thin, burnin)
+    # save.model
+    if(class(save.model) != "logical") {
+        stop("save.model must be logical.")
+    }
 
-########run the analysis
+#####this checks if there is a prior. If there is no prior and the formula is the same as the one we use it uses the same prior as we use.
+    # set priors to default values if not specified 
+    if((missing(priors) & mulTree.data$random.terms == "~animal + sp.col + tissue") == TRUE) { 
+        priors <- list(R = list(V = 1/4, nu = 0.002), 
+                       G = list(
+                        G1 = list(V = 1/4, nu = 0.002),
+                        G2 = list(V = 1/4, nu = 0.002), 
+                        G3 = list(V = 1/4, nu = 0.002)))
+    }
 
-###need to put animal column into data first by dublicating the species column
-#mulTree.data$table$animal <-  mulTree.data$table$species
+#####run the analysis
+    mulTree::mulTree(mulTree.data = mulTree.data, 
+                     formula = formula, 
+                     parameters = parameters, 
+                     priors = priors, 
+                     chains = chains, 
+                     convergence = convergence, 
+                     ESS = ESS, 
+                     output = output,
+                     verbose = verbose,
+                     pl = TRUE,
+                     ...)
+    
+    # Read the results back in
+    tdf_Liabs_raw <- mulTree::read.mulTree(mulTree.chain = output, extract = "Liab")
 
-#if((class(mulTree.data$phy) == "multiPhylo") == TRUE){
-	
-		mulTree::mulTree(mulTree.data  = mulTree.data , 
-		                 formula = formula, 
-		                 parameters = parameters, 
-		                 pl = TRUE, 
-		                 prior = prior, 
-		                 chains = no.chains, 
-		                 convergence = convergence, 
-		                 ESS = ESS, 
-		                 output = output )
-				
-	#na.row <-  which(row(is.na(data)) == T)[1]
-
-tdf_Liabs_raw <- mulTree::read.mulTree(mulTree.chain= output, extract = "Liab")
-
-#}
-#else{
-	
-#	tef_Liabs_raw <- MCMCglmm(fixed = formula, random = random.term, data = mulTree.data$table, pedigree = mulTree.data$tree, prior = prior_tef, nitt = nitt, thin  = thin, burnin = burnin, pl = TRUE)
-	
-#tef_Liabs_raw <- 	tef_Liabs_raw$Liab
-	
-#	}
-	
-#tef_estimates  <- as.mcmc(unlist(tef_Liabs_raw[,1]))
-	
-#	return(list(tef_estimates = tef_estimates))
-	
+          
 #### I think this loop is for the MulTree function so need to come back and fix this.
 #####as the NA row is placed first in the matrix we only want the first column of Liab as the rest are fixed.
-	tdf_Liabs <- list()
-  for(i in 1:(length(names(tdf_Liabs_raw)))){
 
-    tdf_Liabs[[i]] <-	(tdf_Liabs_raw[[i]][,1])
-  }
-	
-  tdf_global  <- coda::as.mcmc(unlist(tdf_Liabs))
-	
-  # return the output as a list
-  return(list(tdf_estimates = tdf_Liabs, tdf_global = tdf_global))
-			
+    #Extract the MCMC outputs
+    tdf_Liabs <- lapply(tdf_Liabs_raw, function(X) X[,1])
+
+    #concatenate the output in the global model
+    tdf_global <- coda::as.mcmc(unlist(tdf_Liabs))
+          
+    # remove the models
+    if(!save.model) {
+        cat("Removing temporary files:\n")
+        file.remove(list.files(pattern = output))
+    }
+
+    # return the output as a list
+    return(list(tdf_estimates = tdf_Liabs, tdf_global = tdf_global))
 }
-
-
-
-#####need to make a function that will give a plot and a table.
-
-
-
-
-
-
-
-
-
-	
-	
