@@ -18,7 +18,7 @@
 #'   
 #' @examples
 #' ## Load the combined trees data
-#' data(combined_trees)
+#' #data(combined_trees)
 #' 
 #' ## Initialise the data in the right format
 #' new.data.test <- recipeSider(species = "Meles_meles", habitat = "terrestrial", 
@@ -26,7 +26,7 @@
 #'    tree = combined_trees)
 #' 
 #' ## Load the isotope data
-#' data(isotope_data)
+#' #data(isotope_data)
 #' 
 #' ## Generate the mulTree object to be passed to imputeSider()
 #' tdf_data_c <- prepareSider(data.estimate = new.data.test,
@@ -39,7 +39,8 @@
       
 #DEBUGGING
 # warning("DEBUG - prepareSider")
-# data(combined_trees);data(isotope_data)
+# utils::data(combined_trees);
+# utils::data(isotope_data)
 # new.data.test <- recipeSider(species = "Meles_meles", habitat = "terrestrial", 
 #    taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
 #    tree = combined_trees)
@@ -78,25 +79,38 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
          setting up the right format.")
   }
 
+  # ** AJ BEGIN COMMENT OUT **
+  # AJ - this section is not loading the data appropriately  and is failing
+  # R CMD check. With it commented out like this, the testthat tests are 
+  # failing. 
+
   # data.isotope
   if(missing(data.isotope)) {
     # If data.isotope is missing, use the default one from the package
-    data(isotope_data)
-    data.isotope <- isotope_data
+
+    # AJ - this call to data() is spawning a NOTE from R CMD check.
+    # I think my interpretation of it is that we don't need to reload the
+    # the object into the global environment, since it should already be
+    # available via lazy loading on library(SIDER)
+    #utils::data(isotope_data, envir = environment())
+    data.isotope <- SIDER::isotope_data
     # And fire a warning!
-    warning("No isotopic data was provided, the default SIDER data set will 
+    warning("No isotopic data was provided, the default SIDER data set will
             be used.\nSee ?isotope_data for more information.")
   } else {
     # Check if it's the standard format
-    data(isotope_data)
+    # AJ - as per my comment above re lazy loading
+    #utils::data(isotope_data, envir = environment())
     # Names must match
-    if(any(is.na(match(names(isotope_data), names(data.isotope))))) {
+    if(any(is.na(match(names(SIDER::isotope_data), names(data.isotope))))) {
       stop("The isotope dataset must be matching the default SIDER data set.
            \nSee ?isotope_data for more information.")
     }
     # TG: missing a way to check the content of the user's table is correct!
   }
 
+  # ** AJ END COMMENT OUT **
+  
   # tree
   if(class(tree) != "phylo") {
     if(class(tree) != "multiPhylo") {

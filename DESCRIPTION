@@ -17,7 +17,8 @@ Suggests:
     knitr,
     ape,
     devtools,
-    hdrcde
+    hdrcde,
+    utils
 Imports:
     mulTree,
     coda,

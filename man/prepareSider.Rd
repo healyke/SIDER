@@ -32,7 +32,7 @@ Matches phylogenies and data into a \code{mulTree} object.
 }
 \examples{
 ## Load the combined trees data
-data(combined_trees)
+#data(combined_trees)
 
 ## Initialise the data in the right format
 new.data.test <- recipeSider(species = "Meles_meles", habitat = "terrestrial", 
@@ -40,7 +40,7 @@ new.data.test <- recipeSider(species = "Meles_meles", habitat = "terrestrial",
    tree = combined_trees)
 
 ## Load the isotope data
-data(isotope_data)
+#data(isotope_data)
 
 ## Generate the mulTree object to be passed to imputeSider()
 tdf_data_c <- prepareSider(data.estimate = new.data.test,

@@ -64,9 +64,6 @@ The \code{priors} argument must be of 3 possible elements: R
   0}, \code{V = 1}, \code{alpha.mu = 0}, and \code{alpha.V = 0}. When alpha.V
   is non-zero, parameter expanded algorithms are used.
 }
-\examples{
-
-}
 \author{
 Kevin Healy
 }

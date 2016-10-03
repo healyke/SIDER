@@ -42,7 +42,6 @@
 #'   Tef.est and a combined chain in Tef.global.
 #'   
 #'   
-#' @examples
 #' 
 #' @author Kevin Healy
 #'   
