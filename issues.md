@@ -26,5 +26,18 @@ Some problems:
  * A bigger issue is that im not sure the current structure for the vignettes makes it as easy for people as it could be. We could hide the dataset from the user and simply load it, and the phylogenies internally and just skip the whole first part of the vignette. Of course we would retain the ability to override the default by loading it oneself and manipulating or altering as one requires... just a thought...
  * i think the summary statistics could do with some additional work. We should probably used hdrcde::hdr() to calculate credible intervals, rather than just throwing summary() and hist() at it.
  
+ ##Renaming functions 3/10/2016
+ * setTdfEst -->   recipeSider
+ * tdfMulClean --> prepareSider
+ * tdfMcmcGlmm --> imputeSider
+ 
+ ##Issues 3/10/2016
+ * the vignettes is a dog's dinner, with buckets loads of verbose output
+ * why are the packages MCMCglmm, Matrix, coda, and ape loaded midway through the vignette? Is this because mulTree loads them? This is not good practice as functions in other packages should be referenced directly using colon notation, e.g. coda::read.coda.
+ * the outputting of the information for each Tree is unhelpful, messy and long.
+    * maybe there should be a `verbose = FALSE` option to suppress this.
+ * the random terms for the mcmcglmm model can now be defined in multiple places in the process. It is bundled into the object created by `prepareSider` (formally `tdfMulClean`) without any user input or control. If it is then not provided directly in the call to `imputeSider` (formally `tdfMcmcglmm`) then the function looks up this list object and pulls the random terms from e.g. `tdf_data_c$random.terms` (from the vignette). However, the fixed effects are not similarly defined automatically, and must instead by defined and passed explicitly to `imputeSider`. I don't see why the random terms would be automatically constructed, and not the random effects, and its not at all clear to me where we should be doing this and where this infomration should be stored (e.g. inside or outside the objects created by our functions)
+ 
+ 
  
  

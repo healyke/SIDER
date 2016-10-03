@@ -1,11 +1,11 @@
-context("setTdfEst")
+context("recipeSider")
 
 #Loading the trees
 data(combined_trees)
 
 test_that("Basic example (should run!)", {
   # Example
-  test <- setTdfEst(species = "Meles_meles",
+  test <- recipeSider(species = "Meles_meles",
                     habitat = "terrestrial", 
                     taxonomic.class = "mammalia",  
                     tissue = "blood",  
@@ -24,7 +24,7 @@ test_that("Basic example (should run!)", {
 test_that("should return errors (bad input)", {
   # No species name
     expect_error(
-      test <- setTdfEst( 
+      test <- recipeSider( 
                         habitat = "terrestrial", 
                         taxonomic.class = "mammalia",  
                         tissue = "blood",  
@@ -35,7 +35,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong species name
   expect_error(
-      test <- setTdfEst(species = "Pokemon", 
+      test <- recipeSider(species = "Pokemon", 
                         habitat = "terrestrial", 
                         taxonomic.class = "mammalia",
                         tissue = "blood",
@@ -46,7 +46,7 @@ test_that("should return errors (bad input)", {
       )
   # No habitat
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "Mordor",
                         taxonomic.class = "mammalia",
                         tissue = "blood",
@@ -57,7 +57,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong habitat
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         
                         taxonomic.class = "mammalia",
                         tissue = "blood",
@@ -68,7 +68,7 @@ test_that("should return errors (bad input)", {
       )
   # No class
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "terrestrial",
                         
                         tissue = "blood",
@@ -79,7 +79,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong class
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "terrestrial",
                         taxonomic.class = "fishy",
                         tissue = "blood",
@@ -90,7 +90,7 @@ test_that("should return errors (bad input)", {
       )
   # No tissue
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "terrestrial",
                         taxonomic.class = "mammalia",
 
@@ -101,7 +101,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong tissue
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "terrestrial",
                         taxonomic.class = "mammalia",
                         tissue = "cotton",
@@ -112,7 +112,7 @@ test_that("should return errors (bad input)", {
       )
   # No diet.type
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "terrestrial",
                         taxonomic.class = "mammalia",
                         tissue = "blood",
@@ -123,7 +123,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong diet.type
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "terrestrial",
                         taxonomic.class = "mammalia",
                         tissue = "blood",
@@ -134,7 +134,7 @@ test_that("should return errors (bad input)", {
       )
   # No tree
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "terrestrial",
                         taxonomic.class = "mammalia",
                         tissue = "blood",
@@ -145,7 +145,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong tree class
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "terrestrial",
                         taxonomic.class = "mammalia",
                         tissue = "blood",
@@ -156,7 +156,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong tree (sp not present within)
   expect_error(
-      test <- setTdfEst(species = "Meles_meles", 
+      test <- recipeSider(species = "Meles_meles", 
                         habitat = "terrestrial",
                         taxonomic.class = "mammalia",
                         tissue = "blood",

@@ -1,4 +1,4 @@
-context("tdfMcmcglmm")
+context("imputeSider")
 
 #Loading the trees
 data(combined_trees)

@@ -1,4 +1,4 @@
-context("tdfMulClean")
+context("prepareSider")
 
 #Loading the trees
 data(combined_trees)
@@ -6,11 +6,11 @@ data(combined_trees)
 #Loading the isotope data
 data(isotope_data)
 
-#Generate the setTdfEst dataset
-TdfEst_test <- setTdfEst(species = "Meles_meles", habitat = "terrestrial", taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore",  tree = combined_trees)
+#Generate the recipeSider dataset
+TdfEst_test <- recipeSider(species = "Meles_meles", habitat = "terrestrial", taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore",  tree = combined_trees)
 
 test_that("Basic example (should run!)", {
-  test <- tdfMulClean(data.estimate = TdfEst_test, data.isotope = isotope_data, tree = combined_trees, isotope = "carbon")
+  test <- prepareSider(data.estimate = TdfEst_test, data.isotope = isotope_data, tree = combined_trees, isotope = "carbon")
 
   #mulTree
   expect_is(test, "mulTree")
@@ -28,7 +28,7 @@ test_that("Basic example (should run!)", {
 
   #Fire of a warning from no isotope source
   expect_warning(
-    test <- tdfMulClean(data.estimate = TdfEst_test, tree = combined_trees, isotope = "carbon")
+    test <- prepareSider(data.estimate = TdfEst_test, tree = combined_trees, isotope = "carbon")
     )
 
   #mulTree
@@ -41,7 +41,7 @@ test_that("Basic example (should run!)", {
   expect_equal(as.vector(unlist(lapply(test, class))), c("multiPhylo", "data.frame", "formula", "character"))
 
 
-  test <- tdfMulClean(data.estimate = TdfEst_test, data.isotope = isotope_data, tree = combined_trees[[1]], isotope = "nitrogen", random.terms = ~ animal + tissue)
+  test <- prepareSider(data.estimate = TdfEst_test, data.isotope = isotope_data, tree = combined_trees[[1]], isotope = "nitrogen", random.terms = ~ animal + tissue)
 
   #mulTree
   expect_is(test, "mulTree")
@@ -62,7 +62,7 @@ test_that("Basic example (should run!)", {
 test_that("should return errors (bad input)", {
   # No data estimate
     expect_error(
-      test <- tdfMulClean(
+      test <- prepareSider(
                           data.isotope = isotope_data,
                           tree = combined_trees,
                           isotope = "carbon",
@@ -70,7 +70,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong data estimate
     expect_error(
-      test <- tdfMulClean(data.estimate = matrix(1,1),
+      test <- prepareSider(data.estimate = matrix(1,1),
                           data.isotope = isotope_data,
                           tree = combined_trees,
                           isotope = "carbon",
@@ -78,7 +78,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong data isotope
     expect_error(
-      test <- tdfMulClean(data.estimate = TdfEst_test,
+      test <- prepareSider(data.estimate = TdfEst_test,
                           data.isotope = matrix(1,1),
                           tree = combined_trees,
                           isotope = "carbon",
@@ -86,7 +86,7 @@ test_that("should return errors (bad input)", {
       )
   # No tree
     expect_error(
-      test <- tdfMulClean(data.estimate = TdfEst_test,
+      test <- prepareSider(data.estimate = TdfEst_test,
                           data.isotope = isotope_data,
                           
                           isotope = "carbon",
@@ -94,7 +94,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong tree
     expect_error(
-      test <- tdfMulClean(data.estimate = TdfEst_test,
+      test <- prepareSider(data.estimate = TdfEst_test,
                           data.isotope = isotope_data,
                           tree = "oak",
                           isotope = "carbon",
@@ -102,7 +102,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong tree
     expect_error(
-      test <- tdfMulClean(data.estimate = TdfEst_test,
+      test <- prepareSider(data.estimate = TdfEst_test,
                           data.isotope = isotope_data,
                           tree = rtree(5),
                           isotope = "carbon",
@@ -110,7 +110,7 @@ test_that("should return errors (bad input)", {
       )
   # No isotope
     expect_error(
-      test <- tdfMulClean(data.estimate = TdfEst_test,
+      test <- prepareSider(data.estimate = TdfEst_test,
                           data.isotope = isotope_data,
                           tree = combined_trees,
                           
@@ -118,7 +118,7 @@ test_that("should return errors (bad input)", {
       )
   # Wrong isotope
     expect_error(
-      test <- tdfMulClean(data.estimate = TdfEst_test,
+      test <- prepareSider(data.estimate = TdfEst_test,
                           data.isotope = isotope_data,
                           tree = combined_trees,
                           isotope = "cardboard",
@@ -126,14 +126,14 @@ test_that("should return errors (bad input)", {
       )
   # Wrong formula
     expect_error(
-      test <- tdfMulClean(data.estimate = TdfEst_test,
+      test <- prepareSider(data.estimate = TdfEst_test,
                           data.isotope = isotope_data,
                           tree = combined_trees,
                           isotope = "carbon",
                           random.terms = "magic")
       )
     expect_error(
-      test <- tdfMulClean(data.estimate = TdfEst_test,
+      test <- prepareSider(data.estimate = TdfEst_test,
                           data.isotope = isotope_data,
                           tree = combined_trees,
                           isotope = "carbon",
