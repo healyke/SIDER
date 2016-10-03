@@ -37,7 +37,7 @@ Some problems:
  * the outputting of the information for each Tree is unhelpful, messy and long.
     * maybe there should be a `verbose = FALSE` option to suppress this.
  * the random terms for the mcmcglmm model can now be defined in multiple places in the process. It is bundled into the object created by `prepareSider` (formally `tdfMulClean`) without any user input or control. If it is then not provided directly in the call to `imputeSider` (formally `tdfMcmcglmm`) then the function looks up this list object and pulls the random terms from e.g. `tdf_data_c$random.terms` (from the vignette). However, the fixed effects are not similarly defined automatically, and must instead by defined and passed explicitly to `imputeSider`. I don't see why the random terms would be automatically constructed, and not the random effects, and its not at all clear to me where we should be doing this and where this infomration should be stored (e.g. inside or outside the objects created by our functions)
- * when attaching SIDER, we get a message `The following object is masked _by_ ‘.GlobalEnv’: combined_trees` and I have not yet worked out what in the code is spawning this extra loading of the object since it should already be in the global environment via lazy loading.
+
  
  
  
