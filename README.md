@@ -9,7 +9,7 @@ and runs a MCMCglmm analysis on multiple trees using [MulTree] (https://github.c
 ```r
 if(!require(devtools)) install.packages("devtools")
 install_github("TGuillerme/mulTree", ref = "release")
-install_github("healyke/SIDER", ref = "andrew-fulbright", 
+install_github("healyke/SIDER", ref = "master", 
   build_vignettes = TRUE)
 library(mulTree)
 library(SIDER)
