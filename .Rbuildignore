@@ -6,4 +6,5 @@ issues.md
 README.md
 cran-comments.md
 \vignettes\*.rda
+\*.rda
 

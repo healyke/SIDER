@@ -2,42 +2,46 @@
 #'   
 #' @description Matches phylogenies and data into a \code{mulTree} object.
 #'   
-#' @param data.estimate data for species to be imputed (see \code{\link{setTdfEst}}).
-#' @param data.isotope a \code{data.frame} containing isotope data. If missing
+#' @param data.estimate data for species to be imputed (see
+#'   \code{\link{recipeSider}}).
+#' @param data.isotope a \code{data.frame} containing isotope data. If missing 
 #'   the \code{\link{isotope_data}} dataset will be used.
 #' @param tree a \code{phylo} or \code{multiPhylo} object.
-#' @param isotope the isotope for which discrimination factor is to be imputed,
+#' @param isotope the isotope for which discrimination factor is to be imputed, 
 #'   either \code{"carbon"} or \code{"nitrogen"}.
-#' @param random.terms an object of class \code{formula} describing the random
-#'   effects. By default the random terms are \code{"~ animal + species + tissue"}.
-#'   Note that "animal" designates phylogeny in \code{\link[MCMCglmm]{MCMCglmm}}.
+#' @param random.terms an object of class \code{formula} describing the random 
+#'   effects. By default the random terms are \code{"~ animal + species +
+#'   tissue"}. Note that "animal" designates phylogeny in
+#'   \code{\link[MCMCglmm]{MCMCglmm}}.
 #'   
 #' @return A \code{mulTree} object.
-#' 
+#'   
 #' @examples
 #' ## Load the combined trees data
-#' data(combined_trees)
+#' #data(combined_trees)
 #' 
 #' ## Initialise the data in the right format
-#' new.data.test <- setTdfEst(species = "Meles_meles", habitat = "terrestrial", 
+#' new.data.test <- recipeSider(species = "Meles_meles", habitat = "terrestrial", 
 #'    taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
 #'    tree = combined_trees)
 #' 
 #' ## Load the isotope data
-#' data(isotope_data)
+#' #data(isotope_data)
 #' 
-#' ## Generate the mulTree object to be passed to tdfMcmcglmm()
-#' tdf_data_c <- tdfMulClean(data.estimate = new.data.test,
+#' ## Generate the mulTree object to be passed to imputeSider()
+#' tdf_data_c <- prepareSider(data.estimate = new.data.test,
 #'    data.isotope = isotope_data, tree = combined_trees, isotope = "carbon")
 #' 
-#' @seealso \code{\link{setTfdEst}}, \code{\link{combined_trees}}, \code{\link{isotope_data}}, \code{\link[mulTree]{as.mulTree}}.
-#' 
+#' @seealso \code{\link{recipeSider}}, \code{\link{combined_trees}},
+#'   \code{\link{isotope_data}}, \code{\link[mulTree]{as.mulTree}}.
+#'   
 #' @export
       
 #DEBUGGING
-# warning("DEBUG - tdfMulClean")
-# data(combined_trees);data(isotope_data)
-# new.data.test <- setTdfEst(species = "Meles_meles", habitat = "terrestrial", 
+# warning("DEBUG - prepareSider")
+# utils::data(combined_trees);
+# utils::data(isotope_data)
+# new.data.test <- recipeSider(species = "Meles_meles", habitat = "terrestrial", 
 #    taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
 #    tree = combined_trees)
 
@@ -47,12 +51,13 @@
 # tree <- combined_trees
 # random.terms = ~ animal + species + tissue
 
-# tdf_data_c <- tdfMulClean(data.estimate = new.data.test, 
+# tdf_data_c <- prepareSider(data.estimate = new.data.test, 
 #                           data.isotope = isotope_data, 
 #                           tree = combined_trees,  
 #                           isotope = "carbon")
 
-tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms = ~ animal + species + tissue) {
+prepareSider <- function(data.estimate, data.isotope, tree, isotope, 
+                         random.terms = ~ animal + species + tissue) {
             
   # Decide on which animal class. I think this will be a good thing to 
   # include as it will edge people towards an appropriate analysis 
@@ -67,27 +72,45 @@ tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms
   # SANITIZING
 
   # data.estimate
-  if(any(is.na(match(c("species", "habitat", "taxonomic.class", "tissue", "diet.type", "source.iso.13C", "delta13C", "source.iso.15N", "delta15N"), names(data.estimate))))) {
-    stop("data.estimate is not in the right format!\nUse setTdfEst() for setting up the right format.")
+  if(any(is.na(match(c("species", "habitat", "taxonomic.class", "tissue", 
+                       "diet.type", "source.iso.13C", "delta13C", 
+                       "source.iso.15N", "delta15N"), names(data.estimate))))) {
+    stop("data.estimate is not in the right format!\nUse recipeSider() for 
+         setting up the right format.")
   }
+
+  # ** AJ BEGIN COMMENT OUT **
+  # AJ - this section is not loading the data appropriately  and is failing
+  # R CMD check. With it commented out like this, the testthat tests are 
+  # failing. 
 
   # data.isotope
   if(missing(data.isotope)) {
     # If data.isotope is missing, use the default one from the package
-    data(isotope_data)
-    data.isotope <- isotope_data
+
+    # AJ - this call to data() is spawning a NOTE from R CMD check.
+    # I think my interpretation of it is that we don't need to reload the
+    # the object into the global environment, since it should already be
+    # available via lazy loading on library(SIDER)
+    #utils::data(isotope_data, envir = environment())
+    data.isotope <- SIDER::isotope_data
     # And fire a warning!
-    warning("No isotopic data was provided, the default SIDER data set will be use.\nSee ?isotope_data for more information.")
+    warning("No isotopic data was provided, the default SIDER data set will
+            be used.\nSee ?isotope_data for more information.")
   } else {
     # Check if it's the standard format
-    data(isotope_data)
+    # AJ - as per my comment above re lazy loading
+    #utils::data(isotope_data, envir = environment())
     # Names must match
-    if(any(is.na(match(names(isotope_data), names(data.isotope))))) {
-      stop("The isotope dataset must be matching the default SIDER data set.\nSee ?isotope_data for more information.")
+    if(any(is.na(match(names(SIDER::isotope_data), names(data.isotope))))) {
+      stop("The isotope dataset must be matching the default SIDER data set.
+           \nSee ?isotope_data for more information.")
     }
     # TG: missing a way to check the content of the user's table is correct!
   }
 
+  # ** AJ END COMMENT OUT **
+  
   # tree
   if(class(tree) != "phylo") {
     if(class(tree) != "multiPhylo") {
@@ -101,7 +124,8 @@ tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms
   } else {
     all_isotopes <- c("carbon", "nitrogen")
     if(all(is.na(match(isotope, all_isotopes)))) {
-      stop("Isotope argument must be one of the following:\n", paste(all_isotopes, collapse = ", "), ".", sep = "")
+      stop("Isotope argument must be one of the following:\n", 
+           paste(all_isotopes, collapse = ", "), ".", sep = "")
     }
   }
 
@@ -117,10 +141,13 @@ tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms
   # Setting up the mulTree data for isotope estimation
 
   #Setting the isotopic data for the right class
-  if(data.estimate$taxonomic.class == "mammalia" | data.estimate$taxonomic.class == "aves") {
-    iso_data_class <- data.isotope[data.isotope$taxonomic.class == data.estimate$taxonomic.class,]
+  if(data.estimate$taxonomic.class == "mammalia" | 
+     data.estimate$taxonomic.class == "aves") {
+    iso_data_class <- data.isotope[
+      data.isotope$taxonomic.class == data.estimate$taxonomic.class,]
   } else {
-    stop("The taxonomic class can only be 'mammalia' or 'aves'.\nSee setTdfEst function for more information.")
+    stop("The taxonomic class can only be 'mammalia' or 'aves'.
+         \nSee recipeSider function for more information.")
   }
             
   #Decide on the isotope
@@ -154,7 +181,8 @@ tdfMulClean <- function(data.estimate, data.isotope, tree, isotope, random.terms
   }
 
   #Clean the data and match up the tree using the multree function
-  #TG: I've added the cleaning function prior to as.mulTree. This way it doesn't polute the console with huge lists of dropped taxa.
+  #TG: I've added the cleaning function prior to as.mulTree. 
+  # This way it doesn't polute the console with huge lists of dropped taxa.
   cleaned_iso_data_com <- mulTree::clean.data("species", iso_data_com, tree)
   clean_iso <- mulTree::as.mulTree(taxa = "species", 
                                    data = cleaned_iso_data_com$data, 
