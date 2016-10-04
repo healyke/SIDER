@@ -64,6 +64,31 @@ The \code{priors} argument must be of 3 possible elements: R
   0}, \code{V = 1}, \code{alpha.mu = 0}, and \code{alpha.V = 0}. When alpha.V
   is non-zero, parameter expanded algorithms are used.
 }
+\examples{
+## Loading data
+data(combined_trees); data(isotope_data)
+
+## Setting up the isotope estimation for one species
+taxa_estimate <- recipeSider(species = "Meles_meles", habitat = "terrestrial",
+     taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
+     tree = combined_trees)
+
+## Generating the "mulTree" object for the estimation
+taxa_est_mulTree <- prepareSider(data.estimate = taxa_estimate,
+     data.isotope = isotope_data, tree = combined_trees, isotope = "carbon")
+
+## Setting up the MCMCglmm parameters
+MCMC_parameters <- c(1200, 200, 5)
+MCMC_formula <- delta13C ~ diet.type + habitat
+isotope_estimate <- imputeSider(taxa_est_mulTree, formula = MCMC_formula,
+     parameters = MCMC_parameters, save.model = FALSE)
+
+## Print out the results
+summary(isotope_estimate$tdf_global)
+plot(isotope_estimate$tdf_global)
+
+
+}
 \author{
 Kevin Healy
 }

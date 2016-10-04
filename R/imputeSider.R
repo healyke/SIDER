@@ -58,10 +58,12 @@
 #' MCMC_parameters <- c(1200, 200, 5)
 #' MCMC_formula <- delta13C ~ diet.type + habitat
 #' isotope_estimate <- imputeSider(taxa_est_mulTree, formula = MCMC_formula,
-#'      parameters = MCMC_parameters)
+#'      parameters = MCMC_parameters, save.model = FALSE)
 #' 
 #' ## Print out the results
-#' summary(istope_estimate)   
+#' summary(isotope_estimate$tdf_global)
+#' plot(isotope_estimate$tdf_global)
+#' 
 #' 
 #' @author Kevin Healy
 #'   
