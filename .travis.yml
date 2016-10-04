@@ -1,0 +1,13 @@
+language: r
+sudo: required
+warnings_are_errors: false
+
+# blacklist
+# branches:
+#  except:
+#    - master
+
+# whitelist
+# branches:
+#  only:
+#    - release
