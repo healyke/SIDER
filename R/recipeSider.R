@@ -52,8 +52,7 @@ recipeSider <- function(species, taxonomic.class, tissue, diet.type,
   } else {
     all_habitats <- c("marine", "terrestrial")
     if(all(is.na(match(habitat, all_habitats)))) {
-      stop("Habitat argument must be one of the following:\n", 
-           paste(all_habitats, collapse = ", "), ".", sep = "")
+      stop("Habitat argument must be one of the following:\n", paste(all_habitats, collapse = ", "), ".", sep = "")
     }
   }
 
@@ -63,8 +62,7 @@ recipeSider <- function(species, taxonomic.class, tissue, diet.type,
   } else {
     all_class <- c("mammalia", "aves")
     if(all(is.na(match(taxonomic.class, all_class)))) {
-      stop("Taxonomic class argument must be one of the following:\n", 
-           paste(all_class, collapse = ", "), ".", sep = "")
+      stop("Taxonomic class argument must be one of the following:\n", paste(all_class, collapse = ", "), ".", sep = "")
     }
   }
 
@@ -75,8 +73,7 @@ recipeSider <- function(species, taxonomic.class, tissue, diet.type,
     all_tissues <- c("blood", "claws", "collagen", "feather", "hair", 
                      "kidney", "liver", "milk", "muscle")
     if(all(is.na(match(tissue, all_tissues)))) {
-      stop("Tissue argument must be one of the following:\n", 
-           paste(all_tissues, collapse = ", "), ".", sep = "")
+      stop("Tissue argument must be one of the following:\n", paste(all_tissues, collapse = ", "), ".", sep = "")
     }
   }
 
@@ -86,8 +83,7 @@ recipeSider <- function(species, taxonomic.class, tissue, diet.type,
   } else {
     all_diets <- c("carnivore", "herbivore", "omnivore", "pellet")
     if(all(is.na(match(diet.type, all_diets)))) {
-      stop("Diet argument must be one of the following:\n", 
-           paste(all_diets, collapse = ", "), ".", sep = "")
+      stop("Diet argument must be one of the following:\n", paste(all_diets, collapse = ", "), ".", sep = "")
     }
   }
 
@@ -98,8 +94,7 @@ recipeSider <- function(species, taxonomic.class, tissue, diet.type,
   } else {
     if(class(source.iso.13C) != "numeric") {
       warning("Source isotopic 13C data is not numeric.")
-      warning("Only include isotopic food values if derived from controlled 
-              dietary settings.")
+      warning("Only include isotopic food values if derived from controlled dietary settings.")
       source.iso.13C <- NA
     }
   }
@@ -109,16 +104,14 @@ recipeSider <- function(species, taxonomic.class, tissue, diet.type,
   } else {
     if(class(source.iso.15N) != "numeric") {
       warning("Source isotopic data 15N is not numeric.")
-      warning("Only include isotopic food values if derived from controlled 
-              dietary settings.")
+      warning("Only include isotopic food values if derived from controlled dietary settings.")
       source.iso.15N <- NA
     }
   }
 
   ###check if there is a tree and what type of tree it is
   if(is.null(tree)){
-      stop("Phylogeny is missing. Use\ndata(combined_trees)\nfor loading 
-           mammalian and aves phylogenies.")
+      stop("Phylogeny is missing. Use\ndata(combined_trees)\nfor loading mammalian and aves phylogenies.")
   } else if (!any(class(tree) == "multiPhylo" | class(tree) == "phylo")) {
       stop("Phylogeny must be a phylo or multiPhylo object.")
   } else {

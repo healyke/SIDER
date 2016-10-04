@@ -41,7 +41,27 @@
 #'   factors including a posterior distribution for each individual chain in 
 #'   Tef.est and a combined chain in Tef.global.
 #'   
-#'   
+#' @examples
+#' ## Loading data
+#' data(combined_trees); data(isotope_data)
+#' 
+#' ## Setting up the isotope estimation for one species
+#' taxa_estimate <- recipeSider(species = "Meles_meles", habitat = "terrestrial",
+#'      taxonomic.class = "mammalia", tissue = "blood", diet.type = "omnivore", 
+#'      tree = combined_trees)
+#' 
+#' ## Generating the "mulTree" object for the estimation
+#' taxa_est_mulTree <- prepareSider(data.estimate = taxa_estimate,
+#'      data.isotope = isotope_data, tree = combined_trees, isotope = "carbon")
+#' 
+#' ## Setting up the MCMCglmm parameters
+#' MCMC_parameters <- c(1200, 200, 5)
+#' MCMC_formula <- delta13C ~ diet.type + habitat
+#' isotope_estimate <- imputeSider(taxa_est_mulTree, formula = MCMC_formula,
+#'      parameters = MCMC_parameters)
+#' 
+#' ## Print out the results
+#' summary(istope_estimate)   
 #' 
 #' @author Kevin Healy
 #'   
@@ -87,17 +107,14 @@ imputeSider <- function(mulTree.data, formula, random.terms, parameters,
     # Sanitizing
     # mulTree.data
     if(class(mulTree.data) != "mulTree") {
-        stop("mulTree.data must be a mulTree object.\nSee the prepareSider() 
-             function for more details.")
+        stop("mulTree.data must be a mulTree object.\nSee the prepareSider() function for more details.")
     } else {
         if(length(mulTree.data) != 4) {
-            stop("mulTree.data must be a mulTree object.\nSee the prepareSider() 
-                 function for more details.")
+            stop("mulTree.data must be a mulTree object.\nSee the prepareSider() function for more details.")
         } else {
-            if(names(mulTree.data) != c("phy", "data", "random.terms", 
-                                        "taxa.column")) {
-                stop("mulTree.data must be a mulTree object.
-                     \nSee the prepareSider() function for more details.")
+            if(any(is.na(match(names(mulTree.data),c("phy", "data", "random.terms", 
+                                        "taxa.column"))))) {
+                stop("mulTree.data must be a mulTree object.\nSee the prepareSider() function for more details.")
             }
         }
     }
@@ -105,6 +122,9 @@ imputeSider <- function(mulTree.data, formula, random.terms, parameters,
     # formula
     if(!missing(random.terms)) {
         mulTree.data$random.terms <- random.terms
+        default_random.terms <- FALSE
+    } else {
+        default_random.terms <- TRUE
     }
     # Replace "species" as a random term into sp.col
     colnames(mulTree.data$data)[1] <- "species"
@@ -117,8 +137,7 @@ imputeSider <- function(mulTree.data, formula, random.terms, parameters,
 #####this checks if there is a prior. If there is no prior and the formula 
     # is the same as the one we use it uses the same prior as we use.
     # set priors to default values if not specified 
-    if((missing(priors) & 
-        mulTree.data$random.terms == "~animal + sp.col + tissue") == TRUE) { 
+    if(missing(priors) & default_random.terms) { 
         priors <- list(R = list(V = 1/4, nu = 0.002), 
                        G = list(
                         G1 = list(V = 1/4, nu = 0.002),
@@ -155,8 +174,9 @@ imputeSider <- function(mulTree.data, formula, random.terms, parameters,
           
     # remove the models
     if(!save.model) {
-        cat("Removing temporary files:\n")
+        if(verbose) cat("Removing temporary files:...")
         file.remove(list.files(pattern = output))
+        if(verbose) cat("Done.\n")
     }
 
     # return the output as a list

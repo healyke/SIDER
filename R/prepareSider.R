@@ -75,8 +75,7 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
   if(any(is.na(match(c("species", "habitat", "taxonomic.class", "tissue", 
                        "diet.type", "source.iso.13C", "delta13C", 
                        "source.iso.15N", "delta15N"), names(data.estimate))))) {
-    stop("data.estimate is not in the right format!\nUse recipeSider() for 
-         setting up the right format.")
+    stop("data.estimate is not in the right format!\nUse recipeSider() for setting up the right format.")
   }
 
   # ** AJ BEGIN COMMENT OUT **
@@ -95,16 +94,14 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
     #utils::data(isotope_data, envir = environment())
     data.isotope <- SIDER::isotope_data
     # And fire a warning!
-    warning("No isotopic data was provided, the default SIDER data set will
-            be used.\nSee ?isotope_data for more information.")
+    warning("No isotopic data was provided, the default SIDER data set will be used.\nSee ?isotope_data for more information.")
   } else {
     # Check if it's the standard format
     # AJ - as per my comment above re lazy loading
     #utils::data(isotope_data, envir = environment())
     # Names must match
     if(any(is.na(match(names(SIDER::isotope_data), names(data.isotope))))) {
-      stop("The isotope dataset must be matching the default SIDER data set.
-           \nSee ?isotope_data for more information.")
+      stop("The isotope dataset must be matching the default SIDER data set.\nSee ?isotope_data for more information.")
     }
     # TG: missing a way to check the content of the user's table is correct!
   }
@@ -146,8 +143,7 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
     iso_data_class <- data.isotope[
       data.isotope$taxonomic.class == data.estimate$taxonomic.class,]
   } else {
-    stop("The taxonomic class can only be 'mammalia' or 'aves'.
-         \nSee recipeSider function for more information.")
+    stop("The taxonomic class can only be 'mammalia' or 'aves'.\nSee recipeSider function for more information.")
   }
             
   #Decide on the isotope
