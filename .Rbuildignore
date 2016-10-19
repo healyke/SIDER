@@ -7,4 +7,5 @@ README.md
 cran-comments.md
 \vignettes\*.rda
 \*.rda
+.travis.yml
 
