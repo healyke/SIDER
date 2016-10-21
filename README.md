@@ -4,14 +4,13 @@ Stable Isotope Discrimination Estimation in R
 
 This package allows users to estimate Trophic Discrimination Factors (TDF) for species with no current measured TDF values using Bayesian imputation. 
 This package is based on the [MCMCglmm](http://cran.r-project.org/web/packages/MCMCglmm/index.html) package
-and runs a MCMCglmm analysis on multiple trees using [MulTree] (https://github.com/TGuillerme/mulTree)
+and runs a MCMCglmm analysis on multiple trees using [mulTree] (https://github.com/TGuillerme/mulTree)
 
 ## Installing SIDER
 ```r
 if(!require(devtools)) install.packages("devtools")
 install_github("TGuillerme/mulTree", ref = "release")
-install_github("healyke/SIDER", ref = "master", 
-  build_vignettes = TRUE)
+install_github("healyke/SIDER", ref = "master", build_vignettes = TRUE)
 library(mulTree)
 library(SIDER)
 ```
