@@ -1,4 +1,5 @@
----
+<!--
+
 title: "Introduction to SIDER"
 author: "Kevin Healy"
 date: "`r Sys.Date()`"
@@ -228,3 +229,4 @@ coda::densplot(TDF_est.c$tdf_global)
 hdrcde::hdr.boxplot(TDF_est.c$tdf_global)
 ```
 
+-->
