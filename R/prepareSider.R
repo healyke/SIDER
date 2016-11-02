@@ -138,10 +138,14 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
   # Setting up the mulTree data for isotope estimation
 
   #Setting the isotopic data for the right class
-  if(data.estimate$taxonomic.class == "mammalia" | 
-     data.estimate$taxonomic.class == "aves") {
-    iso_data_class <- data.isotope[
-      data.isotope$taxonomic.class == data.estimate$taxonomic.class,]
+  taxonomic_class <- unique(data.estimate$taxonomic.class)
+  if(length(taxonomic_class) != 1) {
+    stop("The taxonomic class can only be 'mammalia' or 'aves'.\nSee recipeSider function for more information.")
+  }
+
+  if(taxonomic_class == "mammalia" | 
+     taxonomic_class == "aves") {
+    iso_data_class <- data.isotope[data.isotope$taxonomic.class == taxonomic_class,]
   } else {
     stop("The taxonomic class can only be 'mammalia' or 'aves'.\nSee recipeSider function for more information.")
   }
