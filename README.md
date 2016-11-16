@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/healyke/SIDER.svg?branch=master)](https://travis-ci.org/healyke/SIDER)
+[![DOI](https://zenodo.org/badge/45869597.svg)](https://zenodo.org/badge/latestdoi/45869597)
 # SIDER
 Stable Isotope Discrimination Estimation in R
 
