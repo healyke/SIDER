@@ -10,14 +10,14 @@ and runs a MCMCglmm analysis on multiple trees using [mulTree] (https://github.c
 ## Installing SIDER
 ```r
 if(!require(devtools)) install.packages("devtools")
-install_github("TGuillerme/mulTree", ref = "release")
-install_github("healyke/SIDER", ref = "master", build_vignettes = TRUE)
+devtools::install_github("TGuillerme/mulTree@release")
+devtools::install_github("healyke/SIDER@v0.9", build_vignettes = TRUE)
 library(mulTree)
 library(SIDER)
 ```
 
 #### Vignettes
-*  AJ - need to update these links. though ive added build_vignettes to the install instructions above.
+*  AJ - need to update these links. though ive added build_vignettes to the install instructions above so users will have access from the package itself.
 
 
 Authors
