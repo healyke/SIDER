@@ -11,8 +11,9 @@ vignette: >
 ---
 
 
-This package estimates Trophic Discrimination Factors (TDF) based on the imputation function within the \href{http://cran.r-project.org/web/packages/MCMCglmm/index.html}{\texttt{MCMCglmm} package} and includes the error associated with building phylogenetic  trees using the
-\href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package}.
+This package estimates Trophic Discrimination Factors (TDF) based on the imputation function within the \href{http://cran.r-project.org/web/packages/MCMCglmm/index.html}{\texttt{MCMCglmm} package} and includes
+functionality to include the error associated with building phylogenetic 
+trees using the \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package}.
 
 \section{Installation}
 To install \texttt{SIDER} its dependency \href{https://github.com/TGuillerme/mulTree}{\texttt{MulTree} package} must first be installed directly from GitHub using the following:
@@ -41,7 +42,11 @@ library(SIDER)
 ```
 
 ## Read in the data
-And load in the data
+SIDER has a data file which contains discrimination factors for a range of species.
+It also contains what tissue was used to measure the istopic value and the basic ecology
+of the species including whether it is a herbivore etc and whther it is marine or terrestrial.
+This data is used to run a model adn impute a value for the new species.
+Lets look at the data.
 ```{r read_data}
 
 #read in the data
@@ -73,10 +78,10 @@ combined_trees <- mulTree::tree.bind(x = mammal_trees,
 As may we want to include the error associated with building phylogenies into our analysis we take a sample of the possible trees (See \href{http://rspb.royalsocietypublishing.org/content/281/1784/20140298}{Healy et al 2014}). In this case we combine the mammal and bird phylogenies at a rooted age of 250 mya and take a sample of two possible trees.
 
 
-\section{Testing the new data: \texttt{setTefEst}}
+\section{Testing the new data: \texttt{recipeSider}}
 In order to estimate a trophic enrichment factor for a new species we need to check that the species is already present in our phylogeny and check what data is available for the new species.
 
-setTefEst checks for the presence of the following data:
+recipeSider checks for the presence of the following data:
 tissue type ("blood", "claws", "collagen", "feather", "hair", "kidney", "liver", "milk", "muscle"), habitat ("terrestrial", "marine"), and diet.type ("carnivore", "herbivore", "omnivore", "pellet").
 ```{r check_species}
 #####function that checks the data for some species we want to estimate TEF for
@@ -99,20 +104,14 @@ new.data.dummy <- recipeSider(species = "Varanus_komodoensis",
                              tree = combined_trees)
 ```
 
+The recipeSider function also formats the data for the new species data so that it can be combined with
+the data already available within the package using the prepareSider function.
 
 \section{Formatting the new data: \texttt{prepareSider}}
 We now need to format the data by combining both the isotopic data already available within the package and the data from the new species and matching these species to the included phylogeny. We also include what isotope we want to estimate a trophic discrimination value for (either "carbon" or "nitrogen").
 
 ```{r format_data}
-# AJ - old syntax
-# tdf_data_c <- prepareSider(new.data.test, 
-#                           SIDER.data, 
-#                           species.col.name = "species", 
-#                           tree = combined_trees, 
-#                           taxonomic.class = "mammalia", 
-#                           isotope = "carbon")
 
-# AJ - new syntax
 tdf_data_c <- prepareSider(new.data.test, 
                           SIDER.data, 
                           combined_trees, 
@@ -132,7 +131,7 @@ head(tdf_data_c$data)
 
 \section{Running the analysis: \texttt{prepareSider}}
 
-With the data formatted as a mulTree object we now need to set up the model. In this case we will run the full model to estimate delta13C with the fixed factors
+With the data formatted as a mulTree object we can decide on a model which will impute the new species estimate. In this case we will run the full model to estimate delta13C with the fixed factors
 of diet type and habitat type.
 
 ```{r fixed_effects}
@@ -170,19 +169,23 @@ thin <- c(1)
 parameters <- c(nitt, thin, burnin)
 no.chains <- c(2)
 ```
+
 We need to check that our MCMC chains are converging so we use the Gelman and Rubin diagnostic to check the convergence and also check that the estimated parameters have an effective sample size >1000.
+
 ```{r convergence_criteria}
 convergence =  c(1.1)
 ESS = c(1000)
 ```
-As the function exports the model output to avoid memory issues within R make sure you have set the working directory to somewhere appropriate.
+
+As the function exports the model output to avoid memory issues within R when running over multiple phylogenies make sure you have set the working directory to somewhere appropriate.
 
 ```{r check_wd}
 getwd()
 list.files()
 ```
 
-finally we can run the analysis. This model will take approximatly 5 min but for larger nitt or larger samples of phylogentic trees it will take longer.
+finally we can run the analysis using the imputeSider function. This model will normally take 
+approximatly 5 minutes, however for brevity we will run a much shorter chain.
 
 ```{r eval_glmm}
 TDF_est.c <- imputeSider(mulTree.data = tdf_data_c, 
@@ -202,7 +205,7 @@ TDF_est.c <- imputeSider(mulTree.data = tdf_data_c,
 list.files()
 ```
 
-These are the full MCMCglmm model outputs for each of the chains run and can be imported back into the R for full inspection if required using read.mulTree. Notice also the two other files ending with something simlar to run-tree2_conv. These give a description of the convergance diagnostics of the chains for each tree. The results of these diagnostics for each tree are also printed in R after running tefMcmcglmm returing whether the Effective sample size exceded ESS for all estimated paramaters (with the number for each parameter given as a list), and whether al chains converged for each parameter.
+These are the full MCMCglmm model outputs for each of the chains run and can be imported back into the R for full inspection if required using the read.mulTree function. Notice also that the two other files ending with something simlar to run-tree2_conv. These give a description of the convergance diagnostics of the chains for each tree. The results of these diagnostics for each tree are also printed in R after running tefMcmcglmm returing whether the Effective sample size exceded ESS for all estimated paramaters (with the number for each parameter given as a list), and whether al chains converged for each parameter.
 
 All these models can be seperatly imported into R using read.mulTree(). However, since we are only intrested in the estimated TDF for our species tefMcmcglmm only imports the imputed posterior distribution of the estimated TDF for our species.
 

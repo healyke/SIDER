@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Kevin Healy" />
+
+<meta name="date" content="2016-12-20" />
+
+<title>Introduction to SIDER</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to SIDER</h1>
+<h4 class="author"><em>Kevin Healy</em></h4>
+<h4 class="date"><em>2016-12-20</em></h4>
+
+
+
+<p>This package estimates Trophic Discrimination Factors (TDF) based on the imputation function within the  and includes functionality to include the error associated with building phylogenetic trees using the .</p>
+
+<p>To install  its dependency  must first be installed directly from GitHub using the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># check if you have devools and install if you do not</span>
+if(!<span class="kw">require</span>(devtools)) <span class="kw">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)
+
+<span class="co"># check if you have mulTree and install if you do not using devtools</span>
+if(!<span class="kw">require</span>(mulTree)) devtools::<span class="kw">install_github</span>(<span class="st">&quot;TGuillerme/mulTree&quot;</span>, <span class="dt">ref =</span> <span class="st">&quot;master&quot;</span>)</code></pre></div>
+<p>Following this you can then install  directly from GitHub using the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check if you have SIDER and install from github if you do not</span>
+if(!<span class="kw">require</span>(SIDER)) devtools::<span class="kw">install_github</span>(<span class="st">&quot;healyke/SIDER&quot;</span>, <span class="dt">ref =</span> <span class="st">&quot;master&quot;</span>)</code></pre></div>
+<p>Load the package</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># You could load mulTree if you want, but you do not need to as you can</span>
+<span class="co"># call is functions using e.g. mulTree::tree.bind as below.</span>
+<span class="co">#library(mulTree)</span>
+<span class="kw">library</span>(SIDER)</code></pre></div>
+<div id="read-in-the-data" class="section level2">
+<h2>Read in the data</h2>
+<p>SIDER has a data file which contains discrimination factors for a range of species. It also contains what tissue was used to measure the istopic value and the basic ecology of the species including whether it is a herbivore etc and whther it is marine or terrestrial. This data is used to run a model adn impute a value for the new species. Lets look at the data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#read in the data</span>
+SIDER.data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, 
+                                          <span class="st">&quot;SIDER_data.csv&quot;</span>, 
+                                          <span class="dt">package =</span> <span class="st">&quot;SIDER&quot;</span>), 
+                       <span class="dt">header =</span> <span class="ot">TRUE</span>,
+                       <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># view the first 10 rows of the dataframe</span>
+<span class="kw">head</span>(SIDER.data)</code></pre></div>
+<pre><code>##             species     habitat taxonomic.class tissue diet.type
+## 1 Rattus_norvegicus terrestrial        mammalia  liver herbivore
+## 2 Rattus_norvegicus terrestrial        mammalia  liver carnivore
+## 3 Rattus_norvegicus terrestrial        mammalia  liver  omnivore
+## 4 Rattus_norvegicus terrestrial        mammalia  liver  omnivore
+## 5 Rattus_norvegicus terrestrial        mammalia  blood herbivore
+## 6 Rattus_norvegicus terrestrial        mammalia  blood carnivore
+##   source.iso.13C source.iso.15N delta13C delta15N
+## 1          -25.3            4.8      3.1      1.2
+## 2          -16.2           12.3      3.1      0.6
+## 3          -24.5            7.1      1.5      3.2
+## 4          -16.7            7.4      2.2      3.0
+## 5          -25.3            4.8      1.5      3.6
+## 6          -16.2           12.3      0.7      3.7</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#read in the phylogenetic information</span>
+<span class="co">#first the mammal trees</span>
+mammal_trees &lt;-<span class="st"> </span>ape::<span class="kw">read.tree</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, 
+                                      <span class="st">&quot;3firstFritzTrees.tre&quot;</span>, 
+                                      <span class="dt">package =</span> <span class="st">&quot;SIDER&quot;</span>))
+<span class="co">#then the bird trees</span>
+bird_trees   &lt;-<span class="st"> </span>ape::<span class="kw">read.tree</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, 
+                                      <span class="st">&quot;3firstJetzTrees.tre&quot;</span>, 
+                                      <span class="dt">package =</span> <span class="st">&quot;SIDER&quot;</span>))
+
+<span class="co">#combine them together using the tree.bind function from the mulTree package</span>
+combined_trees &lt;-<span class="st"> </span>mulTree::<span class="kw">tree.bind</span>(<span class="dt">x =</span> mammal_trees, 
+                                     <span class="dt">y =</span> bird_trees, 
+                                     <span class="dt">sample =</span> <span class="dv">2</span>, 
+                                     <span class="dt">root.age =</span> <span class="dv">250</span>)</code></pre></div>
+<p>As may we want to include the error associated with building phylogenies into our analysis we take a sample of the possible trees (See ). In this case we combine the mammal and bird phylogenies at a rooted age of 250 mya and take a sample of two possible trees.</p>
+
+<p>In order to estimate a trophic enrichment factor for a new species we need to check that the species is already present in our phylogeny and check what data is available for the new species.</p>
+<p>recipeSider checks for the presence of the following data: tissue type (“blood”, “claws”, “collagen”, “feather”, “hair”, “kidney”, “liver”, “milk”, “muscle”), habitat (“terrestrial”, “marine”), and diet.type (“carnivore”, “herbivore”, “omnivore”, “pellet”).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">#####function that checks the data for some species we want to estimate TEF for
+new.data.test &lt;-<span class="st"> </span><span class="kw">recipeSider</span>(<span class="dt">species =</span> <span class="st">&quot;Meles_meles&quot;</span>, 
+                             <span class="dt">habitat =</span> <span class="st">&quot;terrestrial&quot;</span>, 
+                             <span class="dt">taxonomic.class =</span> <span class="st">&quot;mammalia&quot;</span>, 
+                             <span class="dt">tissue =</span> <span class="st">&quot;blood&quot;</span>, 
+                             <span class="dt">diet.type =</span> <span class="st">&quot;omnivore&quot;</span>, 
+                             <span class="dt">tree =</span> combined_trees)</code></pre></div>
+<p>If the species is not in the phylogeny already, such as say the Komodo dragon (<em>Varanus komodoensis</em>), or we are missing values as donated by NA, say tissue type, we get an error message to indicate what is missing from our data. N.B, the following code will throw a stop error if evaluated (it is silenced in this vignette).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">#####function that checks the dat for some species we want to estimate TEF for
+new.data.dummy &lt;-<span class="st"> </span><span class="kw">recipeSider</span>(<span class="dt">species =</span> <span class="st">&quot;Varanus_komodoensis&quot;</span>, 
+                             <span class="dt">habitat =</span> <span class="st">&quot;terrestrial&quot;</span>, 
+                             <span class="dt">taxonomic.class =</span> <span class="st">&quot;mammalia&quot;</span>, 
+                             <span class="dt">tissue =</span> <span class="st">&quot;NA&quot;</span>, 
+                             <span class="dt">diet.type =</span> <span class="st">&quot;omnivore&quot;</span>, 
+                             <span class="dt">tree =</span> combined_trees)</code></pre></div>
+<p>The recipeSider function also formats the data for the new species data so that it can be combined with the data already available within the package using the prepareSider function.</p>
+
+<p>We now need to format the data by combining both the isotopic data already available within the package and the data from the new species and matching these species to the included phylogeny. We also include what isotope we want to estimate a trophic discrimination value for (either “carbon” or “nitrogen”).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tdf_data_c &lt;-<span class="st"> </span><span class="kw">prepareSider</span>(new.data.test, 
+                          SIDER.data, 
+                          combined_trees, 
+                          <span class="st">&quot;carbon&quot;</span>)</code></pre></div>
+<p>We now have a mulTree class object, which is required by the imputation analysis. It contains the matched phylogenies, in this case two phylogenies</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tdf_data_c$phy</code></pre></div>
+<pre><code>## 2 phylogenetic trees</code></pre>
+<p>and a dataset containing TDF and related data with the new species for which you want to estimate a trophic enrichment factor at the top with a NA for either delta13C or delta15N depending on isotope.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(tdf_data_c$data)</code></pre></div>
+<pre><code>##                sp.col     habitat taxonomic.class tissue diet.type
+## 1         Meles_meles terrestrial        mammalia  blood  omnivore
+## 120 Rattus_norvegicus terrestrial        mammalia  liver herbivore
+## 2   Rattus_norvegicus terrestrial        mammalia  liver carnivore
+## 3   Rattus_norvegicus terrestrial        mammalia  liver  omnivore
+## 4   Rattus_norvegicus terrestrial        mammalia  liver  omnivore
+## 5   Rattus_norvegicus terrestrial        mammalia  blood herbivore
+##     source.iso.13C delta13C            animal
+## 1               NA       NA       Meles_meles
+## 120          -25.3      3.1 Rattus_norvegicus
+## 2            -16.2      3.1 Rattus_norvegicus
+## 3            -24.5      1.5 Rattus_norvegicus
+## 4            -16.7      2.2 Rattus_norvegicus
+## 5            -25.3      1.5 Rattus_norvegicus</code></pre>
+
+<p>With the data formatted as a mulTree object we can decide on a model which will impute the new species estimate. In this case we will run the full model to estimate delta13C with the fixed factors of diet type and habitat type.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">formula.c &lt;-<span class="st"> </span>delta13C ~<span class="st"> </span>diet.type +<span class="st"> </span>habitat</code></pre></div>
+<p>and random terms that includes the “animal” term which is required to include phylogeny into the analysis, sp.col to allow multiple species entries into the analysis and account for variation within a species, and tissue type.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">random.terms &lt;-<span class="st"> </span>( ~<span class="st"> </span>animal +<span class="st"> </span>species +<span class="st"> </span>tissue)</code></pre></div>
+<p>As we rely on Bayesian imputation to estimate the missing value we also need to specify a prior, in this case we use a non-informative prior as recommended in the .</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">prior &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">R =</span> <span class="kw">list</span>(<span class="dt">V =</span> <span class="dv">1</span>/<span class="dv">4</span>, <span class="dt">nu=</span><span class="fl">0.002</span>), 
+              <span class="dt">G =</span> <span class="kw">list</span>(<span class="dt">G1=</span><span class="kw">list</span>(<span class="dt">V =</span> <span class="dv">1</span>/<span class="dv">4</span>, <span class="dt">nu=</span><span class="fl">0.002</span>),
+                       <span class="dt">G2=</span><span class="kw">list</span>(<span class="dt">V =</span> <span class="dv">1</span>/<span class="dv">4</span>, <span class="dt">nu=</span><span class="fl">0.002</span>), 
+                       <span class="dt">G3=</span><span class="kw">list</span>(<span class="dt">V =</span> <span class="dv">1</span>/<span class="dv">4</span>, <span class="dt">nu=</span><span class="fl">0.002</span>)))</code></pre></div>
+<p>along with the number of iterations to run the chain (nitt), the burn-in (burnin), the sampling thinning (thin), the number of chains to run (no.chains). (.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># These produce results that pass convergence and avoid autocorrelation</span>
+<span class="co"># in the chains, but take a while to run.</span>
+<span class="co"># nitt &lt;- c(1200000)</span>
+<span class="co"># burnin &lt;- c(200000)</span>
+<span class="co"># thin &lt;- c(500)</span>
+<span class="co"># no.chains &lt;- c(2)</span>
+
+<span class="co"># NB settings only for testing and to build the vignettes quickly</span>
+nitt &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10</span>)
+burnin &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>)
+thin &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>)
+parameters &lt;-<span class="st"> </span><span class="kw">c</span>(nitt, thin, burnin)
+no.chains &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>)</code></pre></div>
+<p>We need to check that our MCMC chains are converging so we use the Gelman and Rubin diagnostic to check the convergence and also check that the estimated parameters have an effective sample size &gt;1000.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">convergence =<span class="st">  </span><span class="kw">c</span>(<span class="fl">1.1</span>)
+ESS =<span class="st"> </span><span class="kw">c</span>(<span class="dv">1000</span>)</code></pre></div>
+<p>As the function exports the model output to avoid memory issues within R when running over multiple phylogenies make sure you have set the working directory to somewhere appropriate.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">getwd</span>()</code></pre></div>
+<pre><code>## [1] &quot;/Users/kevinhealy/Desktop/SIDER/vignettes&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list.files</span>()</code></pre></div>
+<pre><code>## [1] &quot;Introduction-to-SIDER.html&quot; &quot;Introduction-to-SIDER.Rmd&quot;</code></pre>
+<p>finally we can run the analysis using the imputeSider function. This model will normally take approximatly 5 minutes, however for brevity we will run a much shorter chain.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TDF_est.c &lt;-<span class="st"> </span><span class="kw">imputeSider</span>(<span class="dt">mulTree.data =</span> tdf_data_c, 
+                         <span class="dt">formula =</span> formula.c, 
+                         <span class="dt">random.terms =</span> random.terms,
+                         <span class="dt">prior =</span> prior, 
+                         <span class="dt">output =</span> <span class="st">&quot;test_c_run&quot;</span>,
+                         <span class="dt">parameters =</span> parameters,
+                         <span class="dt">chains =</span> no.chains, 
+                         <span class="dt">convergence =</span>  convergence, 
+                         <span class="dt">ESS =</span> ESS)</code></pre></div>
+<pre><code>## Loading required package: MCMCglmm</code></pre>
+<pre><code>## Warning: package 'MCMCglmm' was built under R version 3.3.2</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## Loading required package: coda</code></pre>
+<pre><code>## Warning: package 'coda' was built under R version 3.3.2</code></pre>
+<pre><code>## Loading required package: ape</code></pre>
+<pre><code>## 
+## 2016-12-20 - 15:24:32: MCMCglmm performed on tree 1
+## Convergence diagnosis:
+## Effective sample size is &gt; 1000: FALSE
+## 9; 28.68401; 9; 35.39054; 9; 9; 9; 2.660122; 9; 9; 9; 9; 9; 9; 4.840134; 9; 9; 9
+## C1.Sol.(Intercept), C1.Sol.diet.typeherbivore, C1.Sol.diet.typeomnivore, C1.Sol.diet.typepellet, C1.Sol.habitatterrestrial, C1.VCV.animal, C1.VCV.species, C1.VCV.tissue, C1.VCV.units, C2.Sol.(Intercept), C2.Sol.diet.typeherbivore, C2.Sol.diet.typeomnivore, C2.Sol.diet.typepellet, C2.Sol.habitatterrestrial, C2.VCV.animal, C2.VCV.species, C2.VCV.tissue, C2.VCV.units &lt; 1000
+## All levels converged &lt; 1.1: FALSE
+## 1.256641; 0.8879263; 2.451995; 3.016954; 2.476278; 0.9554611; 13.23004; 6.363399
+## Individual models saved as: test_c_run-tree1_chain*.rda
+## Convergence diagnosis saved as: test_c_run-tree1_conv.rda
+## 
+## 2016-12-20 - 15:24:32: MCMCglmm performed on tree 2
+## Convergence diagnosis:
+## Effective sample size is &gt; 1000: FALSE
+## 9; 9; 9; 2.975401; 9; 1.408715; 9; 9; 9; 9; 9; 9; 21.00777; 9; 1.446311; 9; 2.635377; 9
+## C1.Sol.(Intercept), C1.Sol.diet.typeherbivore, C1.Sol.diet.typeomnivore, C1.Sol.diet.typepellet, C1.Sol.habitatterrestrial, C1.VCV.animal, C1.VCV.species, C1.VCV.tissue, C1.VCV.units, C2.Sol.(Intercept), C2.Sol.diet.typeherbivore, C2.Sol.diet.typeomnivore, C2.Sol.diet.typepellet, C2.Sol.habitatterrestrial, C2.VCV.animal, C2.VCV.species, C2.VCV.tissue, C2.VCV.units &lt; 1000
+## All levels converged &lt; 1.1: FALSE
+## 7.633128; 1.246312; 2.748434; 0.9673087; 19.96191; 2.927551; 15.4751; 1.208985
+## Individual models saved as: test_c_run-tree2_chain*.rda
+## Convergence diagnosis saved as: test_c_run-tree2_conv.rda
+## 
+## 2016-12-20 - 15:24:32: MCMCglmm successfully performed on 2 trees.
+## Total execution time: 0.4935601 secs.
+## Use read.mulTree() to read the data as 'mulTree' data.
+## Use summary.mulTree() and plot.mulTree() for plotting or summarizing the 'mulTree' data.</code></pre>
+<p><code>imputeSider</code> now runs the selected amount of chains (no.chains) for each of the sampled phylogeny and exports the resulting MCMC chains to the working directory. Hence in this case we have run two chains for each of the two sampled trees so there should be four files in your working directory ending with something like run-tree1_chain2.rda.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">list.files</span>()</code></pre></div>
+<pre><code>## [1] &quot;Introduction-to-SIDER.html&quot;  &quot;Introduction-to-SIDER.Rmd&quot;  
+## [3] &quot;test_c_run-tree1_chain1.rda&quot; &quot;test_c_run-tree1_chain2.rda&quot;
+## [5] &quot;test_c_run-tree1_conv.rda&quot;   &quot;test_c_run-tree2_chain1.rda&quot;
+## [7] &quot;test_c_run-tree2_chain2.rda&quot; &quot;test_c_run-tree2_conv.rda&quot;</code></pre>
+<p>These are the full MCMCglmm model outputs for each of the chains run and can be imported back into the R for full inspection if required using the read.mulTree function. Notice also that the two other files ending with something simlar to run-tree2_conv. These give a description of the convergance diagnostics of the chains for each tree. The results of these diagnostics for each tree are also printed in R after running tefMcmcglmm returing whether the Effective sample size exceded ESS for all estimated paramaters (with the number for each parameter given as a list), and whether al chains converged for each parameter.</p>
+<p>All these models can be seperatly imported into R using read.mulTree(). However, since we are only intrested in the estimated TDF for our species tefMcmcglmm only imports the imputed posterior distribution of the estimated TDF for our species.</p>
+<p>The contents of <code>TDF_est.c$tdf_global</code> is the posterior estimate of the imputed TDF aggregated across all chains in the model run (<code>TDF_est.c$tdf_estimates</code> is a list containing each posterior chains separately). As a <code>mcmc</code> class obect, the many functions of the <code>coda</code> package provide options for summarising and plotting the distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Explore the names of the list created by SIDER::imputeSider</span>
+<span class="kw">names</span>(TDF_est.c)</code></pre></div>
+<pre><code>## [1] &quot;tdf_estimates&quot; &quot;tdf_global&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate summary statistics of the posterior. </span>
+<span class="co"># Specifically, the mean and standard deviation would be</span>
+<span class="co"># taken from here and used in a mixing model analysis using </span>
+<span class="co"># MixSIAR, MixSIR or SIAR for example.</span>
+<span class="kw">summary</span>(TDF_est.c$tdf_global)</code></pre></div>
+<pre><code>## 
+## Iterations = 1:36
+## Thinning interval = 1 
+## Number of chains = 1 
+## Sample size per chain = 36 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##           Mean             SD       Naive SE Time-series SE 
+##         1.5318         2.3293         0.3882         1.0722 
+## 
+## 2. Quantiles for each variable:
+## 
+##   2.5%    25%    50%    75%  97.5% 
+## -2.912 -0.070  1.712  3.511  5.174</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Credible intervals and the mode of the posterior are obtained </span>
+<span class="co"># using the hdrcde package</span>
+hdrcde::<span class="kw">hdr</span>(TDF_est.c$tdf_global, <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">95</span>, <span class="dv">99</span>))</code></pre></div>
+<pre><code>## $hdr
+##          [,1]     [,2]
+## 99% -2.923416 6.072002
+## 95% -2.680637 5.834352
+## 50% -0.186093 3.378406
+## 
+## $mode
+## [1] 1.582181
+## 
+## $falpha
+##         1%         5%        50% 
+## 0.05386132 0.05638517 0.07798562</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># You can also create density plots of the posterior</span>
+coda::<span class="kw">densplot</span>(TDF_est.c$tdf_global)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Or SIAR / SIBER style density boxplots using the hdrcde package</span>
+hdrcde::<span class="kw">hdr.boxplot</span>(TDF_est.c$tdf_global)</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
