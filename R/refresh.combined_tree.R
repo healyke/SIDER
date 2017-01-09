@@ -29,6 +29,13 @@ refresh.combined_tree <- function(data = c("3firstFritzTrees.tre",
                                                data[1], package = "SIDER"))
     bird_trees   <- ape::read.tree(system.file("extdata", 
                                                data[2], package = "SIDER"))
+    
+    ## Make the bird_trees ultrametric
+    if(any(is.ultrametric(bird_trees)) == FALSE) {
+      bird_trees <- lapply(bird_trees, chronoMPL)
+      class(bird_trees) <- "multiPhylo"
+    }
+
     #Combining the trees
     combined_trees <- mulTree::tree.bind(x = mammal_trees, 
                                          y = bird_trees, 
