@@ -101,7 +101,8 @@
 # save.model = TRUE
 # verbose = TRUE
 
-imputeSider <- function(mulTree.data, formula, random.terms, parameters, 
+imputeSider <- function(mulTree.data, formula, random.terms, 
+                        parameters = c(1200000, 200000, 500), 
                         priors, chains = 2, convergence = 1.1, 
                         ESS = 1000, output = "teff_output", 
                         save.model = TRUE, verbose = TRUE, ...) {
