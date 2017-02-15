@@ -89,13 +89,12 @@ plot(isotope_estimate$tdf_global)
 
 
 }
-\author{
-Kevin Healy
-}
 \seealso{
 \code{\link{recipeSider}}, \code{\link{prepareSider}},
   \code{\link{combined_trees}}, \code{\link{isotope_data}},
   \code{\link[mulTree]{as.mulTree}}, \code{\link[mulTree]{mulTree}},
   \code{\link[MCMCglmm]{MCMCglmm}}.
 }
-
+\author{
+Kevin Healy
+}

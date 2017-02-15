@@ -176,11 +176,11 @@ convergence =  c(1.1)
 ESS = c(1000)
 ```
 
-As the function exports the model output to avoid memory issues within R when running over multiple phylogenies make sure you have set the working directory to somewhere appropriate.
+As the function exports the model output to avoid memory issues within R when running over multiple phylogenies make sure you have set the working directory to somewhere appropriate. In this vignette example, we will use the default temporary directory determined by `tempdir()`, but ordinarily, this would be a folder of your own choosing located somewhere sensible on your local machine. We **_strongly_** advise that you do not use this `tempdir` in your own analyses!  In this example, I store the original working directory to `origwd` so that we can return the R session to the orginal working directory after using the temporary one.
 
 ```{r check_wd}
-getwd()
-list.files()
+origwd <- getwd() # get the current, or original working directory.
+setwd(tempdir()) # 
 ```
 
 finally we can run the analysis using the imputeSider function. This model will normally take 
@@ -231,4 +231,10 @@ coda::densplot(TDF_est.c$tdf_global)
 hdrcde::hdr.boxplot(TDF_est.c$tdf_global)
 ```
 
--->
+```{r tidy-up}
+# return the working directory to the original location (away from the tempdir())
+setwd(origwd) 
+```
+
+
+

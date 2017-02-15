@@ -2,8 +2,8 @@
 % Please edit documentation in R/SIDER.R
 \docType{data}
 \name{isotope_data}
-\alias{SIDER_data}
 \alias{isotope_data}
+\alias{SIDER_data}
 \title{Isotope data set}
 \format{a \code{data.frame} containing isotopic data derived from controlled
   feeding trials on birds and mammals. \describe{ \item{species}{The species
@@ -24,4 +24,3 @@ package.
 [ADD REFERENCES]
 }
 \keyword{datasets}
-

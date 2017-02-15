@@ -2,8 +2,8 @@
 % Please edit documentation in R/SIDER.R
 \docType{data}
 \name{combined_trees}
-\alias{combined_tree}
 \alias{combined_trees}
+\alias{combined_tree}
 \title{Avian and mammalian trees}
 \format{Contains a \code{multiPhylo} object of two randomly combined trees of
   birds and mammals.}
@@ -15,4 +15,3 @@ This is a dataset containing trees from birds (Jetz et al, 2012) and mammals
 [ADD REFERENCES]
 }
 \keyword{datasets}
-

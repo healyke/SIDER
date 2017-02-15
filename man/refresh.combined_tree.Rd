@@ -29,4 +29,3 @@ Internal utility function for refreshing the combined_trees
 \author{
 Thomas Guillerme
 }
-

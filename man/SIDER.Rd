@@ -18,4 +18,3 @@ again this can be expanded to other taxonomic groups as more data becomes
 available. We provide examples of how to use custom databases and custom
 models for prediction.
 }
-

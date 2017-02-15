@@ -22,4 +22,3 @@ Internal utility function for refreshing the isotope_data
 \author{
 Thomas Guillerme
 }
-

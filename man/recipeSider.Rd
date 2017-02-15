@@ -48,10 +48,9 @@ new.data.test <- recipeSider(species = "Meles_meles", habitat = "terrestrial",
    tree = combined_trees)
 
 }
-\author{
-Kevin Healy
-}
 \seealso{
 \code{\link{prepareSider}}, \code{\link{combined_trees}}.
 }
-
+\author{
+Kevin Healy
+}

@@ -51,4 +51,3 @@ tdf_data_c <- prepareSider(data.estimate = new.data.test,
 \code{\link{recipeSider}}, \code{\link{combined_trees}},
   \code{\link{isotope_data}}, \code{\link[mulTree]{as.mulTree}}.
 }
-
