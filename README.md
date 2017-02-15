@@ -7,17 +7,23 @@ This package allows users to estimate Trophic Discrimination Factors (TDF) for s
 This package is based on the [MCMCglmm](http://cran.r-project.org/web/packages/MCMCglmm/index.html) package
 and runs a MCMCglmm analysis on multiple trees using [mulTree] (https://github.com/TGuillerme/mulTree)
 
-## Installing SIDER
+## Installing SIDER (latest stable release)
 ```r
 if(!require(devtools)) install.packages("devtools")
 devtools::install_github("TGuillerme/mulTree@release")
-devtools::install_github("healyke/SIDER@v0.9", build_vignettes = TRUE)
+devtools::install_github("healyke/SIDER@v0.9.1", build_vignettes = TRUE)
 library(mulTree)
 library(SIDER)
 ```
 
-#### Vignettes
-*  AJ - need to update these links. though ive added build_vignettes to the install instructions above so users will have access from the package itself.
+## Installing SIDER (development - not guaranteed stable)
+```r
+if(!require(devtools)) install.packages("devtools")
+devtools::install_github("TGuillerme/mulTree@release")
+devtools::install_github("healyke/SIDER@master", build_vignettes = TRUE)
+library(mulTree)
+library(SIDER)
+```
 
 
 Authors
