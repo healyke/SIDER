@@ -1,10 +1,11 @@
 Package: SIDER
 Title: Stable Isotope Discrimination Estimation using R
 Version: 0.0.0.9000
-Authors@R: c(person("Kevin", "Healy", email = "healyke@tcd.ie", role = c("aut", "cre")),
+Author: c(person("Kevin", "Healy", email = "healyke@tcd.ie", role = c("aut", "cre")),
              person("Thomas", "Guillerme", role = c("aut")),
              person("Sean B.A", "Kelly", role = c("aut")),
              person("Andrew L", "Jackson", role = c("aut")))
+Maintainer: Kevin Healy <healyke@tcd.ie>
 Description: Uses Bayesian Inference to impute (predict) an isotopic 
               trophic discrimination value for an individual based on 
               phylogeny and tissue type.
@@ -22,9 +23,8 @@ Suggests:
 Imports:
     mulTree,
     coda,
-    stats,
-    graphics
+    stats
 Remotes:
-    github::TGuillerme/mulTree#31
+    github::TGuillerme/mulTree#34
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
