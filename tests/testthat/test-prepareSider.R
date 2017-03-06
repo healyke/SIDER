@@ -121,7 +121,7 @@ test_that("should return errors (bad input)", {
       test <- prepareSider(data.estimate = TdfEst_test,
                           data.isotope = isotope_data,
                           tree = combined_trees,
-                          isotope = "cardboard",
+                          isotope = "breakfast_roll",
                           random.terms = ~ animal + species + tissue)
       )
   # Wrong formula

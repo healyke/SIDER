@@ -47,7 +47,7 @@ test_that("should return errors (bad input)", {
   # No habitat
   expect_error(
       test <- recipeSider(species = "Meles_meles", 
-                        habitat = "Mordor",
+                        habitat = "Ballyhale",
                         taxonomic.class = "mammalia",
                         tissue = "blood",
                         diet.type = "omnivore",  
