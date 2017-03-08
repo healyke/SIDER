@@ -4,9 +4,9 @@
 \alias{imputeSider}
 \title{Running MCMCglmm}
 \usage{
-imputeSider(mulTree.data, formula, random.terms, parameters, priors,
-  chains = 2, convergence = 1.1, ESS = 1000, output = "teff_output",
-  save.model = TRUE, verbose = TRUE, ...)
+imputeSider(mulTree.data, formula, random.terms, parameters = c(1200000,
+  2e+05, 500), priors, chains = 2, convergence = 1.1, ESS = 1000,
+  output = "teff_output", save.model = TRUE, verbose = TRUE, ...)
 }
 \arguments{
 \item{mulTree.data}{output from \code{\link{prepareSider}} containing data and
