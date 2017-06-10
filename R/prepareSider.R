@@ -183,7 +183,7 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
   #Clean the data and match up the tree using the multree function
   #TG: I've added the cleaning function prior to as.mulTree. 
   # This way it doesn't polute the console with huge lists of dropped taxa.
-  cleaned_iso_data_com <- mulTree::clean.data(data.col = "species", data  =  iso_data_com, tree  = tree)
+  cleaned_iso_data_com <- mulTree::clean.data("species", iso_data_com, tree)
   clean_iso <- mulTree::as.mulTree(taxa = "species", 
                                    data = cleaned_iso_data_com$data, 
                                    tree = cleaned_iso_data_com$tree)
