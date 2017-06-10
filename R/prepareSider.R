@@ -174,7 +174,7 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
     
   # Include the new data, I bind it so its at the top and hence easier to read.
   
-  if(is.null(data.estimate) == T){
+  if(is.null(data.estimate) == TRUE){
     iso_data_com <- iso_data_sub_na
   } else{ 
     iso_data_com  <- rbind(new.data_sub , iso_data_sub_na)
@@ -183,10 +183,11 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
   #Clean the data and match up the tree using the multree function
   #TG: I've added the cleaning function prior to as.mulTree. 
   # This way it doesn't polute the console with huge lists of dropped taxa.
-  cleaned_iso_data_com <- mulTree::clean.data(taxa = "species", data =  iso_data_com, tree =  tree)
-  clean_iso <- mulTree::as.mulTree(data.col = "species", 
-                                   data = cleaned_iso_data_com$data, 
-                                   tree = cleaned_iso_data_com$tree)
+  cleaned_iso_data_com <- mulTree::clean.data(data = iso_data_com, tree = tree, data.col = "species")
+  clean_iso <- mulTree::as.mulTree(data = cleaned_iso_data_com$data,
+                                   tree = cleaned_iso_data_com$tree,
+                                   taxa = "species")
+
   #Forcing the random terms
   env_tmp <- environment(clean_iso$random.terms)
   clean_iso$random.terms <- random.terms
