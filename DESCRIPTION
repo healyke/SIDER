@@ -1,6 +1,6 @@
 Package: SIDER
 Title: Stable Isotope Discrimination Estimation using R
-Version: 0.0.0.9000
+Version: 0.9.1.1
 Author: c(person("Kevin", "Healy", email = "healyke@tcd.ie", role = c("aut", "cre")),
              person("Thomas", "Guillerme", role = c("aut")),
              person("Sean B.A", "Kelly", role = c("aut")),
@@ -21,10 +21,11 @@ Suggests:
     hdrcde,
     utils
 Imports:
-    mulTree,
+    caper,
     coda,
+    mulTree,
     stats
 Remotes:
-    github::TGuillerme/mulTree#34
+    github::TGuillerme/mulTree@978fa37f366dcd94bb0c3dda6ed1cbde5f6e9ae1
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
