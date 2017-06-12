@@ -7,6 +7,8 @@ This package allows users to estimate Trophic Discrimination Factors (TDF) for s
 This package is based on the [MCMCglmm](http://cran.r-project.org/web/packages/MCMCglmm/index.html) package
 and runs a MCMCglmm analysis on multiple trees using [mulTree] (https://github.com/TGuillerme/mulTree)
 
+N.B. Owing to changes to mulTree, we need to install from a specific mulTree commit from January 2017. This will throw an installation error associated with the package `caper` unless you install that first. You will also need to install `caper` yourself as a workaround before installing `mulTree`.
+
 ## Installing SIDER (latest stable release)
 ```r
 if(!require(devtools)) install.packages("devtools")
