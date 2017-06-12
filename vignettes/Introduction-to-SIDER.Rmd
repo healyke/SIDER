@@ -15,25 +15,27 @@ This package estimates Trophic Discrimination Factors (TDF) based on the imputat
 functionality to include the error associated with building phylogenetic trees using the **`mulTree`** package (https://github.com/TGuillerme/mulTree).
 
 \section{Installation}
-To install **`SIDER`**, its dependency **`mulTree`** must first be installed directly from GitHub using the following:
+To install **`SIDER`**, its dependency **`mulTree`** must first be installed directly from GitHub. If you have not sone so you can use the following:
 
 ```{r install_mulTree, results = "hide", message = FALSE, eval = FALSE}
 # Installing devtools
 if(!require(devtools)) install.packages("devtools")
 
 # Installing mulTree
-devtools::install_github("TGuillerme/mulTree@release")
+#devtools::install_github("TGuillerme/mulTree@releasev1.2.6")
+library(mulTree)
 ```
 
 
-Following this you can then install **`SIDER`** directly from GitHub using the following:
+Following this you can also install **`SIDER`** directly from GitHub using the following:
 
 ```{r install_SIDER, results = "hide", message=FALSE, eval = FALSE}
 # Installing SIDER
-devtools::install_github("healyke/SIDER@v0.9.1", build_vignettes = TRUE)
+#devtools::install_github("healyke/SIDER", ref = "release")
+#library(SIDER)
 ```
 
-Load the package
+However, if you are reading this vignette you should only need to load the package
 
 ```{r load_pakages, results="hide", message=FALSE, warning=FALSE}
 library(SIDER)

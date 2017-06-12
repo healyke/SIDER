@@ -184,7 +184,6 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
   #TG: I've added the cleaning function prior to as.mulTree. 
   # This way it doesn't polute the console with huge lists of dropped taxa.
   cleaned_iso_data_com <- mulTree::clean.data(data = iso_data_com, tree = tree, data.col = "species")
-  cleaned_iso_data_com$data  <- cleaned_iso_data_com$data[!(cleaned_iso_data_com$data$species %in% cleaned_iso_data_com$dropped_rows),]
   clean_iso <- mulTree::as.mulTree(data = cleaned_iso_data_com$data,
                                    tree = cleaned_iso_data_com$tree,
                                    taxa = "species")
