@@ -1,11 +1,12 @@
 [![Build Status](https://travis-ci.org/healyke/SIDER.svg?branch=master)](https://travis-ci.org/healyke/SIDER)
 [![DOI](https://zenodo.org/badge/45869597.svg)](https://zenodo.org/badge/latestdoi/45869597)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 # SIDER
 Stable Isotope Discrimination Estimation in R
 
 This package allows users to estimate Trophic Discrimination Factors (TDF) for species with no current measured TDF values using Bayesian imputation. 
 This package is based on the [MCMCglmm](http://cran.r-project.org/web/packages/MCMCglmm/index.html) package
-and runs a MCMCglmm analysis on multiple trees using [mulTree](https://github.com/TGuillerme/mulTree)
+and runs a MCMCglmm analysis on multiple trees using [mulTree](https://github.com/TGuillerme/mulTree).
 
 N.B. Owing to changes to mulTree due to updates to `caper` we have released SIDER v0.9.1.2. 
 
