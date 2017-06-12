@@ -10,8 +10,9 @@ and runs a MCMCglmm analysis on multiple trees using [mulTree] (https://github.c
 ## Installing SIDER (latest stable release)
 ```r
 if(!require(devtools)) install.packages("devtools")
-devtools::install_github("TGuillerme/mulTree@release")
-devtools::install_github("healyke/SIDER@v0.9.1", build_vignettes = TRUE)
+install.packages("caper")
+devtools::install_github("TGuillerme/mulTree@978fa37f366dcd94bb0c3dda6ed1cbde5f6e9ae1")
+devtools::install_github("healyke/SIDER@v0.9.1.1", build_vignettes = TRUE)
 library(mulTree)
 library(SIDER)
 ```
@@ -19,7 +20,8 @@ library(SIDER)
 ## Installing SIDER (development - not guaranteed stable)
 ```r
 if(!require(devtools)) install.packages("devtools")
-devtools::install_github("TGuillerme/mulTree@release")
+install.packages("caper")
+devtools::install_github("TGuillerme/mulTree@978fa37f366dcd94bb0c3dda6ed1cbde5f6e9ae1")
 devtools::install_github("healyke/SIDER@master", build_vignettes = TRUE)
 library(mulTree)
 library(SIDER)
