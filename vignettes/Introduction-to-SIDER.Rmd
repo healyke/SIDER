@@ -22,8 +22,7 @@ To install **`SIDER`**, its dependency **`mulTree`** must first be installed dir
 if(!require(devtools)) install.packages("devtools")
 
 # Installing mulTree
-if(!require(mulTree)) devtools::install_github("TGuillerme/mulTree",
-                                               ref = "master")
+devtools::install_github("TGuillerme/mulTree@release")
 ```
 
 
@@ -31,7 +30,7 @@ Following this you can then install **`SIDER`** directly from GitHub using the f
 
 ```{r install_SIDER, results = "hide", message=FALSE, eval = FALSE}
 # Installing SIDER
-if(!require(SIDER)) devtools::install_github("healyke/SIDER", ref = "master")
+devtools::install_github("healyke/SIDER@v0.9.1", build_vignettes = TRUE)
 ```
 
 Load the package
