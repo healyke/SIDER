@@ -6,8 +6,10 @@ output:
   pdf_document: default
   html_document: default
   rmarkdown::html_vignette: default
-vignette: |
-  %\VignetteIndexEntry{Introduction to SIDER} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+vignette: >
+  %\VignetteIndexEntry{Introduction to SIDER} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
 ---
 
 
