@@ -5,14 +5,13 @@ Stable Isotope Discrimination Estimation in R
 
 This package allows users to estimate Trophic Discrimination Factors (TDF) for species with no current measured TDF values using Bayesian imputation. 
 This package is based on the [MCMCglmm](http://cran.r-project.org/web/packages/MCMCglmm/index.html) package
-and runs a MCMCglmm analysis on multiple trees using [mulTree] (https://github.com/TGuillerme/mulTree)
+and runs a MCMCglmm analysis on multiple trees using [mulTree](https://github.com/TGuillerme/mulTree)
 
 N.B. Owing to changes to mulTree due to updates to `caper` we have released SIDER v0.9.1.2. 
 
 ## Installing SIDER (latest stable release)
 ```r
 if(!require(devtools)) install.packages("devtools")
-install.packages("caper")
 devtools::install_github("healyke/SIDER@v0.9.1.2", build_vignettes = TRUE)
 library(mulTree)
 library(SIDER)
@@ -21,7 +20,6 @@ library(SIDER)
 ## Installing SIDER (development - not guaranteed stable)
 ```r
 if(!require(devtools)) install.packages("devtools")
-install.packages("caper")
 devtools::install_github("healyke/SIDER@master", build_vignettes = TRUE)
 library(mulTree)
 library(SIDER)
@@ -30,7 +28,7 @@ library(SIDER)
 
 Authors
 -------
-[Kevin Healy](http://healyke.github.io), [Seán B.A Kelly], [Thomas Guillerme](http://tguillerme.github.io), [Andrew Jackson](https://github.com/AndrewLJackson)
+[Kevin Healy](http://healyke.github.io), Seán B.A Kelly, [Thomas Guillerme](http://tguillerme.github.io), [Andrew Jackson](https://github.com/AndrewLJackson)
 
 Citation
 -------
