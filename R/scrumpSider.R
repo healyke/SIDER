@@ -12,13 +12,13 @@
 #' scrumpSider()
 #' 
 #' ## Displaying information for a specific species
-#' scrumpSider(data = "Homo_sapiens")
+#' scrumpSider(iso.data = "Homo_sapiens")
 #' 
 #' ## Displaying information for a specific tree
 #' scrumpSider(tree = 1)
 #' 
 #' ## Displaying information for multiple species and trees
-#' scrumpSider(data = c("Homo_sapiens", "Gallus_gallus"),
+#' scrumpSider(iso.data = c("Homo_sapiens", "Gallus_gallus"),
 #'             tree = c(1,2))
 #'
 #' @seealso \code{link{isotope_data}}, \code{link{combined_trees}} 
