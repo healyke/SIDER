@@ -1,0 +1,78 @@
+---
+title: "SIDER to MixSIAR pipeline example"
+author: "Andrew Jackson"
+date: "`r Sys.Date()`"
+output: html_notebook
+---
+
+In this example we illustrate how to include a SIDER analysis into a workflow for a mixing model anlaysis using MixSIAR.
+
+We will take a single pack from the Wolves example in MixSIAR [**_REF_**] and run a simple mixing model using the default TDFs included with the example which were derived using **_XXX_** and compare that with the results obtained using SIDER to estimate them. For this simplified example we use only wolf pack 1 located in region 1 and so omit any factors. The example will work similarly for the full analysis
+
+
+```{r load-and-prune-data}
+
+# Replace the system.file call with the path to your file
+# wolves.filename <- system.file("extdata", "wolves_consumer.csv", 
+#                                package = "SIDER")
+
+# wolves.filename <- paste0(getwd(), "/inst/extdata/wolves_consumer.csv")
+mix.filename <- "../inst/extdata/wolves_consumer.csv"
+
+# Load the mixture/consumer data
+mix <- load_mix_data(filename = wolves.filename, 
+                     iso_names = c("d13C","d15N"), 
+                     factors = NULL, 
+                     fac_random = NULL, 
+                     fac_nested = NULL, 
+                     cont_effects = NULL)
+
+
+```
+
+
+Now read in the source data.
+```{r load-sources}
+# Replace the system.file call with the path to your file
+# source.filename <- system.file("extdata", "wolves_sources.csv", package = "SIDER")
+source.filename <- "../inst/extdata/wolves_sources.csv"
+
+# Load the source data
+source <- load_source_data(filename=source.filename,
+                           source_factors=NULL, 
+                           conc_dep=FALSE, 
+                           data_type="means", 
+                           mix)
+```
+
+
+
+Load the TDF values used in the original data
+
+```{r load-original-TDFs}
+# Replace the system.file call with the path to your file
+# discr.filename <- system.file("extdata", "wolves_discrimination.csv", package = "MixSIAR")
+discr.filename <- "../inst/extdata/wolves_discrimination.csv"
+
+# Load the discrimination/TDF data
+discr <- load_discr_data(filename=discr.filename, mix)
+
+```
+
+
+Fit the basic MixSIAR model
+
+```{r orig-tdf-model}
+# Write the JAGS model file
+model_filename <- "MixSIAR_model.txt"   # Name of the JAGS model file
+resid_err <- TRUE
+process_err <- FALSE
+write_JAGS_model(model_filename, resid_err, process_err, mix, source)
+
+
+jags.1 <- run_model(run="test", mix, source, discr, model_filename, 
+                    alpha.prior = 1, resid_err, process_err)
+
+```
+
+
