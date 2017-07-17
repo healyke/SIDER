@@ -179,6 +179,7 @@ no.chains <- c(2)
 nitt <- c(1200000)
 burnin <- c(200000)
 thin <- c(500)
+parameters <- c(nitt, thin, burnin)
 no.chains <- c(2)
 ```
 

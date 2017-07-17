@@ -5,6 +5,12 @@ date: "`r Sys.Date()`"
 output: html_notebook
 ---
 
+```{r setup}
+library(MixSIAR)
+
+```
+
+
 In this example we illustrate how to include a SIDER analysis into a workflow for a mixing model anlaysis using MixSIAR.
 
 We will take a single pack from the Wolves example in MixSIAR [**_REF_**] and run a simple mixing model using the default TDFs included with the example which were derived using **_XXX_** and compare that with the results obtained using SIDER to estimate them. For this simplified example we use only wolf pack 1 located in region 1 and so omit any factors. The example will work similarly for the full analysis
@@ -20,7 +26,7 @@ We will take a single pack from the Wolves example in MixSIAR [**_REF_**] and ru
 mix.filename <- "../inst/extdata/wolves_consumer.csv"
 
 # Load the mixture/consumer data
-mix <- load_mix_data(filename = wolves.filename, 
+mix <- load_mix_data(filename = mix.filename, 
                      iso_names = c("d13C","d15N"), 
                      factors = NULL, 
                      fac_random = NULL, 
@@ -60,9 +66,9 @@ discr <- load_discr_data(filename=discr.filename, mix)
 ```
 
 
-Fit the basic MixSIAR model
+## Fit the basic MixSIAR model using the original TDFs
 
-```{r orig-tdf-model}
+```{r orig-tdf-model, results = 'hide', message=FALSE}
 # Write the JAGS model file
 model_filename <- "MixSIAR_model.txt"   # Name of the JAGS model file
 resid_err <- TRUE
@@ -70,9 +76,245 @@ process_err <- FALSE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 
-jags.1 <- run_model(run="test", mix, source, discr, model_filename, 
+jags.1 <- run_model(run="short", mix, source, discr, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
+
+## Use "common" errors on the TDFs
+
+```{r tdf_with_error, results = 'hide', message=FALSE}
+
+discr2 <- discr
+discr2$sig2[,"SDd13C"] <- 0.63
+discr2$sig2[,"SDd15N"] <- 0.74
+
+jags.2 <- run_model(run="short", mix, source, discr2, model_filename, 
+                    alpha.prior = 1, resid_err, process_err)
+
+```
+
+## Use SIDER to estimate TDFs (discrimination factors)
+
+The wolf isotope samples are described fully in Darimont, C. T., Paquet, P. C. and Reimchen, T. E. (2009), Landscape heterogeneity and marine subsidy generate extensive intrapopulation niche diversity in a large terrestrial vertebrate. Journal of Animal Ecology, 78: 126–133.  [doi](http://dx.doi.ord/10.1111/j.1365-2656.2008.01473.x),
+
+```{r SIDER_tdfs}
+
+# Read in the data
+SIDER.data <- read.csv(file = system.file("extdata", 
+                                          "SIDER_data.csv", 
+                                          package = "SIDER"), 
+                       header = TRUE,
+                       stringsAsFactors = FALSE)
+
+# View the first 10 rows of the data frame
+head(SIDER.data)
+
+# Read in the phylogenetic information
+# The mammal trees
+mammal_trees <- ape::read.tree(system.file("extdata", 
+                                      "3firstFritzTrees.tre", 
+                                      package = "SIDER"))
+# The bird trees
+bird_trees   <- ape::read.tree(system.file("extdata", 
+                                      "3firstJetzTrees.tre", 
+                                      package = "SIDER"))
+
+# Combine them together using the tree.bind function from the mulTree package
+combined_trees <- mulTree::tree.bind(x = mammal_trees, 
+                                     y = bird_trees, 
+                                     sample = 2, 
+                                     root.age = 250)
+
+# Checking the data for the species we want to estimate TEF for (Meles meles)
+new.data.test <- recipeSider(species = "Canis_lupus", 
+                             habitat = "terrestrial", 
+                             taxonomic.class = "mammalia", 
+                             tissue = "hair", 
+                             diet.type = "carnivore", 
+                             tree = combined_trees)
+
+# prepare the carbon model
+tdf_data_c <- prepareSider(new.data.test, 
+                          isotope_data, 
+                          combined_trees, 
+                          "carbon")
+
+# prepare the nitrogen model
+tdf_data_n <- prepareSider(new.data.test, 
+                          isotope_data, 
+                          combined_trees, 
+                          "nitrogen")
+
+# formulae for both
+formula.c <- delta13C ~ diet.type + habitat
+formula.n <- delta15N ~ diet.type + habitat
+
+# common random structure for both
+random.terms <- ( ~ animal + species + tissue)
+
+prior <- list(R = list(V = 1, nu=0.002), 
+              G = list(G1=list(V = 1, nu=0.002),
+                       G2=list(V = 1, nu=0.002), 
+                       G3=list(V = 1, nu=0.002)))
+
+# model run settings
+# *Might* want these to be longer runs.
+nitt <- c(220000)
+burnin <- c(20000)
+thin <- c(100)
+parameters <- c(nitt, thin, burnin)
+no.chains <- c(2)
+
+# convergence settings
+convergence =  c(1.1)
+ESS = c(1000)
+
+
+# ************** VIGNETTE *********************
+# These dont work in notebooks
+# origwd <- getwd() # get the current, or original working directory.
+# # setwd(tempdir()) # 
+# setwd("/tmp")
+# ***********************************
+
+
+TDF_est.c <- imputeSider(mulTree.data = tdf_data_c, 
+                         formula = formula.c, 
+                         random.terms = random.terms,
+                         prior = prior, 
+                         output = "wolves_sider_c_run",
+                         parameters = parameters,
+                         chains = no.chains, 
+                         convergence =  convergence, 
+                         ESS = ESS)
+
+TDF_est.n <- imputeSider(mulTree.data = tdf_data_n, 
+                         formula = formula.n, 
+                         random.terms = random.terms,
+                         prior = prior, 
+                         output = "wolves_sider_n_run",
+                         parameters = parameters,
+                         chains = no.chains, 
+                         convergence =  convergence, 
+                         ESS = ESS)
+
+
+# **************** VIGNETTE *******************
+# ? set back for the vignette
+# setwd(origwd)
+# ***********************************
+
+###Now lets have a look at the files imputeSider has saved to the current working directory
+# list.files(pattern = "test_c_run")
+
+```
+
+Take a look at the summaries of the SIDER runs. First $\Delta^{13}$C.
+
+```{r summarise-sider-carbon}
+# Calculate summary statistics of the posterior. 
+# Specifically, the mean and standard deviation would be
+# taken from here and used in a mixing model analysis using 
+# MixSIAR, MixSIR or SIAR for example.
+summary(TDF_est.c$tdf_global)
+
+# Credible intervals and the mode of the posterior are obtained 
+# using the hdrcde package
+hdrcde::hdr(TDF_est.c$tdf_global, prob = c(50, 95, 99))
+
+# You can also create density plots of the posterior
+coda::densplot(TDF_est.c$tdf_global)
+
+```
+
+Second, $\Delta^{15}$N.
+
+```{r summarise-sider-nitrogen}
+# Calculate summary statistics of the posterior. 
+# Specifically, the mean and standard deviation would be
+# taken from here and used in a mixing model analysis using 
+# MixSIAR, MixSIR or SIAR for example.
+summary(TDF_est.c$tdf_global)
+
+# Credible intervals and the mode of the posterior are obtained 
+# using the hdrcde package
+hdrcde::hdr(TDF_est.c$tdf_global, prob = c(50, 95, 99))
+
+# You can also create density plots of the posterior
+coda::densplot(TDF_est.c$tdf_global)
+
+```
+
+Now incorporate the new TDF data in a mixsiar model.
+
+```{r sider-to-mixsiar}
+
+# means and standard deviations of the SIDER estimates
+mu.c <- mean(TDF_est.c$tdf_global)
+mu.n <- mean(TDF_est.n$tdf_global)
+
+sd.c <- sd(TDF_est.c$tdf_global)
+sd.n <- sd(TDF_est.n$tdf_global)
+
+tdf_sider <- list()
+tdf_sider$mu <- matrix(c(rep(mu.c, 3), rep(mu.n, 3)), ncol = 2, nrow = 3,
+                       dimnames = list(source$source_names, mix$MU_names))
+tdf_sider$sd <- matrix(c(rep(sd.c, 3), rep(sd.n, 3)), ncol = 2, nrow = 3,
+                       dimnames = list(source$source_names, mix$SIG_names))
+
+
+```
+
+And finally run mixsiar
+
+```{r sider-mixsiar-model, results = 'hide', message=FALSE}
+
+jags.3 <- run_model(run="short", mix, source, tdf_sider, model_filename, 
+                    alpha.prior = 1, resid_err, process_err)
+
+```
+
+
+
+## Compare model estimates
+
+```{r compare-model-estimates}
+
+cat("Model 1: original TDFs from the mixsiar example\n")
+knitr::kable(jags.1$BUGSoutput$summary)
+
+cat("Model 2: original TDFs from the mixsiar example with extra error\n")
+knitr::kable(jags.2$BUGSoutput$summary)
+
+cat("Model 3: SIDER derived TDFs\n")
+knitr::kable(jags.3$BUGSoutput$summary)
+
+```
+
+Bundle all the posteriors together using dplyr for plotting with ggplot. Here we focus on the proportion of Deer in the diet of this wolf pack, being the largest constituent of the diet. As we can see, using the TDFs from SIDER increase slightly the estimate of Deer in the diet owing to the slightly higher TDF used for $\Delta^{15}$N. The inclusion of additional error widened the esimated proportion for the "Added Variation" model, but not the SIDER model despite having considerably larger standard deviations: this is most likely due to the proportions moving closer to the boundary at $p_{Deer} = 1$, where there is a natural compressive effect on the distribution.
+
+```{r bundle-output}
+
+post_df <- dplyr::bind_rows(list(as.data.frame(jags.1$BUGSoutput$sims.matrix), 
+                                 as.data.frame(jags.2$BUGSoutput$sims.matrix),
+                                 as.data.frame(jags.3$BUGSoutput$sims.matrix)),
+                            .id = "Model")
+
+# change the names to match the sources
+names(post_df) <- c("Model", "Deviance", source$source_names)
+
+# convert to numeric and then factor
+post_df$Model <- as.numeric(post_df$Model)
+post_df$Model <- factor(post_df$Model, labels = c("Original","Added Variation","SIDER"))
+
+# plot the Deer.
+p1 <- ggplot(post_df, mapping = aes(x = Model, y = Deer)) + 
+  geom_violin(draw_quantiles = c(0.025, 0.25, 0.5, 0.75, 0.975))
+print(p1)
+```
+
+
+
 
 
