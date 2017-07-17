@@ -54,24 +54,32 @@ scrumpSider <- function(iso.data, tree) {
 
         ## Species are characters
         if(class_data == "character") {
-            ## Select the species in the dataset
-            rows_selected <- isotope_data[,1] %in% iso.data
-            
-            ## Check if the species are present
-            if(length(which(rows_selected)) != 0) {
-                ## Select the rows to output
-                output_data <- isotope_data[rows_selected, ]
-                output <- TRUE
-            } 
 
-            ## If any species are not in isotope_data, print a message
-            if(!all(iso.data %in% isotope_data[,1])) {
-                missing_sp <- iso.data[which(!iso.data %in% isotope_data[,1])]
-                ## Tells which species is absent
-                if(length(missing_sp) > 1) {
-                    message(paste("species:", paste(missing_sp, sep = ", "), "are not found in isotope_data.\nUse imputeSider(...) to get their isotope estimates!"))
-                } else {
-                    message(paste("species", paste(missing_sp, sep = ", "), "is not found in isotope_data.\nUse imputeSider(...) to get its isotope estimates!"))
+            if(length(iso.data) == 1 && iso.data == "all") {
+                ## Returns the whole isotope dataset
+                output <- TRUE
+                output_data <- isotope_data
+
+            } else {
+                ## Select the species in the dataset
+                rows_selected <- isotope_data[,1] %in% iso.data
+                
+                ## Check if the species are present
+                if(length(which(rows_selected)) != 0) {
+                    ## Select the rows to output
+                    output_data <- isotope_data[rows_selected, ]
+                    output <- TRUE
+                } 
+
+                ## If any species are not in isotope_data, print a message
+                if(!all(iso.data %in% isotope_data[,1])) {
+                    missing_sp <- iso.data[which(!iso.data %in% isotope_data[,1])]
+                    ## Tells which species is absent
+                    if(length(missing_sp) > 1) {
+                        message(paste("species:", paste(missing_sp, sep = ", "), "are not found in isotope_data.\nUse imputeSider(...) to get their isotope estimates!"))
+                    } else {
+                        message(paste("species", paste(missing_sp, sep = ", "), "is not found in isotope_data.\nUse imputeSider(...) to get its isotope estimates!"))
+                    }
                 }
             }
         }
@@ -85,23 +93,31 @@ scrumpSider <- function(iso.data, tree) {
     }
 
     if(!missing(tree)) {
-        ## Checking the tree values
-        if(class(tree) != "numeric") {
-            stop("Tree argument must be one or more numeric values.")
-        }
-        if(any(tree > length(combined_trees))) {
-            stop(paste("Tree argument is too big: only", length(combined_trees), "are available in the combined_tree dataset."))
-        }
 
-        ## Select the trees
-        if(length(tree) > 1) {
-            ## multiple trees
-            output_tree <- combined_trees[tree]
+        if(length(tree) == 1 && tree == "all") {
+            ## Return all trees
+            output_tree <- combined_trees
+
         } else {
-            ## single tree
-            output_tree <- combined_trees[[tree]]
-        }
 
+            ## Checking the tree values
+            if(class(tree) != "numeric") {
+                stop("Tree argument must be one or more numeric values.")
+            }
+            if(any(tree > length(combined_trees))) {
+                stop(paste("Tree argument is too big: only", length(combined_trees), "are available in the combined_tree dataset."))
+            }
+
+            ## Select the trees
+            if(length(tree) > 1) {
+                ## multiple trees
+                output_tree <- combined_trees[tree]
+            } else {
+                ## single tree
+                output_tree <- combined_trees[[tree]]
+            }
+        }
+       
         if(output) {
             ## If data was already required, make a list of both data
             output_data <- list("data" = output_data, "tree" = output_tree)

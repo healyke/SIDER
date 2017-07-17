@@ -52,4 +52,24 @@ test_that("scrumpSider works", {
     expect_equal(names(test), c("data", "tree"))
     expect_is(test[[1]], "data.frame")
     expect_is(test[[2]], "phylo")
+
+    ## Getting all the isotopic data
+    test <- scrumpSider(iso.data = "all")
+    expect_is(test, "data.frame")
+    expect_equal(dim(test), c(225, 9))
+
+    ## Getting all the trees
+    test <- scrumpSider(tree = "all")
+    expect_is(test, "multiPhylo")
+    expect_equal(length(test), 2)
+
+    ## Getting everything
+    test <- scrumpSider(iso.data = "all", tree = "all")
+    expect_is(test, "list")
+    expect_length(test, 2)
+    expect_equal(names(test), c("data", "tree"))
+    expect_is(test[[1]], "data.frame")
+    expect_equal(dim(test[[1]]), c(225, 9))
+    expect_is(test[[2]], "multiPhylo")
+
 })
