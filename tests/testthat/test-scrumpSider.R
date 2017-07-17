@@ -21,14 +21,14 @@ test_that("scrumpSider works", {
     expect_is(combined_trees, "multiPhylo")
 
     ## Right output row
-    expect_equal(dim(test), c(1,9))
+    expect_equal(dim(test), c(1,10))
     expect_equal(names(test), colnames(isotope_data))
 
     ## More than one taxa loading (no more message, data already loaded)
     test <- scrumpSider(iso.data = c("Homo_sapiens", "Gallus_gallus"))
 
     ## Right output row
-    expect_equal(dim(test), c(5,9))
+    expect_equal(dim(test), c(5,10))
     expect_equal(names(test), colnames(isotope_data))
 
     ## Selecting species by ID
@@ -56,7 +56,7 @@ test_that("scrumpSider works", {
     ## Getting all the isotopic data
     test <- scrumpSider(iso.data = "all")
     expect_is(test, "data.frame")
-    expect_equal(dim(test), c(225, 9))
+    expect_equal(dim(test), c(225, 10))
 
     ## Getting all the trees
     test <- scrumpSider(tree = "all")
@@ -69,7 +69,7 @@ test_that("scrumpSider works", {
     expect_length(test, 2)
     expect_equal(names(test), c("data", "tree"))
     expect_is(test[[1]], "data.frame")
-    expect_equal(dim(test[[1]]), c(225, 9))
+    expect_equal(dim(test[[1]]), c(225, 10))
     expect_is(test[[2]], "multiPhylo")
 
 })
