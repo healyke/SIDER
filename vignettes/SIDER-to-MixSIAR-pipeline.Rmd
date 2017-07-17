@@ -7,6 +7,7 @@ output: html_notebook
 
 ```{r setup}
 library(MixSIAR)
+library(ggplot2)
 
 ```
 
