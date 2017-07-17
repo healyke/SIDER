@@ -3,13 +3,11 @@ title: "Introduction to SIDER"
 author: "Kevin Healy"
 date: '`r Sys.Date()`'
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
   rmarkdown::html_vignette: default
-vignette: >
-  %\VignetteIndexEntry{Introduction to SIDER} 
-  %\VignetteEngine{knitr::rmarkdown} 
-  %\VignetteEncoding{UTF-8}
+vignette: |
+  %\VignetteIndexEntry{Introduction to SIDER}  %\VignetteEngine{knitr::rmarkdown}  %\VignetteEncoding{UTF-8}
 ---
 
 
@@ -46,12 +44,21 @@ library(SIDER)
 ## Read in the data
 **`SIDER`** has a data file which contains discrimination factors for a range of species.
 It also contains what tissue was used to measure the istopic value and the basic ecology of the species including its diet (herbivore, etc) and whether it is a marine or terrestrial organism.
-This data is used to run a model and impute an isotopic value for the new species.
-Lets look at the data.
+This data is used to run a model and impute an isotopic value for the new species. We search this data using the `scrumpSider` function.
 
 ```{r read_data}
+
+##search the dataset
+scrumpSider(iso.data = "Homo_sapiens")
+
+
+
 # Read in the data
-SIDER.data <- read.csv(file = system.file("extdata", 
+SIDER.data <- 
+  
+  
+  
+  read.csv(file = system.file("extdata", 
                                           "SIDER_data.csv", 
                                           package = "SIDER"), 
                        header = TRUE,
