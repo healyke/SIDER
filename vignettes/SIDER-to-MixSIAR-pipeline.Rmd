@@ -13,7 +13,9 @@ library(dplyr)
 ```
 
 
-In this example we illustrate how to include a SIDER analysis into a workflow for a mixing model anlaysis using MixSIAR.
+In this example we illustrate how to include a SIDER analysis into a workflow for a mixing model anlaysis using MixSIAR. The section **Use SIDER to estimate TDFs (discrimination factors)** illustrates how to run SIDER and then use the estimated TDFs in a subsequent mixing model analysis using MixSIAR. The rest of document is not required for such an analysis, and instead it serves as a comparison of alternative methods, that we would like to see consigned ultimately to history!
+
+In 
 
 We will take a single pack from the Wolves example in MixSIAR [**_REF_**] and run a simple mixing model using the default TDFs included with the example which were derived using **_XXX_** and compare that with the results obtained using SIDER to estimate them. For this simplified example we use only wolf pack 1 located in region 1 and so omit any factors. The example will work similarly for the full analysis
 
@@ -63,7 +65,7 @@ Load the TDF values used in the original data
 discr.filename <- "../inst/extdata/wolves_discrimination.csv"
 
 # Load the discrimination/TDF data
-discr <- load_discr_data(filename=discr.filename, mix)
+wolf_example_tdfs <- load_discr_data(filename=discr.filename, mix)
 
 ```
 
@@ -78,7 +80,7 @@ process_err <- FALSE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 
-jags.1 <- run_model(run="short", mix, source, discr, model_filename, 
+jags.1 <- run_model(run="short", mix, source, wolf_example_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
@@ -87,11 +89,11 @@ jags.1 <- run_model(run="short", mix, source, discr, model_filename,
 
 ```{r tdf_with_error, results = 'hide', message=FALSE}
 
-discr2 <- discr
-discr2$sig2[,"SDd13C"] <- 0.63
-discr2$sig2[,"SDd15N"] <- 0.74
+extra_errors_tdfs <- wolf_example_tdfs
+extra_errors_tdfs$sig2[,"SDd13C"] <- 0.63
+extra_errors_tdfs$sig2[,"SDd15N"] <- 0.74
 
-jags.2 <- run_model(run="short", mix, source, discr2, model_filename, 
+jags.2 <- run_model(run="short", mix, source, extra_errors_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
@@ -101,15 +103,15 @@ jags.2 <- run_model(run="short", mix, source, discr2, model_filename,
 Although not from a controlled feeding experiment, [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves of $\Delta^13\text{C} = 1.97$ &#8240 and $\Delta^15\text{N} = 3.04$ &#8240 using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated.
 
 ```{r derbridge-tdfs}
-discr3 <- discr2
-discr3$mu[,"Meand13C"] <- 1.97
-discr3$mu[,"Meand15N"] <- 3.04
+derbridge_tdfs <- discr2
+derbridge_tdfs$mu[,"Meand13C"] <- 1.97
+derbridge_tdfs$mu[,"Meand15N"] <- 3.04
 
-discr3$sig2[,"SDd13C"] <- 0.70
-discr3$sig2[,"SDd15N"] <- 0.31
+derbridge_tdfs$sig2[,"SDd13C"] <- 0.70
+derbridge_tdfs$sig2[,"SDd15N"] <- 0.31
 
 
-jags.4 <- run_model(run="short", mix, source, discr3, model_filename, 
+jags.4 <- run_model(run="short", mix, source, derbridge_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 
@@ -126,9 +128,8 @@ The nearest species to the wolf in the dataset with known TDFs is the fox. While
 fox_data <- SIDER::isotope_data %>% filter(species == "Vulpes_vulpes", 
                                            tissue == "hair")
 
-discr4 <- discr2
-discr4$mu[,"Meand13C"] <- fox_data$delta13C
-discr4$mu[,"Meand15N"] <- fox_data$delta15N
+fox_tdfs$mu[,"Meand13C"] <- fox_data$delta13C
+fox_tdfs$mu[,"Meand15N"] <- fox_data$delta15N
 
 
 jags.4 <- run_model(run="short", mix, source, discr4, model_filename, 
@@ -169,7 +170,7 @@ combined_trees <- mulTree::tree.bind(x = mammal_trees,
                                      sample = 2, 
                                      root.age = 250)
 
-# Checking the data for the species we want to estimate TEF for (Meles meles)
+# Checking the data for the species we want to estimate TEF for (Canis lupus)
 new.data.test <- recipeSider(species = "Canis_lupus", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
@@ -299,6 +300,13 @@ mu.n <- mean(TDF_est.n$tdf_global)
 
 sd.c <- sd(TDF_est.c$tdf_global)
 sd.n <- sd(TDF_est.n$tdf_global)
+
+# construct the list object containing the mean and sd of the TDF data 
+# to pass to MixSIAR. This is a list of length 2, each containing a matrix 
+# with row.names of the sources, and specific column names that match the 
+# source file. The code below extracts these from the loaded source and mixture 
+# objects created early in the first section of this document via 
+# load_mix_data() and load_source_data()
 
 tdf_sider <- list()
 tdf_sider$mu <- matrix(c(rep(mu.c, 3), rep(mu.n, 3)), ncol = 2, nrow = 3,
