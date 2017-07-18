@@ -6,8 +6,9 @@ output: html_notebook
 ---
 
 ```{r setup}
+library(SIDER)
 library(MixSIAR)
-library(ggplot2)
+library(dplyr)
 
 ```
 
@@ -94,6 +95,47 @@ jags.2 <- run_model(run="short", mix, source, discr2, model_filename,
                     alpha.prior = 1, resid_err, process_err)
 
 ```
+
+## Use TDFs from an experimental study
+
+Although not from a controlled feeding experiment, [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves of $\Delta^13\text{C} = 1.97$ &#8240 and $\Delta^15\text{N} = 3.04$ &#8240 using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated.
+
+```{r derbridge-tdfs}
+discr3 <- discr2
+discr3$mu[,"Meand13C"] <- 1.97
+discr3$mu[,"Meand15N"] <- 3.04
+
+discr3$sig2[,"SDd13C"] <- 0.70
+discr3$sig2[,"SDd15N"] <- 0.31
+
+
+jags.4 <- run_model(run="short", mix, source, discr3, model_filename, 
+                    alpha.prior = 1, resid_err, process_err)
+
+
+
+```
+
+
+## Choose TDFs from the nearest species neighbour
+
+The nearest species to the wolf in the dataset with known TDFs is the fox. While we have an estimate for the means, we still dont have any uncertainty for this, and so will continue to use the "common" errors we used in the previous example.
+
+```{r get-fox-TDFs}
+
+fox_data <- SIDER::isotope_data %>% filter(species == "Vulpes_vulpes", 
+                                           tissue == "hair")
+
+discr4 <- discr2
+discr4$mu[,"Meand13C"] <- fox_data$delta13C
+discr4$mu[,"Meand15N"] <- fox_data$delta15N
+
+
+jags.4 <- run_model(run="short", mix, source, discr4, model_filename, 
+                    alpha.prior = 1, resid_err, process_err)
+
+```
+
 
 ## Use SIDER to estimate TDFs (discrimination factors)
 
@@ -271,7 +313,7 @@ And finally run mixsiar
 
 ```{r sider-mixsiar-model, results = 'hide', message=FALSE}
 
-jags.3 <- run_model(run="short", mix, source, tdf_sider, model_filename, 
+jags.5 <- run_model(run="short", mix, source, tdf_sider, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
@@ -288,8 +330,11 @@ knitr::kable(jags.1$BUGSoutput$summary)
 cat("Model 2: original TDFs from the mixsiar example with extra error\n")
 knitr::kable(jags.2$BUGSoutput$summary)
 
-cat("Model 3: SIDER derived TDFs\n")
+cat("Model 3: use the fox TDFs\n")
 knitr::kable(jags.3$BUGSoutput$summary)
+
+cat("Model 4: SIDER derived TDFs\n")
+knitr::kable(jags.4$BUGSoutput$summary)
 
 ```
 
@@ -299,15 +344,19 @@ Bundle all the posteriors together using dplyr for plotting with ggplot. Here we
 
 post_df <- dplyr::bind_rows(list(as.data.frame(jags.1$BUGSoutput$sims.matrix), 
                                  as.data.frame(jags.2$BUGSoutput$sims.matrix),
-                                 as.data.frame(jags.3$BUGSoutput$sims.matrix)),
-                            .id = "Model")
+                                 as.data.frame(jags.3$BUGSoutput$sims.matrix),
+                                 as.data.frame(jags.4$BUGSoutput$sims.matrix),
+                                 as.data.frame(jags.5$BUGSoutput$sims.matrix))
+                            , .id = "Model")
 
 # change the names to match the sources
 names(post_df) <- c("Model", "Deviance", source$source_names)
 
 # convert to numeric and then factor
 post_df$Model <- as.numeric(post_df$Model)
-post_df$Model <- factor(post_df$Model, labels = c("Original","Added Variation","SIDER"))
+post_df$Model <- factor(post_df$Model, 
+                        labels = c("Original","Added Variation","Fox TDFs", 
+                                   "Derbridge TDFs", "SIDER"))
 
 # plot the Deer.
 p1 <- ggplot(post_df, mapping = aes(x = Model, y = Deer)) + 
