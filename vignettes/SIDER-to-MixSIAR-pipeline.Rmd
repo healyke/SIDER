@@ -9,6 +9,7 @@ output: html_notebook
 library(SIDER)
 library(MixSIAR)
 library(dplyr)
+library(ggplot2)
 
 ```
 
@@ -45,13 +46,13 @@ Now read in the source data.
 ```{r load-sources}
 # Replace the system.file call with the path to your file
 # source.filename <- system.file("extdata", "wolves_sources.csv", package = "SIDER")
-source.filename <- "../inst/extdata/wolves_sources.csv"
+source_filename <- "../inst/extdata/wolves_sources.csv"
 
 # Load the source data
-source <- load_source_data(filename=source.filename,
-                           source_factors=NULL, 
-                           conc_dep=FALSE, 
-                           data_type="means", 
+source <- load_source_data(filename = source_filename,
+                           source_factors = NULL, 
+                           conc_dep = FALSE, 
+                           data_type = "means", 
                            mix)
 ```
 
@@ -62,10 +63,10 @@ Load the TDF values used in the original data
 ```{r load-original-TDFs}
 # Replace the system.file call with the path to your file
 # discr.filename <- system.file("extdata", "wolves_discrimination.csv", package = "MixSIAR")
-discr.filename <- "../inst/extdata/wolves_discrimination.csv"
+discr_filename <- "../inst/extdata/wolves_discrimination.csv"
 
 # Load the discrimination/TDF data
-wolf_example_tdfs <- load_discr_data(filename=discr.filename, mix)
+wolf_example_tdfs <- load_discr_data(filename = discr_filename, mix)
 
 ```
 
@@ -75,12 +76,12 @@ wolf_example_tdfs <- load_discr_data(filename=discr.filename, mix)
 ```{r orig-tdf-model, results = 'hide', message=FALSE}
 # Write the JAGS model file
 model_filename <- "MixSIAR_model.txt"   # Name of the JAGS model file
-resid_err <- TRUE
-process_err <- FALSE
+resid_err <- FALSE
+process_err <- TRUE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 
-jags.1 <- run_model(run="short", mix, source, wolf_example_tdfs, model_filename, 
+jags_1 <- run_model(run="short", mix, source, wolf_example_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
@@ -93,7 +94,7 @@ extra_errors_tdfs <- wolf_example_tdfs
 extra_errors_tdfs$sig2[,"SDd13C"] <- 0.63
 extra_errors_tdfs$sig2[,"SDd15N"] <- 0.74
 
-jags.2 <- run_model(run="short", mix, source, extra_errors_tdfs, model_filename, 
+jags_2 <- run_model(run="short", mix, source, extra_errors_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
@@ -103,7 +104,7 @@ jags.2 <- run_model(run="short", mix, source, extra_errors_tdfs, model_filename,
 Although not from a controlled feeding experiment, [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves of $\Delta^13\text{C} = 1.97$ &#8240 and $\Delta^15\text{N} = 3.04$ &#8240 using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated.
 
 ```{r derbridge-tdfs}
-derbridge_tdfs <- discr2
+derbridge_tdfs <- wolf_example_tdfs
 derbridge_tdfs$mu[,"Meand13C"] <- 1.97
 derbridge_tdfs$mu[,"Meand15N"] <- 3.04
 
@@ -111,7 +112,7 @@ derbridge_tdfs$sig2[,"SDd13C"] <- 0.70
 derbridge_tdfs$sig2[,"SDd15N"] <- 0.31
 
 
-jags.4 <- run_model(run="short", mix, source, derbridge_tdfs, model_filename, 
+jags_3 <- run_model(run="short", mix, source, derbridge_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 
@@ -128,11 +129,13 @@ The nearest species to the wolf in the dataset with known TDFs is the fox. While
 fox_data <- SIDER::isotope_data %>% filter(species == "Vulpes_vulpes", 
                                            tissue == "hair")
 
+fox_tdfs <- extra_errors_tdfs
+
 fox_tdfs$mu[,"Meand13C"] <- fox_data$delta13C
 fox_tdfs$mu[,"Meand15N"] <- fox_data$delta15N
 
 
-jags.4 <- run_model(run="short", mix, source, discr4, model_filename, 
+jags_4 <- run_model(run="short", mix, source, fox_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
@@ -145,14 +148,14 @@ The wolf isotope samples are described fully in Darimont, C. T., Paquet, P. C. a
 ```{r SIDER_tdfs}
 
 # Read in the data
-SIDER.data <- read.csv(file = system.file("extdata", 
+SIDER_data <- read.csv(file = system.file("extdata", 
                                           "SIDER_data.csv", 
                                           package = "SIDER"), 
                        header = TRUE,
                        stringsAsFactors = FALSE)
 
 # View the first 10 rows of the data frame
-head(SIDER.data)
+head(SIDER_data)
 
 # Read in the phylogenetic information
 # The mammal trees
@@ -171,7 +174,7 @@ combined_trees <- mulTree::tree.bind(x = mammal_trees,
                                      root.age = 250)
 
 # Checking the data for the species we want to estimate TEF for (Canis lupus)
-new.data.test <- recipeSider(species = "Canis_lupus", 
+new_data_test <- recipeSider(species = "Canis_lupus", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
                              tissue = "hair", 
@@ -179,23 +182,23 @@ new.data.test <- recipeSider(species = "Canis_lupus",
                              tree = combined_trees)
 
 # prepare the carbon model
-tdf_data_c <- prepareSider(new.data.test, 
+tdf_data_c <- prepareSider(new_data_test, 
                           isotope_data, 
                           combined_trees, 
                           "carbon")
 
 # prepare the nitrogen model
-tdf_data_n <- prepareSider(new.data.test, 
+tdf_data_n <- prepareSider(new_data_test, 
                           isotope_data, 
                           combined_trees, 
                           "nitrogen")
 
 # formulae for both
-formula.c <- delta13C ~ diet.type + habitat
-formula.n <- delta15N ~ diet.type + habitat
+formula_c <- delta13C ~ diet.type + habitat
+formula_n <- delta15N ~ diet.type + habitat
 
 # common random structure for both
-random.terms <- ( ~ animal + species + tissue)
+random_terms <- ( ~ animal + species + tissue)
 
 prior <- list(R = list(V = 1, nu=0.002), 
               G = list(G1=list(V = 1, nu=0.002),
@@ -208,7 +211,7 @@ nitt <- c(220000)
 burnin <- c(20000)
 thin <- c(100)
 parameters <- c(nitt, thin, burnin)
-no.chains <- c(2)
+n_chains <- c(2)
 
 # convergence settings
 convergence =  c(1.1)
@@ -223,23 +226,23 @@ ESS = c(1000)
 # ***********************************
 
 
-TDF_est.c <- imputeSider(mulTree.data = tdf_data_c, 
-                         formula = formula.c, 
-                         random.terms = random.terms,
+TDF_est_c <- imputeSider(mulTree.data = tdf_data_c, 
+                         formula = formula_c, 
+                         random.terms = random_terms,
                          prior = prior, 
                          output = "wolves_sider_c_run",
                          parameters = parameters,
-                         chains = no.chains, 
+                         chains = n_chains, 
                          convergence =  convergence, 
                          ESS = ESS)
 
-TDF_est.n <- imputeSider(mulTree.data = tdf_data_n, 
-                         formula = formula.n, 
-                         random.terms = random.terms,
+TDF_est_n <- imputeSider(mulTree.data = tdf_data_n, 
+                         formula = formula_n, 
+                         random.terms = random_terms,
                          prior = prior, 
                          output = "wolves_sider_n_run",
                          parameters = parameters,
-                         chains = no.chains, 
+                         chains = n_chains, 
                          convergence =  convergence, 
                          ESS = ESS)
 
@@ -261,14 +264,14 @@ Take a look at the summaries of the SIDER runs. First $\Delta^{13}$C.
 # Specifically, the mean and standard deviation would be
 # taken from here and used in a mixing model analysis using 
 # MixSIAR, MixSIR or SIAR for example.
-summary(TDF_est.c$tdf_global)
+summary(TDF_est_c$tdf_global)
 
 # Credible intervals and the mode of the posterior are obtained 
 # using the hdrcde package
-hdrcde::hdr(TDF_est.c$tdf_global, prob = c(50, 95, 99))
+hdrcde::hdr(TDF_est_c$tdf_global, prob = c(50, 95, 99))
 
 # You can also create density plots of the posterior
-coda::densplot(TDF_est.c$tdf_global)
+coda::densplot(TDF_est_c$tdf_global)
 
 ```
 
@@ -279,14 +282,14 @@ Second, $\Delta^{15}$N.
 # Specifically, the mean and standard deviation would be
 # taken from here and used in a mixing model analysis using 
 # MixSIAR, MixSIR or SIAR for example.
-summary(TDF_est.c$tdf_global)
-
+summary(TDF_est_n$tdf_global)
+TDF_est_n
 # Credible intervals and the mode of the posterior are obtained 
 # using the hdrcde package
-hdrcde::hdr(TDF_est.c$tdf_global, prob = c(50, 95, 99))
+hdrcde::hdr(TDF_est_n$tdf_global, prob = c(50, 95, 99))
 
 # You can also create density plots of the posterior
-coda::densplot(TDF_est.c$tdf_global)
+coda::densplot(TDF_est_n$tdf_global)
 
 ```
 
@@ -295,11 +298,11 @@ Now incorporate the new TDF data in a mixsiar model.
 ```{r sider-to-mixsiar}
 
 # means and standard deviations of the SIDER estimates
-mu.c <- mean(TDF_est.c$tdf_global)
-mu.n <- mean(TDF_est.n$tdf_global)
+mu_c <- mean(TDF_est.c$tdf_global)
+mu_n <- mean(TDF_est.n$tdf_global)
 
-sd.c <- sd(TDF_est.c$tdf_global)
-sd.n <- sd(TDF_est.n$tdf_global)
+sd_c <- sd(TDF_est.c$tdf_global)
+sd_n <- sd(TDF_est.n$tdf_global)
 
 # construct the list object containing the mean and sd of the TDF data 
 # to pass to MixSIAR. This is a list of length 2, each containing a matrix 
@@ -309,9 +312,9 @@ sd.n <- sd(TDF_est.n$tdf_global)
 # load_mix_data() and load_source_data()
 
 tdf_sider <- list()
-tdf_sider$mu <- matrix(c(rep(mu.c, 3), rep(mu.n, 3)), ncol = 2, nrow = 3,
+tdf_sider$mu <- matrix(c(rep(mu_c, 3), rep(mu_n, 3)), ncol = 2, nrow = 3,
                        dimnames = list(source$source_names, mix$MU_names))
-tdf_sider$sd <- matrix(c(rep(sd.c, 3), rep(sd.n, 3)), ncol = 2, nrow = 3,
+tdf_sider$sig2 <- matrix(c(rep(sd_c, 3), rep(sd_n, 3)), ncol = 2, nrow = 3,
                        dimnames = list(source$source_names, mix$SIG_names))
 
 
@@ -321,7 +324,7 @@ And finally run mixsiar
 
 ```{r sider-mixsiar-model, results = 'hide', message=FALSE}
 
-jags.5 <- run_model(run="short", mix, source, tdf_sider, model_filename, 
+jags_5 <- run_model(run="short", mix, source, tdf_sider, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
@@ -333,28 +336,33 @@ jags.5 <- run_model(run="short", mix, source, tdf_sider, model_filename,
 ```{r compare-model-estimates}
 
 cat("Model 1: original TDFs from the mixsiar example\n")
-knitr::kable(jags.1$BUGSoutput$summary)
+knitr::kable(jags_1$BUGSoutput$summary)
 
 cat("Model 2: original TDFs from the mixsiar example with extra error\n")
-knitr::kable(jags.2$BUGSoutput$summary)
+knitr::kable(jags_2$BUGSoutput$summary)
 
-cat("Model 3: use the fox TDFs\n")
-knitr::kable(jags.3$BUGSoutput$summary)
+cat("Model 3: Inferred wolf TDFs from Derbridge paper\n")
+knitr::kable(jags_4$BUGSoutput$summary)
 
-cat("Model 4: SIDER derived TDFs\n")
-knitr::kable(jags.4$BUGSoutput$summary)
+cat("Model 4: use the fox TDFs\n")
+knitr::kable(jags_3$BUGSoutput$summary)
+
+cat("Model 5: SIDER derived TDFs\n")
+knitr::kable(jags_5$BUGSoutput$summary)
 
 ```
 
-Bundle all the posteriors together using dplyr for plotting with ggplot. Here we focus on the proportion of Deer in the diet of this wolf pack, being the largest constituent of the diet. As we can see, using the TDFs from SIDER increase slightly the estimate of Deer in the diet owing to the slightly higher TDF used for $\Delta^{15}$N. The inclusion of additional error widened the esimated proportion for the "Added Variation" model, but not the SIDER model despite having considerably larger standard deviations: this is most likely due to the proportions moving closer to the boundary at $p_{Deer} = 1$, where there is a natural compressive effect on the distribution.
+Bundle all the posteriors together using dplyr for plotting with ggplot. Here we focus on the proportion of Deer in the diet of this wolf pack, being the largest constituent of the diet. As we can see, adding ad hoc uncertainty to the TDFs used in the original model widens the estimated proportion of deer in the diet and slightly lowers the mean estiamte (c.f. "Original" with "Added Variation" models). Using the fox as the nearest species in the SIDER dataset along with some ad hoc variation has little effect in this instance since their TDFs are similar to those used in the original model. The TDFs inferred by Derbridge et al (2015) differ from the "original" model primarily in having a higher $\Delta^15\text{N}$ of 3.04 compared with 2.60 and consequently the estimated proportion of deer in the diet is higher. Although the SIDER estimated $\Delta^15\text{N}$ is higher still at 3.32 (the $\Delta^13\text{C}$ is more similar) the additional uncertainty on these estimates widens and flattens the estimated proportion of deer in the diet, and also brings the esimate away from teh boundary at 1, and closer to the prior which in this case is $\approx 0.33$.
+
+We did not include the Derbridge et al (2015) TDFs in the SIDER dataset as they did not conform to our criteria as they are not derived directly from a controlled feeding trial, and instead are inferred indirectly using a modified mixing model approach. In any case, we would argue that unless you have a TDF for your specific population of consumers, and you are satisfied that they best represent their physiology and diet, then SIDER should be used to estimate the TDFs for your study. An additional option is to add the extra data to the SIDER dataset yourself and re-run the analysis to impute a wolf TDF which will now draw additional information from the wolf data in the dataset already. We provide an associated vignette illustrating how to this in SIDER.
 
 ```{r bundle-output}
 
-post_df <- dplyr::bind_rows(list(as.data.frame(jags.1$BUGSoutput$sims.matrix), 
-                                 as.data.frame(jags.2$BUGSoutput$sims.matrix),
-                                 as.data.frame(jags.3$BUGSoutput$sims.matrix),
-                                 as.data.frame(jags.4$BUGSoutput$sims.matrix),
-                                 as.data.frame(jags.5$BUGSoutput$sims.matrix))
+post_df <- dplyr::bind_rows(list(as.data.frame(jags_1$BUGSoutput$sims.matrix), 
+                                 as.data.frame(jags_2$BUGSoutput$sims.matrix),
+                                 as.data.frame(jags_3$BUGSoutput$sims.matrix),
+                                 as.data.frame(jags_4$BUGSoutput$sims.matrix),
+                                 as.data.frame(jags_5$BUGSoutput$sims.matrix))
                             , .id = "Model")
 
 # change the names to match the sources

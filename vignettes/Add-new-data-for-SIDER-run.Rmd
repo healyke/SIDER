@@ -22,14 +22,14 @@ It may seem like over-kill to run SIDER for a species for which you have data, a
 ```{r SIDER_tdfs}
 
 # Read in the data
-SIDER.data <- read.csv(file = system.file("extdata", 
+SIDER_data <- read.csv(file = system.file("extdata", 
                                           "SIDER_data.csv", 
                                           package = "SIDER"), 
                        header = TRUE,
                        stringsAsFactors = FALSE)
 
 # View the first 10 rows of the data frame
-head(SIDER.data)
+head(SIDER_data)
 
 # Read in the phylogenetic information
 # The mammal trees
@@ -48,31 +48,31 @@ combined_trees <- mulTree::tree.bind(x = mammal_trees,
                                      root.age = 250)
 
 # Checking the data for the species we want to estimate TEF for (Meles meles)
-new.data.wolf <- recipeSider(species = "Canis_lupus", 
-                             habitat = "terrestrial", 
-                             taxonomic.class = "mammalia", 
-                             tissue = "hair", 
-                             diet.type = "carnivore", 
-                             tree = combined_trees)
+data_with_imputed_species <- recipeSider(species = "Canis_lupus", 
+                                         habitat = "terrestrial", 
+                                         taxonomic.class = "mammalia", 
+                                         tissue = "hair", 
+                                         diet.type = "carnivore", 
+                                         tree = combined_trees)
 
-# prepare the carbon model
-tdf_data_c <- prepareSider(new.data.wolf, 
+# prepare the data for the carbon tdf model
+tdf_data_c <- prepareSider(data_with_imputed_species, 
                           isotope_data, 
                           combined_trees, 
                           "carbon")
 
-# prepare the nitrogen model
-tdf_data_n <- prepareSider(new.data.wolf, 
+# prepare the data for the nitrogen tdf model
+tdf_data_n <- prepareSider(data_with_imputed_species, 
                           isotope_data, 
                           combined_trees, 
                           "nitrogen")
 
-# formulae for both
-formula.c <- delta13C ~ diet.type + habitat
-formula.n <- delta15N ~ diet.type + habitat
+# Define the formulae for both models
+formula_c <- delta13C ~ diet.type + habitat
+formula_n <- delta15N ~ diet.type + habitat
 
-# common random structure for both
-random.terms <- ( ~ animal + species + tissue)
+# Define the random structure which is common to both models
+random_terms <- ( ~ animal + species + tissue)
 
 prior <- list(R = list(V = 1, nu=0.002), 
               G = list(G1=list(V = 1, nu=0.002),
@@ -85,7 +85,7 @@ nitt <- c(220000)
 burnin <- c(20000)
 thin <- c(100)
 parameters <- c(nitt, thin, burnin)
-no.chains <- c(3)
+no_chains <- c(3)
 
 # convergence settings
 convergence =  c(1.1)
@@ -99,24 +99,25 @@ ESS = c(1000)
 # setwd("/tmp")
 # ***********************************
 
-
-TDF_est_out.c <- imputeSider(mulTree.data = tdf_data_c, 
-                           formula = formula.c, 
-                           random.terms = random.terms,
+# estimated TDFs for wolves that are not in (i.e. out) of 
+# the dataset
+TDF_est_out_c <- imputeSider(mulTree.data = tdf_data_c, 
+                           formula = formula_c, 
+                           random.terms = random_terms,
                            prior = prior, 
-                           output = "wolves_sider_c_run",
+                           output = "wolves_out_sider_c_run",
                            parameters = parameters,
-                           chains = no.chains, 
+                           chains = no_chains, 
                            convergence =  convergence, 
                            ESS = ESS)
 
-TDF_est_out.n <- imputeSider(mulTree.data = tdf_data_n, 
-                           formula = formula.n, 
-                           random.terms = random.terms,
+TDF_est_out_n <- imputeSider(mulTree.data = tdf_data_n, 
+                           formula = formula_n, 
+                           random.terms = random_terms,
                            prior = prior, 
-                           output = "wolves_sider_n_run",
+                           output = "wolves_out_sider_n_run",
                            parameters = parameters,
-                           chains = no.chains, 
+                           chains = no_chains, 
                            convergence =  convergence, 
                            ESS = ESS)
 
@@ -140,7 +141,8 @@ Much of the required data has already been read in and objects created in the co
 
 
 # add the wolf data by binding the new data onto the included SIDER dataset
-SIDER.data.wolf <- rbind(SIDER.data, data.frame(species = "Canis_lupus", 
+derbridge_wolf_tdf_data <- rbind(SIDER_data, 
+                                 data.frame(species = "Canis_lupus", 
                                                 habitat = "terrestrial", 
                                                 taxonomic.class = "mammalia",
                                                 tissue = "hair", 
@@ -151,28 +153,28 @@ SIDER.data.wolf <- rbind(SIDER.data, data.frame(species = "Canis_lupus",
                                                 delta15N = 3.04))
 
 # check it worked
-tail(SIDER.data.wolf)
+tail(derbridge_wolf_tdf_data)
 
 
-# Checking the data for the species we want to estimate TEF for (Canis lupus)
-new.data.wolf_2 <- recipeSider(species = "Canis_lupus", 
-                             habitat = "terrestrial", 
-                             taxonomic.class = "mammalia", 
-                             tissue = "hair", 
-                             diet.type = "carnivore", 
-                             tree = combined_trees)
+# Check the data for the species we want to estimate TEF for (Canis lupus)
+derbridge_data_with_imputed_species <- recipeSider(species = "Canis_lupus", 
+                                                   habitat = "terrestrial", 
+                                                   taxonomic.class = "mammalia", 
+                                                   tissue = "hair", 
+                                                   diet.type = "carnivore", 
+                                                   tree = combined_trees)
 
 # prepare the carbon model
-tdf_data_c <- prepareSider(new.data.wolf_2, 
-                          isotope_data, 
-                          combined_trees, 
-                          "carbon")
+derbridge_tdf_data_c <- prepareSider(derbridge_data_with_imputed_species, 
+                                      isotope_data, 
+                                      combined_trees, 
+                                      "carbon")
 
 # prepare the nitrogen model
-tdf_data_n <- prepareSider(new.data.wolf_2, 
-                          isotope_data, 
-                          combined_trees, 
-                          "nitrogen")
+derbridge_tdf_data_n <- prepareSider(derbridge_data_with_imputed_species, 
+                                      isotope_data, 
+                                      combined_trees, 
+                                      "nitrogen")
 
 
 # ************** VIGNETTE *********************
@@ -182,22 +184,22 @@ tdf_data_n <- prepareSider(new.data.wolf_2,
 # setwd("/tmp")
 # ***********************************
 
-
-TDF_est_in.c <- imputeSider(mulTree.data = tdf_data_c, 
-                           formula = formula.c, 
-                           random.terms = random.terms,
+# estimated TDFs for wolves that are in the dataset
+TDF_est_in_c <- imputeSider(mulTree.data = derbridge_tdf_data_c, 
+                           formula = formula_c, 
+                           random.terms = random_terms,
                            prior = prior, 
-                           output = "wolves_2_sider_c_run",
+                           output = "wolves_in_sider_c_run",
                            parameters = parameters,
                            chains = no.chains, 
                            convergence =  convergence, 
                            ESS = ESS)
 
-TDF_est_in.n <- imputeSider(mulTree.data = tdf_data_n, 
-                           formula = formula.n, 
-                           random.terms = random.terms,
+TDF_est_in_n <- imputeSider(mulTree.data = tdf_derbridge_tdf_data_ndata_n, 
+                           formula = formula_n, 
+                           random.terms = random_terms,
                            prior = prior, 
-                           output = "wolves_2_sider_n_run",
+                           output = "wolves_in_sider_n_run",
                            parameters = parameters,
                            chains = no.chains, 
                            convergence =  convergence, 
@@ -216,24 +218,29 @@ TDF_est_in.n <- imputeSider(mulTree.data = tdf_data_n,
 
 ## Compare the output from both models
 
-In this example, there is very little difference in the two models.
+In this example, there is very little difference in the two models. We can see this in the summary statistics and in the figure below we focus on the means and standard devations of the estimated TDFs since these are the statistics that would be passed onwards to a stable isotope mixing model (SIMM) analysis in packages such as MixSIAR, simmr or siar. See the accompanying vignette for an example pipeline on including these estimates in such an analysis.
 
 ```{r compare-models}
 
-df_wide <- data.frame(DC_in  = as.numeric(TDF_est_in.c$tdf_global),
-                      DC_out = as.numeric(TDF_est_out.c$tdf_global), 
-                      DN_in  = as.numeric(TDF_est_in.n$tdf_global),
-                      DN_out = as.numeric(TDF_est_out.n$tdf_global)
+# bundle the global estimates of TDFs from each of the 4 models into a 
+# wide format data.frame.
+tdf_wide <- data.frame(DC_in  = as.numeric(TDF_est_in_c$tdf_global),
+                      DC_out = as.numeric(TDF_est_out_c$tdf_global), 
+                      DN_in  = as.numeric(TDF_est_in_n$tdf_global),
+                      DN_out = as.numeric(TDF_est_out_n$tdf_global)
                       )
 
-summary(df_wide)
+# get some summary statistics of these estimates
+summary(tdf_wide)
 
 # tidy to long format for nice plotting
-df_long <- tidyr::gather(df_wide, model, TDF)
+tdf_long <- tidyr::gather(tdf_wide, model, TDF)
 
-smrys <- df_long %>% group_by(model) %>% 
+# calculate means and standard deviations for plotting in ggplot
+smrys <- tdf_long %>% group_by(model) %>% 
   summarise(mean = mean(TDF), sd = sd(TDF))
 
+# make a nice ggplot of error bars showing the mean and standard deviations.
 ggplot(smrys, aes(model, mean)) + 
   geom_errorbar(data = smrys, 
                 mapping = aes(ymin = mean - sd, ymax = mean + sd)) + 
