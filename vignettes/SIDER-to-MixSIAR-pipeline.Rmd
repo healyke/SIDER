@@ -23,11 +23,6 @@ We will take a single pack from the Wolves example in MixSIAR [Semmens et al 200
 
 ```{r load-and-prune-data}
 
-# Replace the system.file call with the path to your file
-# wolves.filename <- system.file("extdata", "wolves_consumer.csv",
-#                                package = "SIDER")
-
-# wolves.filename <- paste0(getwd(), "/inst/extdata/wolves_consumer.csv")
 mix.filename <- "../inst/extdata/wolves_consumer_mainland.csv"
 
 # Load the mixture/consumer data
@@ -56,55 +51,50 @@ source <- load_source_data(filename = source_filename,
                            mix)
 ```
 
-
-
-Load the TDF values used in the original data
-
-```{r load-original-TDFs}
-# Replace the system.file call with the path to your file
-# discr.filename <- system.file("extdata", "wolves_discrimination.csv", package = "MixSIAR")
-discr_filename <- "../inst/extdata/wolves_discrimination.csv"
-
-# Load the discrimination/TDF data
-original_tdfs <- load_discr_data(filename = discr_filename, mix)
-
-```
-
-
-## Fit the basic MixSIAR model using the original TDFs
-
-```{r orig-tdf-model, results = 'hide', message=FALSE}
+```{r model-type}
 # Write the JAGS model file
 model_filename <- "MixSIAR_model.txt"   # Name of the JAGS model file
 resid_err <- FALSE
 process_err <- TRUE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
+```
 
-jags_1 <- run_model(run="short", mix, source, original_tdfs, model_filename, 
+
+## Choose TDFs from the nearest species neighbour
+
+The nearest species to the wolf in the dataset with known TDFs is the fox. While we have an estimate for the means, we still dont have any uncertainty for this, and so will continue to use the "common" errors we used in the previous example. These fox TDFs were used by [Darimont et al 2008](http://dx.doi.org/10.1111/j.1365-2656.2008.01473.x) in a mixing model and were oringally derived from controlled feeding experiments by [Roth & Hobson](https://doi.org/10.1139/z00-008).
+
+```{r get-fox-TDFs}
+
+fox_data <- SIDER::isotope_data %>% filter(species == "Vulpes_vulpes", 
+                                           tissue == "hair")
+
+
+# create the fox_tdfs list and populate it with matrices for the means and sd
+fox_tdfs <- list()
+fox_tdfs$mu <- matrix(0, ncol = 2, nrow = 3,
+                       dimnames = list(source$source_names, mix$MU_names))
+fox_tdfs$sig2 <- matrix(0, ncol = 2, nrow = 3,
+                       dimnames = list(source$source_names, mix$SIG_names))
+
+# add in the means for the fox tdfs that are in the SIDER dataset
+fox_tdfs$mu[,"Meand13C"] <- fox_data$delta13C
+fox_tdfs$mu[,"Meand15N"] <- fox_data$delta15N
+
+
+jags_fox <- run_model(run="short", mix, source, fox_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
 
-## Use "common" errors on the TDFs
-
-```{r tdf_with_error, results = 'hide', message=FALSE}
-
-extra_errors_tdfs <- original_tdfs
-extra_errors_tdfs$sig2[,"SDd13C"] <- 0.63
-extra_errors_tdfs$sig2[,"SDd15N"] <- 0.74
-
-jags_2 <- run_model(run="short", mix, source, extra_errors_tdfs, model_filename, 
-                    alpha.prior = 1, resid_err, process_err)
-
-```
 
 ## Use TDFs from an experimental study
 
 Although not from a controlled feeding experiment, [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves of $\Delta^13\text{C} = 1.97$ &#8240 and $\Delta^15\text{N} = 3.04$ &#8240 using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated.
 
 ```{r derbridge-tdfs}
-derbridge_tdfs <- original_tdfs
+derbridge_tdfs <- fox_tdfs
 derbridge_tdfs$mu[,"Meand13C"] <- 1.97
 derbridge_tdfs$mu[,"Meand15N"] <- 3.04
 
@@ -112,33 +102,13 @@ derbridge_tdfs$sig2[,"SDd13C"] <- 0.70
 derbridge_tdfs$sig2[,"SDd15N"] <- 0.31
 
 
-jags_3 <- run_model(run="short", mix, source, derbridge_tdfs, model_filename, 
+jags_derbridge <- run_model(run="short", mix, source, derbridge_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 
 
 ```
 
-
-## Choose TDFs from the nearest species neighbour
-
-The nearest species to the wolf in the dataset with known TDFs is the fox. While we have an estimate for the means, we still dont have any uncertainty for this, and so will continue to use the "common" errors we used in the previous example.
-
-```{r get-fox-TDFs}
-
-fox_data <- SIDER::isotope_data %>% filter(species == "Vulpes_vulpes", 
-                                           tissue == "hair")
-
-fox_tdfs <- extra_errors_tdfs
-
-fox_tdfs$mu[,"Meand13C"] <- fox_data$delta13C
-fox_tdfs$mu[,"Meand15N"] <- fox_data$delta15N
-
-
-jags_4 <- run_model(run="short", mix, source, fox_tdfs, model_filename, 
-                    alpha.prior = 1, resid_err, process_err)
-
-```
 
 
 ## Use SIDER to estimate TDFs (discrimination factors)
@@ -298,11 +268,11 @@ Now incorporate the new TDF data in a mixsiar model.
 ```{r sider-to-mixsiar}
 
 # means and standard deviations of the SIDER estimates
-mu_c <- mean(TDF_est.c$tdf_global)
-mu_n <- mean(TDF_est.n$tdf_global)
+mu_c <- mean(TDF_est_c$tdf_global)
+mu_n <- mean(TDF_est_n$tdf_global)
 
-sd_c <- sd(TDF_est.c$tdf_global)
-sd_n <- sd(TDF_est.n$tdf_global)
+sd_c <- sd(TDF_est_c$tdf_global)
+sd_n <- sd(TDF_est_n$tdf_global)
 
 # construct the list object containing the mean and sd of the TDF data 
 # to pass to MixSIAR. This is a list of length 2, each containing a matrix 
@@ -311,10 +281,10 @@ sd_n <- sd(TDF_est.n$tdf_global)
 # objects created early in the first section of this document via 
 # load_mix_data() and load_source_data()
 
-tdf_sider <- list()
-tdf_sider$mu <- matrix(c(rep(mu_c, 3), rep(mu_n, 3)), ncol = 2, nrow = 3,
+sider_tdf <- list()
+sider_tdf$mu <- matrix(c(rep(mu_c, 3), rep(mu_n, 3)), ncol = 2, nrow = 3,
                        dimnames = list(source$source_names, mix$MU_names))
-tdf_sider$sig2 <- matrix(c(rep(sd_c, 3), rep(sd_n, 3)), ncol = 2, nrow = 3,
+sider_tdf$sig2 <- matrix(c(rep(sd_c, 3), rep(sd_n, 3)), ncol = 2, nrow = 3,
                        dimnames = list(source$source_names, mix$SIG_names))
 
 
@@ -324,7 +294,7 @@ And finally run mixsiar
 
 ```{r sider-mixsiar-model, results = 'hide', message=FALSE}
 
-jags_5 <- run_model(run="short", mix, source, tdf_sider, model_filename, 
+jags_sider <- run_model(run="short", mix, source, sider_tdf, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
@@ -335,20 +305,14 @@ jags_5 <- run_model(run="short", mix, source, tdf_sider, model_filename,
 
 ```{r compare-model-estimates}
 
-cat("Model 1: original TDFs from the mixsiar example\n")
-knitr::kable(jags_1$BUGSoutput$summary)
+cat("Model 1: use the fox TDFs\n")
+knitr::kable(jags_fox$BUGSoutput$summary)
 
-cat("Model 2: original TDFs from the mixsiar example with extra error\n")
-knitr::kable(jags_2$BUGSoutput$summary)
+cat("Model 2: Inferred wolf TDFs from Derbridge paper\n")
+knitr::kable(jags_derbridge$BUGSoutput$summary)
 
-cat("Model 3: Inferred wolf TDFs from Derbridge paper\n")
-knitr::kable(jags_4$BUGSoutput$summary)
-
-cat("Model 4: use the fox TDFs\n")
-knitr::kable(jags_3$BUGSoutput$summary)
-
-cat("Model 5: SIDER derived TDFs\n")
-knitr::kable(jags_5$BUGSoutput$summary)
+cat("Model 3ehad(post: SIDER derived TDFs\n")
+knitr::kable(jags_sider$BUGSoutput$summary)
 
 ```
 
@@ -358,11 +322,9 @@ We did not include the Derbridge et al (2015) TDFs in the SIDER dataset as they 
 
 ```{r bundle-output}
 
-post_df <- dplyr::bind_rows(list(as.data.frame(jags_1$BUGSoutput$sims.matrix), 
-                                 as.data.frame(jags_2$BUGSoutput$sims.matrix),
-                                 as.data.frame(jags_3$BUGSoutput$sims.matrix),
-                                 as.data.frame(jags_4$BUGSoutput$sims.matrix),
-                                 as.data.frame(jags_5$BUGSoutput$sims.matrix))
+post_df <- dplyr::bind_rows(list(as.data.frame(jags_fox$BUGSoutput$sims.matrix), 
+                                 as.data.frame(jags_derbridge$BUGSoutput$sims.matrix),
+                                 as.data.frame(jags_sider$BUGSoutput$sims.matrix))
                             , .id = "Model")
 
 # change the names to match the sources
@@ -371,12 +333,12 @@ names(post_df) <- c("Model", "Deviance", source$source_names)
 # convert to numeric and then factor
 post_df$Model <- as.numeric(post_df$Model)
 post_df$Model <- factor(post_df$Model, 
-                        labels = c("Original","Added Variation","Fox TDFs", 
-                                   "Derbridge TDFs", "SIDER"))
+                        labels = c("Fox", 
+                                   "Derbridge", "SIDER"))
 
 # plot the Deer.
 p1 <- ggplot(post_df, mapping = aes(x = Model, y = Deer)) + 
-  geom_violin(draw_quantiles = c(0.025, 0.25, 0.5, 0.75, 0.975))
+  geom_violin(draw_quantiles = c(0.025, 0.25, 0.5, 0.75, 0.975)) + theme_classic()
 print(p1)
 ```
 
