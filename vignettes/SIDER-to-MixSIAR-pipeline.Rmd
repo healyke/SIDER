@@ -18,17 +18,17 @@ In this example we illustrate how to include a SIDER analysis into a workflow fo
 
 In 
 
-We will take a single pack from the Wolves example in MixSIAR [**_REF_**] and run a simple mixing model using the default TDFs included with the example which were derived using **_XXX_** and compare that with the results obtained using SIDER to estimate them. For this simplified example we use only wolf pack 1 located in region 1 and so omit any factors. The example will work similarly for the full analysis
+We will take a single pack from the Wolves example in MixSIAR [Semmens et al 2009](https://doi.org/10.1371/journal.pone.0006187) which is based on a study by [Darimont et al 2008](http://dx.doi.org/10.1111/j.1365-2656.2008.01473.x). We run a simple mixing model using the default TDFs included with the example which were described originally by [Roth & Hobson  and compare that with the results obtained using SIDER to estimate them. For this simplified example we use only wolf pack 1 located in region 1 and so omit any factors. The example will work similarly for the full analysis with all packs and all regions included. We run the models with process error (and without residual error: see the MixSIAR documentation for more details).
 
 
 ```{r load-and-prune-data}
 
 # Replace the system.file call with the path to your file
-# wolves.filename <- system.file("extdata", "wolves_consumer.csv", 
+# wolves.filename <- system.file("extdata", "wolves_consumer.csv",
 #                                package = "SIDER")
 
 # wolves.filename <- paste0(getwd(), "/inst/extdata/wolves_consumer.csv")
-mix.filename <- "../inst/extdata/wolves_consumer.csv"
+mix.filename <- "../inst/extdata/wolves_consumer_mainland.csv"
 
 # Load the mixture/consumer data
 mix <- load_mix_data(filename = mix.filename, 
@@ -66,7 +66,7 @@ Load the TDF values used in the original data
 discr_filename <- "../inst/extdata/wolves_discrimination.csv"
 
 # Load the discrimination/TDF data
-wolf_example_tdfs <- load_discr_data(filename = discr_filename, mix)
+original_tdfs <- load_discr_data(filename = discr_filename, mix)
 
 ```
 
@@ -81,7 +81,7 @@ process_err <- TRUE
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 
-jags_1 <- run_model(run="short", mix, source, wolf_example_tdfs, model_filename, 
+jags_1 <- run_model(run="short", mix, source, original_tdfs, model_filename, 
                     alpha.prior = 1, resid_err, process_err)
 
 ```
@@ -90,7 +90,7 @@ jags_1 <- run_model(run="short", mix, source, wolf_example_tdfs, model_filename,
 
 ```{r tdf_with_error, results = 'hide', message=FALSE}
 
-extra_errors_tdfs <- wolf_example_tdfs
+extra_errors_tdfs <- original_tdfs
 extra_errors_tdfs$sig2[,"SDd13C"] <- 0.63
 extra_errors_tdfs$sig2[,"SDd15N"] <- 0.74
 
@@ -104,7 +104,7 @@ jags_2 <- run_model(run="short", mix, source, extra_errors_tdfs, model_filename,
 Although not from a controlled feeding experiment, [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves of $\Delta^13\text{C} = 1.97$ &#8240 and $\Delta^15\text{N} = 3.04$ &#8240 using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated.
 
 ```{r derbridge-tdfs}
-derbridge_tdfs <- wolf_example_tdfs
+derbridge_tdfs <- original_tdfs
 derbridge_tdfs$mu[,"Meand13C"] <- 1.97
 derbridge_tdfs$mu[,"Meand15N"] <- 3.04
 

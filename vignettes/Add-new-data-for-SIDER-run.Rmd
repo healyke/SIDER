@@ -240,12 +240,24 @@ tdf_long <- tidyr::gather(tdf_wide, model, TDF)
 smrys <- tdf_long %>% group_by(model) %>% 
   summarise(mean = mean(TDF), sd = sd(TDF))
 
+# a data.frame of the derbridge wolf TDF estimates to add to the figure
+# for comparison
+der_points = data.frame(x1 = 1, x2 = 2, x3 = 3, x4 = 4,
+                        y1 = tail(derbridge_wolf_tdf_data$delta13C),
+                        y2 = tail(derbridge_wolf_tdf_data$delta13C),
+                        y3 = tail(derbridge_wolf_tdf_data$delta15N),
+                        y4 = tail(derbridge_wolf_tdf_data$delta15N))
+
 # make a nice ggplot of error bars showing the mean and standard deviations.
 ggplot(smrys, aes(model, mean)) + 
   geom_errorbar(data = smrys, 
                 mapping = aes(ymin = mean - sd, ymax = mean + sd)) + 
   geom_point() + 
-  scale_y_continuous(name="TDF")
+  scale_y_continuous(name="TDF") + 
+  geom_segment(data = der_points, 
+               mapping = aes(x1 = x1, y = y1, xend = x2, yend = y2)) + 
+  geom_segment(data = der_points, 
+               mapping = aes(x1 = x3, y = y3, xend = x4, yend = y4))
 
 ```
 
