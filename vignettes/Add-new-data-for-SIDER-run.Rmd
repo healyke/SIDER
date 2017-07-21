@@ -5,6 +5,8 @@ date: "`r Sys.Date()`"
 output: html_notebook
 ---
 
+Load the required packages:
+
 ```{r setup}
 library(SIDER)
 library(MixSIAR)
