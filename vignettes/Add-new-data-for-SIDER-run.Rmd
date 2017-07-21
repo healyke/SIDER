@@ -9,12 +9,12 @@ output: html_notebook
 library(SIDER)
 library(MixSIAR)
 library(dplyr)
+library(ggplot2)
 
 ```
 In this example we will illustrate how you can add additional data for known TDFs to the dataset and run SIDER. We also compare the results obtained from SIDER should the new species be added with the case when it was omitted entirely. In compiling the dataset for SIDER we applied strict rules on the data, including that he TDFs be from a strictly controlled feeding diet. In many cases this excluded data from studies where the TDFs were inferred indirectly from an experiemental manipulation such as when [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves (**Canis lupus**) using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated. Here we will use SIDER to estimate the TDF for wolf hair when wolves are absent from the dataset, and when we include the Derbridge et al (2015) data.
 
 It may seem like over-kill to run SIDER for a species for which you have data, and the obvious question is "why would you do this?". It comes down to how much you trust the TDFs for your species. If you are confident that they most fairly and acccurately reflect the consumers in your mixing model, then you should use them. If however they are from a different population, or at a different time, or they lack the number of replicates etc... then in all likelihood you are not as certain of them as you might be. By adding the data you do have to SIDER and then running SIDER with that same species and tissue missing, then you are getting an estimate that is more informed by the dataset total. Of course it will be weighted more heavily towards the same species data in the dataset owing to the phylogenetic correlation structure in the models, but you will also get estimates of the uncertainty that might be lacking if your data comprise only the mean estimates.
-
 
 
 ## SIDER data without wolves
@@ -85,7 +85,7 @@ nitt <- c(220000)
 burnin <- c(20000)
 thin <- c(100)
 parameters <- c(nitt, thin, burnin)
-no_chains <- c(3)
+n_chains <- c(3)
 
 # convergence settings
 convergence =  c(1.1)
@@ -107,7 +107,7 @@ TDF_est_out_c <- imputeSider(mulTree.data = tdf_data_c,
                            prior = prior, 
                            output = "wolves_out_sider_c_run",
                            parameters = parameters,
-                           chains = no_chains, 
+                           chains = n_chains, 
                            convergence =  convergence, 
                            ESS = ESS)
 
@@ -117,7 +117,7 @@ TDF_est_out_n <- imputeSider(mulTree.data = tdf_data_n,
                            prior = prior, 
                            output = "wolves_out_sider_n_run",
                            parameters = parameters,
-                           chains = no_chains, 
+                           chains = n_chains, 
                            convergence =  convergence, 
                            ESS = ESS)
 
@@ -127,8 +127,6 @@ TDF_est_out_n <- imputeSider(mulTree.data = tdf_data_n,
 # setwd(origwd)
 # ***********************************
 
-###Now lets have a look at the files imputeSider has saved to the current working directory
-# list.files(pattern = "test_c_run")
 
 ```
 
@@ -191,17 +189,17 @@ TDF_est_in_c <- imputeSider(mulTree.data = derbridge_tdf_data_c,
                            prior = prior, 
                            output = "wolves_in_sider_c_run",
                            parameters = parameters,
-                           chains = no.chains, 
+                           chains = n_chains, 
                            convergence =  convergence, 
                            ESS = ESS)
 
-TDF_est_in_n <- imputeSider(mulTree.data = tdf_derbridge_tdf_data_ndata_n, 
+TDF_est_in_n <- imputeSider(mulTree.data = derbridge_tdf_data_n, 
                            formula = formula_n, 
                            random.terms = random_terms,
                            prior = prior, 
                            output = "wolves_in_sider_n_run",
                            parameters = parameters,
-                           chains = no.chains, 
+                           chains = n_chains, 
                            convergence =  convergence, 
                            ESS = ESS)
 
@@ -243,24 +241,28 @@ smrys <- tdf_long %>% group_by(model) %>%
 # a data.frame of the derbridge wolf TDF estimates to add to the figure
 # for comparison
 der_points = data.frame(x1 = 1, x2 = 2, x3 = 3, x4 = 4,
-                        y1 = tail(derbridge_wolf_tdf_data$delta13C),
-                        y2 = tail(derbridge_wolf_tdf_data$delta13C),
-                        y3 = tail(derbridge_wolf_tdf_data$delta15N),
-                        y4 = tail(derbridge_wolf_tdf_data$delta15N))
+                        y1 = tail(derbridge_wolf_tdf_data$delta13C,1),
+                        y2 = tail(derbridge_wolf_tdf_data$delta13C,1),
+                        y3 = tail(derbridge_wolf_tdf_data$delta15N,1),
+                        y4 = tail(derbridge_wolf_tdf_data$delta15N,1))
 
 # make a nice ggplot of error bars showing the mean and standard deviations.
 ggplot(smrys, aes(model, mean)) + 
   geom_errorbar(data = smrys, 
-                mapping = aes(ymin = mean - sd, ymax = mean + sd)) + 
-  geom_point() + 
+                mapping = aes(ymin = mean - sd, ymax = mean + sd), 
+                size = 1, width = 0.3) + 
+  geom_point(size = 3) + 
   scale_y_continuous(name="TDF") + 
   geom_segment(data = der_points, 
-               mapping = aes(x1 = x1, y = y1, xend = x2, yend = y2)) + 
+               mapping = aes(x = x1, y = y1, xend = x2, yend = y2),
+               col = "red", lty = 2) + 
   geom_segment(data = der_points, 
-               mapping = aes(x1 = x3, y = y3, xend = x4, yend = y4))
+               mapping = aes(x = x3, y = y3, xend = x4, yend = y4),
+               col = "red", lty = 2) + 
+  theme_classic()
 
 ```
-
+Figure 1. The means and standard deviations for carbon and nitrogen TDFs for two models: one run with the Derbridge data included *__in__* the model, and one with it left *__out__* of the model. The red horizontal lines indicate the means of the actual Derbridge et al 2015 data for carbon and nitrogen.
 
 
 

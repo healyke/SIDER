@@ -16,10 +16,11 @@ library(ggplot2)
 
 In this example we illustrate how to include a SIDER analysis into a workflow for a mixing model anlaysis using MixSIAR. The section **Use SIDER to estimate TDFs (discrimination factors)** illustrates how to run SIDER and then use the estimated TDFs in a subsequent mixing model analysis using MixSIAR. The rest of document is not required for such an analysis, and instead it serves as a comparison of alternative methods, that we would like to see consigned ultimately to history!
 
-In 
+We will take a single pack from the Wolves example in MixSIAR [Semmens et al 2009](https://doi.org/10.1371/journal.pone.0006187) which is based on a study by [Darimont et al 2008](http://dx.doi.org/10.1111/j.1365-2656.2008.01473.x). The SIDER dataset does not contain a TDF for wolf hair (the tissue type sampled in that study) nor indeed any wolf tissue sample. For the original analysis by [Darimont et al 2008](http://dx.doi.org/10.1111/j.1365-2656.2008.01473.x) and subsequently used by [Semmens et al 2009](https://doi.org/10.1371/journal.pone.0006187)  to present a new heirarchical SIMM, the authors used TDFs from fox hair a nearest species neighbour approximation using data from [Roth & Hobson 2000](https://doi.org/10.1139/z00-008). We compare the effects on the SIMM estimates of diet using this fox TDF with a more recently derived TDF for wolf hair that is not included in SIDER owing to it not being a directly observed TDF from a feeing experiment and the TDFs estimated using SIDER. Using a nearest species neighbour would be a commonly adopted approach by researchers when their species does not have a published TDF. We will argue later that researchers should use SIDER to esimate their TDF in nearly all cases even if species-specific data are available.
 
-We will take a single pack from the Wolves example in MixSIAR [Semmens et al 2009](https://doi.org/10.1371/journal.pone.0006187) which is based on a study by [Darimont et al 2008](http://dx.doi.org/10.1111/j.1365-2656.2008.01473.x). We run a simple mixing model using the default TDFs included with the example which were described originally by [Roth & Hobson  and compare that with the results obtained using SIDER to estimate them. For this simplified example we use only wolf pack 1 located in region 1 and so omit any factors. The example will work similarly for the full analysis with all packs and all regions included. We run the models with process error (and without residual error: see the MixSIAR documentation for more details).
+The instructions to run MixSIAR are taken from the manual for that package, and further information and explanation is included in the MixSIAR package documentation. 
 
+First we load the mixture data from a *csv file. Here we are using only a single pack from the mainland population of wolves who were found to consumre more deer than marine mammals or salmon.
 
 ```{r load-and-prune-data}
 
@@ -38,6 +39,7 @@ mix <- load_mix_data(filename = mix.filename,
 
 
 Now read in the source data.
+
 ```{r load-sources}
 # Replace the system.file call with the path to your file
 # source.filename <- system.file("extdata", "wolves_sources.csv", package = "SIDER")
@@ -51,6 +53,8 @@ source <- load_source_data(filename = source_filename,
                            mix)
 ```
 
+Construct the jags model for this analysis using `write_JAGS_model()`.
+
 ```{r model-type}
 # Write the JAGS model file
 model_filename <- "MixSIAR_model.txt"   # Name of the JAGS model file
@@ -63,18 +67,23 @@ write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 ## Choose TDFs from the nearest species neighbour
 
-The nearest species to the wolf in the dataset with known TDFs is the fox. While we have an estimate for the means, we still dont have any uncertainty for this, and so will continue to use the "common" errors we used in the previous example. These fox TDFs were used by [Darimont et al 2008](http://dx.doi.org/10.1111/j.1365-2656.2008.01473.x) in a mixing model and were oringally derived from controlled feeding experiments by [Roth & Hobson](https://doi.org/10.1139/z00-008).
+The nearest species to the wolf in the dataset with known TDFs is the fox [(Roth & Hobson 2000)](https://doi.org/10.1139/z00-008). Following the procedure adopted by both [Darimont et al 2008](http://dx.doi.org/10.1111/j.1365-2656.2008.01473.x) and [Semmens et al 2009](https://doi.org/10.1371/journal.pone.0006187) we use only the means and set their variances to 0.
 
-```{r get-fox-TDFs}
+```{r get-fox-TDFs, results = 'hide', message=FALSE}
 
+# extract the fox data using dplyr::filter() 
 fox_data <- SIDER::isotope_data %>% filter(species == "Vulpes_vulpes", 
                                            tissue == "hair")
 
 
 # create the fox_tdfs list and populate it with matrices for the means and sd
 fox_tdfs <- list()
+
+# matrix of means
 fox_tdfs$mu <- matrix(0, ncol = 2, nrow = 3,
                        dimnames = list(source$source_names, mix$MU_names))
+
+# matrix of standard deviations
 fox_tdfs$sig2 <- matrix(0, ncol = 2, nrow = 3,
                        dimnames = list(source$source_names, mix$SIG_names))
 
@@ -91,9 +100,9 @@ jags_fox <- run_model(run="short", mix, source, fox_tdfs, model_filename,
 
 ## Use TDFs from an experimental study
 
-Although not from a controlled feeding experiment, [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves of $\Delta^13\text{C} = 1.97$ &#8240 and $\Delta^15\text{N} = 3.04$ &#8240 using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated.
+Although not from a controlled feeding experiment, [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves of $\Delta^{13}\text{C} = 1.97$ &#8240; and $\Delta^{15}\text{N} = 3.04$ &#8240; using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated.
 
-```{r derbridge-tdfs}
+```{r derbridge-tdfs, results = 'hide', message=FALSE}
 derbridge_tdfs <- fox_tdfs
 derbridge_tdfs$mu[,"Meand13C"] <- 1.97
 derbridge_tdfs$mu[,"Meand15N"] <- 3.04
@@ -115,7 +124,7 @@ jags_derbridge <- run_model(run="short", mix, source, derbridge_tdfs, model_file
 
 The wolf isotope samples are described fully in Darimont, C. T., Paquet, P. C. and Reimchen, T. E. (2009), Landscape heterogeneity and marine subsidy generate extensive intrapopulation niche diversity in a large terrestrial vertebrate. Journal of Animal Ecology, 78: 126–133.  [doi](http://dx.doi.ord/10.1111/j.1365-2656.2008.01473.x),
 
-```{r SIDER_tdfs}
+```{r SIDER_tdfs, results = 'hide', message=FALSE}
 
 # Read in the data
 SIDER_data <- read.csv(file = system.file("extdata", 
@@ -123,9 +132,6 @@ SIDER_data <- read.csv(file = system.file("extdata",
                                           package = "SIDER"), 
                        header = TRUE,
                        stringsAsFactors = FALSE)
-
-# View the first 10 rows of the data frame
-head(SIDER_data)
 
 # Read in the phylogenetic information
 # The mammal trees
@@ -267,12 +273,12 @@ Now incorporate the new TDF data in a mixsiar model.
 
 ```{r sider-to-mixsiar}
 
-# means and standard deviations of the SIDER estimates
+# means and variances of the SIDER estimates
 mu_c <- mean(TDF_est_c$tdf_global)
 mu_n <- mean(TDF_est_n$tdf_global)
 
-sd_c <- sd(TDF_est_c$tdf_global)
-sd_n <- sd(TDF_est_n$tdf_global)
+sig2_c <- var(TDF_est_c$tdf_global)
+sig2_n <- var(TDF_est_n$tdf_global)
 
 # construct the list object containing the mean and sd of the TDF data 
 # to pass to MixSIAR. This is a list of length 2, each containing a matrix 
@@ -281,10 +287,15 @@ sd_n <- sd(TDF_est_n$tdf_global)
 # objects created early in the first section of this document via 
 # load_mix_data() and load_source_data()
 
+# construct the list object
 sider_tdf <- list()
+
+# create the matrix of mean TDFs
 sider_tdf$mu <- matrix(c(rep(mu_c, 3), rep(mu_n, 3)), ncol = 2, nrow = 3,
                        dimnames = list(source$source_names, mix$MU_names))
-sider_tdf$sig2 <- matrix(c(rep(sd_c, 3), rep(sd_n, 3)), ncol = 2, nrow = 3,
+
+# create the matrix of variances for the TDFs
+sider_tdf$sig2 <- matrix(c(rep(sig2_c, 3), rep(sig2_n, 3)), ncol = 2, nrow = 3,
                        dimnames = list(source$source_names, mix$SIG_names))
 
 
@@ -316,11 +327,11 @@ knitr::kable(jags_sider$BUGSoutput$summary)
 
 ```
 
-Bundle all the posteriors together using dplyr for plotting with ggplot. Here we focus on the proportion of Deer in the diet of this wolf pack, being the largest constituent of the diet. As we can see, adding ad hoc uncertainty to the TDFs used in the original model widens the estimated proportion of deer in the diet and slightly lowers the mean estiamte (c.f. "Original" with "Added Variation" models). Using the fox as the nearest species in the SIDER dataset along with some ad hoc variation has little effect in this instance since their TDFs are similar to those used in the original model. The TDFs inferred by Derbridge et al (2015) differ from the "original" model primarily in having a higher $\Delta^15\text{N}$ of 3.04 compared with 2.60 and consequently the estimated proportion of deer in the diet is higher. Although the SIDER estimated $\Delta^15\text{N}$ is higher still at 3.32 (the $\Delta^13\text{C}$ is more similar) the additional uncertainty on these estimates widens and flattens the estimated proportion of deer in the diet, and also brings the esimate away from teh boundary at 1, and closer to the prior which in this case is $\approx 0.33$.
+Bundle all the posteriors together using dplyr for plotting with ggplot. Here we focus on the proportion of Deer in the diet of this wolf pack, being the largest constituent of the diet. As we can see, adding ad hoc uncertainty to the TDFs used in the original model widens the estimated proportion of deer in the diet and slightly lowers the mean estiamte (c.f. "Original" with "Added Variation" models). Using the fox as the nearest species in the SIDER dataset along with some ad hoc variation has little effect in this instance since their TDFs are similar to those used in the original model. The TDFs inferred by Derbridge et al (2015) differ from the "original" model primarily in having a higher $\Delta^{15}\text{N}$ of 3.04 &#8240; compared with 2.60 &#8240; and consequently the estimated proportion of deer in the diet is higher. Although the SIDER estimated $\Delta^{15}\text{N}$ is higher still at 3.32 (the $\Delta^{13}\text{C}$ is more similar) the additional uncertainty on these estimates widens and flattens the estimated proportion of deer in the diet, and also brings the esimate away from the boundary at 1, and closer to the prior which in this case is $\approx 0.33$.
 
 We did not include the Derbridge et al (2015) TDFs in the SIDER dataset as they did not conform to our criteria as they are not derived directly from a controlled feeding trial, and instead are inferred indirectly using a modified mixing model approach. In any case, we would argue that unless you have a TDF for your specific population of consumers, and you are satisfied that they best represent their physiology and diet, then SIDER should be used to estimate the TDFs for your study. An additional option is to add the extra data to the SIDER dataset yourself and re-run the analysis to impute a wolf TDF which will now draw additional information from the wolf data in the dataset already. We provide an associated vignette illustrating how to this in SIDER.
 
-```{r bundle-output}
+```{r bundle-output, fig.width=8}
 
 post_df <- dplyr::bind_rows(list(as.data.frame(jags_fox$BUGSoutput$sims.matrix), 
                                  as.data.frame(jags_derbridge$BUGSoutput$sims.matrix),
@@ -341,6 +352,7 @@ p1 <- ggplot(post_df, mapping = aes(x = Model, y = Deer)) +
   geom_violin(draw_quantiles = c(0.025, 0.25, 0.5, 0.75, 0.975)) + theme_classic()
 print(p1)
 ```
+Figure 3. Violin plot of the estimate proportions of Deer in the diet for the 3 alternative models. Horizontal lines show the median at the middle, and then the interquartile range and 95% credible intervals.
 
 
 
