@@ -3,3 +3,4 @@
 export(imputeSider)
 export(prepareSider)
 export(recipeSider)
+export(scrumpSider)

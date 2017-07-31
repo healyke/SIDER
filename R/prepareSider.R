@@ -78,10 +78,6 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
     stop("data.estimate is not in the right format!\nUse recipeSider() for setting up the right format.")
   }
 
-  # ** AJ BEGIN COMMENT OUT **
-  # AJ - this section is not loading the data appropriately  and is failing
-  # R CMD check. With it commented out like this, the testthat tests are 
-  # failing. 
 
   # data.isotope
   if(missing(data.isotope)) {
@@ -92,15 +88,21 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
     # the object into the global environment, since it should already be
     # available via lazy loading on library(SIDER)
     #utils::data(isotope_data, envir = environment())
-    data.isotope <- SIDER::isotope_data
+    data.isotope <- within(SIDER::isotope_data, rm("citation"))
+    
     # And fire a warning!
     warning("No isotopic data was provided, the default SIDER data set will be used.\nSee ?isotope_data for more information.")
   } else {
     # Check if it's the standard format
     # AJ - as per my comment above re lazy loading
     #utils::data(isotope_data, envir = environment())
+    
     # Names must match
-    if(any(is.na(match(names(SIDER::isotope_data), names(data.isotope))))) {
+    # But first need to remove the citations column
+    if(any(names(data.isotope) == "citation")) {
+    data.isotope <- within(data.isotope, rm("citation"))
+    }
+    if(any(is.na(match(names(within(SIDER::isotope_data,rm("citation"))), names(data.isotope))))) {
       stop("The isotope dataset must be matching the default SIDER data set.\nSee ?isotope_data for more information.")
     }
     # TG: missing a way to check the content of the user's table is correct!
@@ -109,10 +111,8 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
   # ** AJ END COMMENT OUT **
   
   # tree
-  if(class(tree) != "phylo") {
-    if(class(tree) != "multiPhylo") {
-      stop("tree argument must be of class 'phylo' or 'multiPhylo'.")
-    }
+  if(class(tree) != "phylo" && class(tree) != "multiPhylo") {
+    stop("tree argument must be of class 'phylo' or 'multiPhylo'.")
   }
 
   # isotope
@@ -170,23 +170,34 @@ prepareSider <- function(data.estimate, data.isotope, tree, isotope,
   }
   
   # get rid on NAs so that the only NAs are for the new data
-  iso_data_sub_na <-  stats::na.omit(iso_data_class)
+  iso_data_sub_na <- stats::na.omit(iso_data_class)
     
   # Include the new data, I bind it so its at the top and hence easier to read.
   
-  if(is.null(data.estimate) == TRUE){
+  if(is.null(data.estimate)){
     iso_data_com <- iso_data_sub_na
-  } else{ 
-    iso_data_com  <- rbind(new.data_sub , iso_data_sub_na)
+  } else { 
+    iso_data_com <- rbind(new.data_sub , iso_data_sub_na)
   }
 
-  #Clean the data and match up the tree using the multree function
-  #TG: I've added the cleaning function prior to as.mulTree. 
-  # This way it doesn't polute the console with huge lists of dropped taxa.
-  cleaned_iso_data_com <- mulTree::clean.data(data = iso_data_com, tree = tree, data.col = "species")
-  clean_iso <- mulTree::as.mulTree(data = cleaned_iso_data_com$data,
-                                   tree = cleaned_iso_data_com$tree,
-                                   taxa = "species")
+  ## Checking whether at least one tip in the tree exists in the data
+  if(class(tree) == "phylo") {
+    matches <- any(unique(iso_data_com[,1]) %in% tree$tip.label)
+  } else {
+    matches <- any(unlist(lapply(tree, function (X) return(any(unique(iso_data_com[,1]) %in% X$tip.label)))))
+  }
+
+  if(matches) {
+    #Clean the data and match up the tree using the multree function
+    #TG: I've added the cleaning function prior to as.mulTree. 
+    # This way it doesn't polute the console with huge lists of dropped taxa.
+    cleaned_iso_data_com <- mulTree::clean.data(data = iso_data_com, tree = tree, data.col = "species")
+    clean_iso <- mulTree::as.mulTree(data = cleaned_iso_data_com$data,
+                                     tree = cleaned_iso_data_com$tree,
+                                     taxa = "species")
+  } else {
+    stop("There are no species in common between the tree and the data.")
+  }
 
   #Forcing the random terms
   env_tmp <- environment(clean_iso$random.terms)

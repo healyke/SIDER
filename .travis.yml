@@ -11,3 +11,10 @@ warnings_are_errors: false
 # branches:
 #  only:
 #    - release
+
+# Code coverage
+r_packages:
+  - covr
+
+after_success:
+- Rscript -e 'library(covr); codecov()'
