@@ -74,7 +74,7 @@ test_that("should return errors (bad input)", {
         imputeSider(mulTree.data = mulTree.data,
                     formula = delta13C ~ diet.type + habitat,
                     random.terms = ~animal + species + tissue,
-                    parameters = c(1200, 200, 5),
+                    parameters = c(1200, 5 , 200),
                     priors = priors,
                     chains = 2,
                     convergence = 1.1,
