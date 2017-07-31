@@ -16,7 +16,7 @@ mulTree.data <- prepareSider(data.estimate = taxa_estimate,
 test_that("Basic example (should run!)", {
     set.seed(1)
     ## Setting up the MCMCglmm parameters
-    MCMC_parameters <- c(1200, 5, 200)
+    MCMC_parameters <- c(1200, 200, 5)
     MCMC_formula <- delta13C ~ diet.type + habitat
     isotope_estimate <- imputeSider(mulTree.data, formula = MCMC_formula,
          parameters = MCMC_parameters, verbose = FALSE, save.model = FALSE)
