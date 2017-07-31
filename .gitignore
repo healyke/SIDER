@@ -3,6 +3,8 @@
 *.doc*
 *.docx
 .Rproj.user
-\vignettes\*.rda
+vignettes/*.rda
 *.DS_store
+
+
 

@@ -5,7 +5,7 @@
 # nested factors: 
 # factors: 
 # continuous effects: 0
-# error structure: Residual only
+# error structure: Process only (MixSIR, for N = 1)
 # source$conc_dep: FALSE
 
 model{
@@ -62,12 +62,15 @@ model{
       }
    }
 
-   # Mixture covariance prior (residual error only model)
-   Sigma ~ dwish(I,n.iso+1);
 
-   # Likelihood
-   for(i in 1:N) {
-     X_iso[i,] ~ dmnorm(mix.mu[,i], Sigma);
-   }
-} # end model
+  # calculate mix variance and likelihood
+  for(iso in 1:n.iso){
+    for(i in 1:N){
+
+      process.var[iso,i] <- inprod(1/src_tau[,iso],p2[i,]) + inprod(frac_sig2[,iso],p2[i,]);
+      mix.prcsn[iso,i] <- 1/process.var[iso,i];
+      X_iso[i,iso] ~ dnorm(mix.mu[iso,i], mix.prcsn[iso,i]);
+    }
+  }
+}  # end model
 
