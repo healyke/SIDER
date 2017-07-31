@@ -22,7 +22,7 @@ To install **`SIDER`**, its dependency **`mulTree`** must first be installed dir
 if(!require(devtools)) install.packages("devtools")
 
 # Installing mulTree
-#devtools::install_github("TGuillerme/mulTree@releasev1.2.6")
+#devtools::install_github("TGuillerme/mulTree@v1.3")
 library(mulTree)
 ```
 

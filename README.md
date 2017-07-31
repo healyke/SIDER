@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/healyke/SIDER.svg?branch=master)](https://travis-ci.org/healyke/SIDER)
 [![DOI](https://zenodo.org/badge/45869597.svg)](https://zenodo.org/badge/latestdoi/45869597)
+[![codecov](https://codecov.io/gh/healyke/SIDER/branch/master/graph/badge.svg)](https://codecov.io/gh/healyke/SIDER)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 # SIDER
 Stable Isotope Discrimination Estimation in R

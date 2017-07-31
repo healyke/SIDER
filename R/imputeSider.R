@@ -93,7 +93,7 @@
 #                           isotope = "carbon")
 
 # formula = delta13C ~ diet.type + habitat
-# parameters = c(1200000, 200000, 500)
+# parameters = c(1200000, 500, 200000)
 # chains = 2
 # convergence = 1.1
 # ESS = 1000
@@ -102,7 +102,7 @@
 # verbose = TRUE
 
 imputeSider <- function(mulTree.data, formula, random.terms, 
-                        parameters = c(1200000, 200000, 500), 
+                        parameters = c(1200000, 500, 200000), 
                         priors, chains = 2, convergence = 1.1, 
                         ESS = 1000, output = "teff_output", 
                         save.model = TRUE, verbose = TRUE, ...) {
