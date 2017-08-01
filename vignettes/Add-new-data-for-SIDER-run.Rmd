@@ -23,31 +23,11 @@ It may seem like over-kill to run SIDER for a species for which you have data, a
 
 ```{r SIDER_tdfs}
 
-# Read in the data
-SIDER_data <- read.csv(file = system.file("extdata", 
-                                          "SIDER_data.csv", 
-                                          package = "SIDER"), 
-                       header = TRUE,
-                       stringsAsFactors = FALSE)
 
-# View the first 10 rows of the data frame
-head(SIDER_data)
+##save the entire dataset as an object
+scrumpSider()
+SIDER_data <- scrumpSider(iso.data = "all")
 
-# Read in the phylogenetic information
-# The mammal trees
-mammal_trees <- ape::read.tree(system.file("extdata", 
-                                      "3firstFritzTrees.tre", 
-                                      package = "SIDER"))
-# The bird trees
-bird_trees   <- ape::read.tree(system.file("extdata", 
-                                      "3firstJetzTrees.tre", 
-                                      package = "SIDER"))
-
-# Combine them together using the tree.bind function from the mulTree package
-combined_trees <- mulTree::tree.bind(x = mammal_trees, 
-                                     y = bird_trees, 
-                                     sample = 2, 
-                                     root.age = 250)
 
 # Checking the data for the species we want to estimate TEF for (Meles meles)
 data_with_imputed_species <- recipeSider(species = "Canis_lupus", 
@@ -141,7 +121,7 @@ Much of the required data has already been read in and objects created in the co
 
 
 # add the wolf data by binding the new data onto the included SIDER dataset
-derbridge_wolf_tdf_data <- rbind(SIDER_data, 
+derbridge_wolf_tdf_data <- rbind(SIDER_data[,1:9], 
                                  data.frame(species = "Canis_lupus", 
                                                 habitat = "terrestrial", 
                                                 taxonomic.class = "mammalia",
@@ -150,7 +130,8 @@ derbridge_wolf_tdf_data <- rbind(SIDER_data,
                                                 source.iso.13C = NA,
                                                 source.iso.15N = NA, 
                                                 delta13C = 1.97,
-                                                delta15N = 3.04))
+                                                delta15N = 3.04,
+                                                citation = c("Derbridge et al (2015)")))
 
 # check it worked
 tail(derbridge_wolf_tdf_data)
