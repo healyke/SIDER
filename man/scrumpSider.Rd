@@ -18,7 +18,7 @@ Loads isotopic and phylogenetic data for SIDER analysis and allows to visualise 
 The function always loads the isotopic data set and the multiple phylogenies. When the two parameters \code{data} or \code{tree} have arguments, the function also prints the details of the arguments.
 }
 \examples{
-## Loading the datasets
+## Loading the datasets
 scrumpSider()
 
 ## Displaying information for a specific species
