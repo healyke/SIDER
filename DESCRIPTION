@@ -25,6 +25,6 @@ Imports:
     coda,
     stats
 Remotes:
-    github::TGuillerme/mulTree@v1.3
+    github::TGuillerme/mulTree@v1.3.1
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
