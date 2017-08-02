@@ -10,7 +10,7 @@ Description: Uses Bayesian Inference to impute (predict) an isotopic
               trophic discrimination value for an individual based on 
               phylogeny and tissue type.
 Depends:
-    R (>= 3.2.0)
+    R (>= 3.4.0)
 License: GPL-3
 LazyData: true
 Suggests:
