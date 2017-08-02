@@ -12,6 +12,10 @@ vignette: >
   %\VignetteDepends{devtools}
 ---
 
+```{r setup, echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
 
 This package estimates Trophic Discrimination Factors (TDF) based on the imputation function within the **`MCMCglmm`** package (http://cran.r-project.org/web/packages/MCMCglmm/index.html) and includes
 functionality to include the error associated with building phylogenetic trees using the **`mulTree`** package (https://github.com/TGuillerme/mulTree).
