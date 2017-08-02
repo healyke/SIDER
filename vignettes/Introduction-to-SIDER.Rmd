@@ -93,7 +93,7 @@ In order to estimate a trophic enrichment factor for a new species we need to ch
 
 ```{r check_species}
 # Checking the data for the species we want to estimate TEF for (Meles meles)
-new.data.test <- recipeSider(species = "Meles_meles", 
+new_data_test <- recipeSider(species = "Meles_meles", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
                              tissue = "blood", 
