@@ -25,9 +25,8 @@ It may seem like over-kill to run SIDER for a species for which you have data, a
 
 
 ##save the entire dataset as an object
-scrumpSider()
 SIDER_data <- scrumpSider(iso.data = "all")
-
+combined_trees <- scrumpSider(tree = c(1,2))
 
 # Checking the data for the species we want to estimate TEF for (Meles meles)
 data_with_imputed_species <- recipeSider(species = "Canis_lupus", 
@@ -121,7 +120,7 @@ Much of the required data has already been read in and objects created in the co
 
 
 # add the wolf data by binding the new data onto the included SIDER dataset
-derbridge_wolf_tdf_data <- rbind(SIDER_data[,1:9], 
+derbridge_wolf_tdf_data <- rbind(SIDER_data, 
                                  data.frame(species = "Canis_lupus", 
                                                 habitat = "terrestrial", 
                                                 taxonomic.class = "mammalia",

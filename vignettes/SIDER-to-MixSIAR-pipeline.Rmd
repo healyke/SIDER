@@ -129,27 +129,10 @@ The wolf isotope samples are described fully in Darimont, C. T., Paquet, P. C. a
 ```{r SIDER_tdfs, results = 'hide', message=FALSE}
 
 # Read in the data
-SIDER_data <- read.csv(file = system.file("extdata", 
-                                          "SIDER_data.csv", 
-                                          package = "SIDER"), 
-                       header = TRUE,
-                       stringsAsFactors = FALSE)
+SIDER_data <- scrumpSider(iso.data = "all")
+combined_trees <- scrumpSider(tree = c(1,2))
 
-# Read in the phylogenetic information
-# The mammal trees
-mammal_trees <- ape::read.tree(system.file("extdata", 
-                                      "3firstFritzTrees.tre", 
-                                      package = "SIDER"))
-# The bird trees
-bird_trees   <- ape::read.tree(system.file("extdata", 
-                                      "3firstJetzTrees.tre", 
-                                      package = "SIDER"))
 
-# Combine them together using the tree.bind function from the mulTree package
-combined_trees <- mulTree::tree.bind(x = mammal_trees, 
-                                     y = bird_trees, 
-                                     sample = 2, 
-                                     root.age = 250)
 
 # Checking the data for the species we want to estimate TEF for (Canis lupus)
 new_data_test <- recipeSider(species = "Canis_lupus", 
