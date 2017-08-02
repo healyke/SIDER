@@ -21,7 +21,8 @@ Suggests:
     hdrcde,
     MixSIAR,
     ggplot2,
-    dplyr
+    dplyr,
+    tidyr
 Imports:
     ape,
     coda,

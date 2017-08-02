@@ -9,6 +9,7 @@ vignette: >
   %\usepackage[utf8]{inputenc}
   %\VignetteDepends{ggplot2}
   %\VignetteDepends{dplyr}
+  %\VignetteDepends{tidyr}
 ---
 
 Load the required packages:
