@@ -7,8 +7,8 @@ vignette: >
   %\VignetteIndexEntry{How to add user defined TDF data to SIDER}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
-  % \VignetteDepends{ggplot2}
-  % \VignetteDepends{dplyr}
+  %\VignetteDepends{ggplot2}
+  %\VignetteDepends{dplyr}
 ---
 
 Load the required packages:
@@ -68,9 +68,9 @@ prior <- list(R = list(V = 1, nu=0.002),
 
 # model run settings
 # *Might* want these to be longer runs.
-nitt <- c(220000)
-burnin <- c(20000)
-thin <- c(100)
+nitt <- 10 # c(220000)
+burnin <- 1 #c(20000)
+thin <- 1 #c(100)
 parameters <- c(nitt, thin, burnin)
 n_chains <- c(3)
 
@@ -83,8 +83,8 @@ ESS = c(1000)
 # here we set to R's temporary directory but you would normally use 
 # your local folder for your project. We keep track of the original 
 # directory and change back again at the end of this example.
-origwd <- getwd() # get the current, or original working directory.
-setwd(tempdir()) # 
+# origwd <- getwd() # get the current, or original working directory.
+# setwd(tempdir()) # 
 # ***********************************
 
 # estimated TDFs for wolves that are not in (i.e. out) of 
@@ -189,7 +189,7 @@ TDF_est_in_n <- imputeSider(mulTree.data = derbridge_tdf_data_n,
 
 # **************** VIGNETTE *******************
 # reset back for the vignette
-setwd(origwd)
+# setwd(origwd)
 # ***********************************
 
 ###Now lets have a look at the files imputeSider has saved to the current working directory

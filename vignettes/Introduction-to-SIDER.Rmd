@@ -7,8 +7,8 @@ vignette: >
   %\VignetteIndexEntry{Introduction to SIBER}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
-  % \VignetteDepends{hdrcde}
-  % \VignetteDepends{coda}
+  %\VignetteDepends{hdrcde}
+  %\VignetteDepends{coda}
 ---
 
 
