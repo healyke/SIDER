@@ -3,11 +3,12 @@ title: "Introduction to SIDER"
 author: "Kevin Healy"
 date: '`r Sys.Date()`'
 output: rmarkdown::html_vignette
-output: pdf_document
 vignette: >
   %\VignetteIndexEntry{Introduction to SIBER}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
+  % \VignetteDepends{hdrcde}
+  % \VignetteDepends{coda}
 ---
 
 
@@ -207,8 +208,13 @@ Then we can finally we can run the analysis using the imputeSider function.
 This model will normally take approximately 5 minutes, however for brevity we will run a much shorter chain.
 
 ```{r eval_glmm}
+
+# here we set to R's temporary directory but you would normally use 
+# your local folder for your project. We keep track of the original 
+# directory and change back again at the end of this example.
 origwd <- getwd() # get the current, or original working directory.
- setwd(tempdir()) # 
+setwd(tempdir()) 
+
 TDF_est.c <- imputeSider(mulTree.data = tdf_data_c, 
                          formula = formula.c, 
                          random.terms = random.terms,

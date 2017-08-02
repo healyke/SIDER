@@ -16,10 +16,13 @@ LazyData: true
 Suggests:
     testthat,
     knitr,
-    ape,
     devtools,
+    utils,
     hdrcde,
-    utils
+    MixSIAR,
+    ggplot2,
+    dplyr,
+    coda
 Imports:
     mulTree,
     coda,

@@ -1,19 +1,20 @@
 ---
-title: "Add user defined TDF data to SIDER"
+title: "How to add user defined TDF data to SIDER"
 author: "Andrew Jackson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to SIDER}
+  %\VignetteIndexEntry{How to add user defined TDF data to SIDER}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
+  % \VignetteDepends{ggplot2}
+  % \VignetteDepends{dplyr}
 ---
 
 Load the required packages:
 
 ```{r setup}
 library(SIDER)
-library(MixSIAR)
 library(dplyr)
 library(ggplot2)
 
@@ -79,10 +80,11 @@ ESS = c(1000)
 
 
 # ************** VIGNETTE *********************
-# These dont work in notebooks
-# origwd <- getwd() # get the current, or original working directory.
-# # setwd(tempdir()) # 
-# setwd("/tmp")
+# here we set to R's temporary directory but you would normally use 
+# your local folder for your project. We keep track of the original 
+# directory and change back again at the end of this example.
+origwd <- getwd() # get the current, or original working directory.
+setwd(tempdir()) # 
 # ***********************************
 
 # estimated TDFs for wolves that are not in (i.e. out) of 
@@ -106,12 +108,6 @@ TDF_est_out_n <- imputeSider(mulTree.data = tdf_data_n,
                            chains = n_chains, 
                            convergence =  convergence, 
                            ESS = ESS)
-
-
-# **************** VIGNETTE *******************
-# ? set back for the vignette
-# setwd(origwd)
-# ***********************************
 
 
 ```
@@ -192,8 +188,8 @@ TDF_est_in_n <- imputeSider(mulTree.data = derbridge_tdf_data_n,
 
 
 # **************** VIGNETTE *******************
-# ? set back for the vignette
-# setwd(origwd)
+# reset back for the vignette
+setwd(origwd)
 # ***********************************
 
 ###Now lets have a look at the files imputeSider has saved to the current working directory

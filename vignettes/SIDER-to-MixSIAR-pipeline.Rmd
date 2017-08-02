@@ -4,9 +4,11 @@ author: "Andrew Jackson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to SIBER}
+  %\VignetteIndexEntry{SIDER to MixSIAR pipeline example}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
+  % \VignetteDepends{MixSIAR}
+  % \VignetteDepends{ggplot2}
 ---
 
 Load the required packages:
@@ -66,6 +68,14 @@ Construct the jags model for this analysis using `write_JAGS_model()`.
 model_filename <- "MixSIAR_model.txt"   # Name of the JAGS model file
 resid_err <- FALSE
 process_err <- TRUE
+
+
+# here we set to R's temporary directory but you would normally use 
+# your local folder for your project. We keep track of the original 
+# directory and change back again at the end of this example.
+origwd <- getwd() # get the current, or original working directory.
+setwd(tempdir()) 
+
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 ```
@@ -134,7 +144,7 @@ The wolf isotope samples are described fully in Darimont, C. T., Paquet, P. C. a
 
 # Read in the data
 SIDER_data <- scrumpSider(iso.data = "all")
-combined_trees <- scrumpSider(tree = c(1,2))
+combined_trees <- scrumpSider(tree = "all")
 
 
 
@@ -213,8 +223,8 @@ TDF_est_n <- imputeSider(mulTree.data = tdf_data_n,
 
 
 # **************** VIGNETTE *******************
-# ? set back for the vignette
-# setwd(origwd)
+# reset the working directory
+setwd(origwd)
 # ***********************************
 
 ###Now lets have a look at the files imputeSider has saved to the current working directory
