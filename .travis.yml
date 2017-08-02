@@ -19,6 +19,7 @@ before_install:
 #  - sudo apt-get install r-cran-rjags
   
   
+## AJ - this looks like a shortcut to the long version below
 # Code coverage
 r_packages:
   - covr
@@ -26,10 +27,13 @@ r_packages:
   - rjags
   - MixSIAR
 
-## For a CRAN package
-#  - ./travis-tool.sh install_r <package>
-
+## instructions from http://jtleek.com/protocols/travis_bioc_devel/
 #install:
+#  - ./travis-tool.sh install_bioc S4Vectors
+#  - ./travis-tool.sh install_bioc IRanges
+#  - ./travis-tool.sh install_r Matrix
+#  - ./travis-tool.sh install_r knitr
+#  - ./travis-tool.sh install_r rmarkdown
 #  ## For installing all CRAN dependencies using rpack's DESCRIPTION
 #  - ./travis-tool.sh install_deps
   

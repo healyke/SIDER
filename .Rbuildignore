@@ -7,5 +7,7 @@ README.md
 cran-comments.md
 \vignettes\*.rda
 \*.rda
-.travis.yml
+
+## Ignore travis config file
+^\.travis\.yml$
 
