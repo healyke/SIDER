@@ -4,7 +4,7 @@ author: "Andrew Jackson"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to SIBER}
+  %\VignetteIndexEntry{Introduction to SIDER}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
@@ -30,7 +30,8 @@ It may seem like over-kill to run SIDER for a species for which you have data, a
 
 ##save the entire dataset as an object
 SIDER_data <- scrumpSider(iso.data = "all")
-combined_trees <- scrumpSider(tree = c(1,2))
+
+combined_trees <- scrumpSider(tree = "all")
 
 # Checking the data for the species we want to estimate TEF for (Meles meles)
 data_with_imputed_species <- recipeSider(species = "Canis_lupus", 

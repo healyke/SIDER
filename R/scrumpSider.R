@@ -54,8 +54,10 @@ scrumpSider <- function(iso.data, tree) {
 
         ## Checking the class
         class_data <- class(iso.data)
-        if(class_data != "character" && class_data != "integer" && class_data != "numeric") {
-            stop("iso.data parameter must be a single value or a vector of class character or numeric.")
+        if(class_data != "character" && class_data != "integer" && 
+           class_data != "numeric") {
+            stop("iso.data parameter must be a single value or a vector of 
+                 class character or numeric.")
         }
 
         ## Species are characters
@@ -79,12 +81,20 @@ scrumpSider <- function(iso.data, tree) {
 
                 ## If any species are not in isotope_data, print a message
                 if(!all(iso.data %in% isotope_data[,1])) {
-                    missing_sp <- iso.data[which(!iso.data %in% isotope_data[,1])]
+                    missing_sp <- iso.data[which(!iso.data %in% 
+                                                   isotope_data[,1])]
+                    
                     ## Tells which species is absent
                     if(length(missing_sp) > 1) {
-                        message(paste("species:", paste(missing_sp, sep = ", "), "are not found in isotope_data.\nUse imputeSider(...) to get their isotope estimates!"))
+                        message(paste("species:", paste(missing_sp, sep = ", "),
+                                      "are not found in isotope_data.\nUse 
+                                      imputeSider(...) to get their isotope 
+                                      estimates!"))
                     } else {
-                        message(paste("species", paste(missing_sp, sep = ", "), "is not found in isotope_data.\nUse imputeSider(...) to get its isotope estimates!"))
+                        message(paste("species", paste(missing_sp, sep = ", "), 
+                                      "is not found in isotope_data.\nUse 
+                                      imputeSider(...) to get its isotope 
+                                      estimates!"))
                     }
                 }
             }
@@ -111,16 +121,20 @@ scrumpSider <- function(iso.data, tree) {
                 stop("Tree argument must be one or more numeric values.")
             }
             if(any(tree > length(combined_trees))) {
-                stop(paste("Tree argument is too big: only", length(combined_trees), "are available in the combined_tree dataset."))
+                stop(paste("Tree argument is too big: only", 
+                           length(combined_trees), 
+                           "are available in the combined_tree dataset."))
             }
 
             ## Select the trees
             if(length(tree) > 1) {
                 ## multiple trees
                 output_tree <- combined_trees[tree]
+                class(output_tree) <- "multiPhylo"
             } else {
                 ## single tree
                 output_tree <- combined_trees[[tree]]
+                class(output_tree) <- "phylo"
             }
         }
        
