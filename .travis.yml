@@ -12,6 +12,11 @@ warnings_are_errors: false
 #  only:
 #    - release
 
+before_install:
+  - sudo add-apt-repository ppa:marutter/rrutter -y
+  - sudo apt-get update
+  - sudo apt-get install r-cran-rjags
+  
 # Code coverage
 r_packages:
   - covr
