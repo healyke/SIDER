@@ -9,6 +9,7 @@ vignette: >
   %\usepackage[utf8]{inputenc}
   %\VignetteDepends{hdrcde}
   %\VignetteDepends{coda}
+  %\VignetteDepends{devtools}
 ---
 
 
@@ -16,15 +17,13 @@ This package estimates Trophic Discrimination Factors (TDF) based on the imputat
 functionality to include the error associated with building phylogenetic trees using the **`mulTree`** package (https://github.com/TGuillerme/mulTree).
 
 \section{Installation}
-To install **`SIDER`**, its dependency **`mulTree`** must first be installed directly from GitHub. If you have not sone so you can use the following:
+To install **`SIDER`** you will required the `devtools` package in order to install `mulTree` on which `SIDER` depends. If you dont have `devtools` installed, you will need to run the following:
 
 ```{r install_mulTree, results = "hide", message = FALSE, eval = FALSE}
-# Installing devtools
-#if(!require(devtools)) install.packages("devtools")
 
-# Installing mulTree
-#devtools::install_github("TGuillerme/mulTree@v1.3.1")
-#library(mulTree)
+# Installing devtools
+install.packages("devtools")
+
 ```
 
 
@@ -32,8 +31,8 @@ Following this you can also install **`SIDER`** directly from GitHub using the f
 
 ```{r install_SIDER, results = "hide", message=FALSE, eval = FALSE}
 # Installing SIDER
-devtools::install_github("healyke/SIDER", ref = "master")
-#library(SIDER)
+devtools::install_github("healyke/SIDER@v1.0.0")
+
 ```
 
 However, if you are reading this vignette you should only need to load the package
@@ -212,8 +211,8 @@ This model will normally take approximately 5 minutes, however for brevity we wi
 # here we set to R's temporary directory but you would normally use 
 # your local folder for your project. We keep track of the original 
 # directory and change back again at the end of this example.
-origwd <- getwd() # get the current, or original working directory.
-setwd(tempdir()) 
+# origwd <- getwd() # get the current, or original working directory.
+# setwd(tempdir()) 
 
 TDF_est.c <- imputeSider(mulTree.data = tdf_data_c, 
                          formula = formula.c, 

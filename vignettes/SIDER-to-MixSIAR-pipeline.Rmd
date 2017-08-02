@@ -138,7 +138,7 @@ jags_derbridge <- run_model(run="short", mix, source, derbridge_tdfs, model_file
 
 ## Use SIDER to estimate TDFs (discrimination factors)
 
-The wolf isotope samples are described fully in Darimont, C. T., Paquet, P. C. and Reimchen, T. E. (2009), Landscape heterogeneity and marine subsidy generate extensive intrapopulation niche diversity in a large terrestrial vertebrate. Journal of Animal Ecology, 78: 126–133.  [doi](http://dx.doi.ord/10.1111/j.1365-2656.2008.01473.x),
+The wolf isotope samples are described fully in Darimont, C.T., Papquet, P.C. and Reimchen, T.E. (2009), Landscape heterogeneity and marine subsidy generate exensive intrapopulation niche diversity in a large terrestrial vertebrate. Journal of Animal Ecology, 78: 126-133. [doi](http://dx.doi.ord/10.1111/j.1365-2656.2008.01473.x).
 
 ```{r SIDER_tdfs, results = 'hide', message=FALSE}
 
@@ -182,23 +182,15 @@ prior <- list(R = list(V = 1, nu=0.002),
 
 # model run settings
 # *Might* want these to be longer runs.
-nitt <- 10 #c(220000)
-burnin <- 1 #c(20000)
-thin <- 1 #c(100)
+nitt   <- c(220000)
+burnin <- c(20000)
+thin   <- c(100)
 parameters <- c(nitt, thin, burnin)
 n_chains <- c(2)
 
 # convergence settings
 convergence =  c(1.1)
 ESS = c(1000)
-
-
-# ************** VIGNETTE *********************
-# These dont work in notebooks
-# origwd <- getwd() # get the current, or original working directory.
-# # setwd(tempdir()) # 
-# setwd("/tmp")
-# ***********************************
 
 
 TDF_est_c <- imputeSider(mulTree.data = tdf_data_c, 
@@ -221,11 +213,6 @@ TDF_est_n <- imputeSider(mulTree.data = tdf_data_n,
                          convergence =  convergence, 
                          ESS = ESS)
 
-
-# **************** VIGNETTE *******************
-# reset the working directory
-# setwd(origwd)
-# ***********************************
 
 ###Now lets have a look at the files imputeSider has saved to the current working directory
 # list.files(pattern = "test_c_run")
