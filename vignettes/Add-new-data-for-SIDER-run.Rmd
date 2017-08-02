@@ -2,7 +2,11 @@
 title: "Add user defined TDF data to SIDER"
 author: "Andrew Jackson"
 date: "`r Sys.Date()`"
-output: html_notebook
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to SIBER}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
 ---
 
 Load the required packages:

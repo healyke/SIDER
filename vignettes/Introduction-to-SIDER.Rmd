@@ -2,12 +2,11 @@
 title: "Introduction to SIDER"
 author: "Kevin Healy"
 date: '`r Sys.Date()`'
-output:
-  html_document: default
-  pdf_document: default
-  rmarkdown::html_vignette: default
-vignette: |
-  %\VignetteIndexEntry{Introduction to SIDER}  %\VignetteEngine{knitr::rmarkdown}  %\VignetteEncoding{UTF-8}
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to SIBER}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
 ---
 
 

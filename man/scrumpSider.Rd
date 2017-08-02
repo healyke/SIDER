@@ -7,15 +7,21 @@
 scrumpSider(iso.data, tree)
 }
 \arguments{
-\item{iso.data}{A species name (\code{character}, or the \code{numeric} value of its corresponding row), a vector of species names or \code{"all"} to display the related isotopic data.}
+\item{iso.data}{A species name (\code{character}, or the \code{numeric} value
+of its corresponding row), a vector of species names or \code{"all"} to
+display the related isotopic data.}
 
-\item{tree}{The ID of a specific tree to display (\code{numeric}) or a \code{"all"} to display all trees.}
+\item{tree}{The ID of a specific tree to display (\code{numeric}) or a
+\code{"all"} to display all trees.}
 }
 \description{
-Loads isotopic and phylogenetic data for SIDER analysis and allows to visualise data for specific taxa or visualise specific trees.
+Loads isotopic and phylogenetic data for SIDER analysis and
+  allows to visualise data for specific taxa or visualise specific trees.
 }
 \details{
-The function always loads the isotopic data set and the multiple phylogenies. When the two parameters \code{data} or \code{tree} have arguments, the function also prints the details of the arguments.
+The function always loads the isotopic data set and the multiple
+  phylogenies. When the two parameters \code{data} or \code{tree} have
+  arguments, the function also prints the details of the arguments.
 }
 \examples{
 ## Loading the datasets
