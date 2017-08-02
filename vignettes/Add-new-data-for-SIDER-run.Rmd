@@ -18,7 +18,7 @@ library(SIDER)
 library(dplyr)
 library(ggplot2)
 
-knitr::opts_chunk$set(eval = FALSE)
+# knitr::opts_chunk$set(eval = FALSE)
 
 ```
 In this example we will illustrate how you can add additional data for known TDFs to the dataset and run SIDER. We also compare the results obtained from SIDER should the new species be added with the case when it was omitted entirely. In compiling the dataset for SIDER we applied strict rules on the data, including that he TDFs be from a strictly controlled feeding diet. In many cases this excluded data from studies where the TDFs were inferred indirectly from an experiemental manipulation such as when [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves (**Canis lupus**) using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated. Here we will use SIDER to estimate the TDF for wolf hair when wolves are absent from the dataset, and when we include the Derbridge et al (2015) data.

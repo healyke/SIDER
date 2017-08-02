@@ -13,7 +13,7 @@ vignette: >
 ---
 
 ```{r setup, echo = FALSE}
-knitr::opts_chunk$set(eval = FALSE)
+# knitr::opts_chunk$set(eval = FALSE)
 ```
 
 
@@ -57,15 +57,15 @@ scrumpSider(iso.data = "Homo_sapiens")
 
 ```
 
-We can also save the full dataset as an object
+We can also load the full dataset as an object
 
 ```{r scrumpSider data all}
 
 ##save the entire dataset as an object
-SIDER.data <- scrumpSider(iso.data = "all")
+isotope_data <- scrumpSider(iso.data = "all")
 
 # View the first rows of the data frame
-SIDER.data[1,]
+isotope_data[1,]
 
 ```
 
@@ -83,13 +83,6 @@ summary(single_tree)
 combined_trees <- scrumpSider(tree = "all")
 ```
 
-Alternativey the entire dataset and the phylogenies can all be uploaded to the R environment using
-
-```{r scrumpSider full load}
-
-scrumpSider()
-
-```
 
 \section{Testing the new data: \texttt{recipeSider}}
 In order to estimate a trophic enrichment factor for a new species we need to check that the species is already present in our phylogeny and check what data is available for the new species.
@@ -114,7 +107,7 @@ If the species is not present in the phylogeny already (say the Komodo dragon - 
 
 ```{r species_absent, eval = FALSE}
 # Some incomplete dataset
-new.data.test <- recipeSider(species = "Varanus_komodoensis", 
+new_data_test <- recipeSider(species = "Varanus_komodoensis", 
                              habitat = "terrestrial", 
                              taxonomic.class = "mammalia", 
                              tissue = "NA", 
@@ -128,7 +121,7 @@ The `recipeSider` function also formats the data for the new species data so tha
 We now need to format the data by combining both the isotopic data already available within the package and the data from the new species. We also include what isotope we want to estimate a trophic discrimination value for (either `carbon` or `nitrogen`).
 
 ```{r format_data}
-tdf_data_c <- prepareSider(new.data.test, 
+tdf_data_c <- prepareSider(new_data_test, 
                           isotope_data, 
                           combined_trees, 
                           "carbon")

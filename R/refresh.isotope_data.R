@@ -15,10 +15,11 @@
 
 refresh.isotope_data <- function(data = "SIDER_data.csv") {
     # Read the csv file from the package data
-    isotope_data <- utils::read.csv(file = system.file("extdata", data, 
+    isotope_data <- utils::read.table(file = system.file("extdata", data, 
                                                        package = "SIDER"), 
                                     header = TRUE, 
-                                    stringsAsFactors = FALSE)
+                                    stringsAsFactors = FALSE,
+                                    encoding = "UTF-8")
     
     # Save it as the isotope_data set in the manual
     save(isotope_data, file = "../data/isotope_data.rda", compress = 'xz')

@@ -9,10 +9,12 @@ scrumpSider(iso.data, tree)
 \arguments{
 \item{iso.data}{A species name (\code{character}, or the \code{numeric} value
 of its corresponding row), a vector of species names or \code{"all"} to
-display the related isotopic data.}
+display the related isotopic data. If \code{iso.data} is provided then 
+\code{tree} should not be provided.}
 
 \item{tree}{The ID of a specific tree to display (\code{numeric}) or a
-\code{"all"} to display all trees.}
+\code{"all"} to display all trees. If \code{iso.data} is provided, then 
+\code{tree} should not be.}
 }
 \description{
 Loads isotopic and phylogenetic data for SIDER analysis and
@@ -20,12 +22,10 @@ Loads isotopic and phylogenetic data for SIDER analysis and
 }
 \details{
 The function always loads the isotopic data set and the multiple
-  phylogenies. When the two parameters \code{data} or \code{tree} have
-  arguments, the function also prints the details of the arguments.
+  phylogenies. Only one or other of \code{iso.data} and \code{tree} should 
+  be provided by the user. It will return an error if both are given.
 }
 \examples{
-## Loading the datasets
-scrumpSider()
 
 ## Displaying information for a specific species
 scrumpSider(iso.data = "Homo_sapiens")
@@ -33,9 +33,6 @@ scrumpSider(iso.data = "Homo_sapiens")
 ## Displaying information for a specific tree
 scrumpSider(tree = 1)
 
-## Displaying information for multiple species and trees
-scrumpSider(iso.data = c("Homo_sapiens", "Gallus_gallus"),
-            tree = c(1,2))
 
 }
 \seealso{

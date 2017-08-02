@@ -21,11 +21,11 @@ Suggests:
     hdrcde,
     MixSIAR,
     ggplot2,
-    dplyr,
-    coda
+    dplyr
 Imports:
-    mulTree,
+    ape,
     coda,
+    mulTree,
     stats
 Remotes:
     github::TGuillerme/mulTree@v1.3.1

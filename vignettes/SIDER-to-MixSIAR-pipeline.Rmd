@@ -19,7 +19,7 @@ library(MixSIAR)
 library(dplyr)
 library(ggplot2)
 
-knitr::opts_chunk$set(eval = FALSE)
+# knitr::opts_chunk$set(eval = FALSE)
 
 ```
 
