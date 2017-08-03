@@ -17,8 +17,6 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install jags
 #  - sudo apt-get install r-cran-rjags
-
-install: travis_wait 30 mvn install
   
 ## AJ - this looks like a shortcut to the long version below
 # Code coverage
@@ -37,6 +35,8 @@ r_packages:
 #  - ./travis-tool.sh install_r rmarkdown
 #  ## For installing all CRAN dependencies using rpack's DESCRIPTION
 #  - ./travis-tool.sh install_deps
+
+install: travis_wait 30
   
 after_success:
 - Rscript -e 'library(covr); codecov()'
