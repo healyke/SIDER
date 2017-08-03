@@ -186,9 +186,9 @@ prior <- list(R = list(V = 1, nu=0.002),
 
 # model run settings
 # *Might* want these to be longer runs.
-nitt   <- c(220000)
+nitt   <- c(120000)
 burnin <- c(20000)
-thin   <- c(100)
+thin   <- c(50)
 parameters <- c(nitt, thin, burnin)
 n_chains <- c(2)
 

@@ -36,7 +36,10 @@ r_packages:
 #  ## For installing all CRAN dependencies using rpack's DESCRIPTION
 #  - ./travis-tool.sh install_deps
 
-install: travis_wait 30
+## AJ - this line is not working. I dont know how to specify the
+## particular jobs which are the running of the vignettes here as
+# its all taken care of within R CMD install
+#install: travis_wait 30
   
 after_success:
 - Rscript -e 'library(covr); codecov()'
