@@ -23,6 +23,8 @@ library(ggplot2)
 
 ```
 
+N.B. to run this example you will need to download and install the `jags` software which is separate to R and separate to the R package `rjags`. This is required for MixSIAR to run. You can find it at http://mcmc-jags.sourceforge.net
+
 
 In this example we illustrate how to include a SIDER analysis into a workflow for a mixing model anlaysis using MixSIAR. The section **Use SIDER to estimate TDFs (discrimination factors)** illustrates how to run SIDER and then use the estimated TDFs in a subsequent mixing model analysis using MixSIAR. The rest of document is not required for such an analysis, and instead it serves as a comparison of alternative methods, that we would like to see consigned ultimately to history!
 

@@ -17,7 +17,8 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install jags
 #  - sudo apt-get install r-cran-rjags
-  
+
+install: travis_wait 30 mvn install
   
 ## AJ - this looks like a shortcut to the long version below
 # Code coverage
