@@ -14,7 +14,7 @@ and runs a MCMCglmm analysis on multiple trees using [mulTree](https://github.co
 
 If you want the vignettes installed along with `SIDER` you will need to first download and install the `JAGS` software which is required for the package `MixSIAR` that is called in the *SIDER-to-MixSIAR-pipeline* vignette. Please note also that these vignettes take some time to run as there are several real calls made to SIDER, and it will probably take about **15 minutes** on a 2.7 GHz i5 with 16 GB RAM to install.
 
-```r
+```
 # Install devtools if you dont already have it
 if(!require(devtools)) install.packages("devtools")
 devtools::install_github("healyke/SIDER@v1.0.0", build_vignettes = TRUE)
@@ -23,7 +23,7 @@ library(SIDER)
 
 If you want to skip the vignette installation then you can run the following.
 
-```r
+```
 # Install devtools if you dont already have it
 if(!require(devtools)) install.packages("devtools")
 devtools::install_github("healyke/SIDER@v1.0.0", build_vignettes = FALSE)
@@ -31,7 +31,7 @@ library(SIDER)
 ```
 
 ## Installing SIDER (development - not guaranteed stable)
-```r
+```
 if(!require(devtools)) install.packages("devtools")
 devtools::install_github("healyke/SIDER@master", build_vignettes = TRUE)
 library(SIDER)
