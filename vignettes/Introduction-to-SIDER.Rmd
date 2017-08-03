@@ -194,22 +194,10 @@ convergence =  c(1.1)
 ESS = c(1000)
 ```
 
-As the function exports the model output to avoid memory issues within `R` when running over multiple phylogenies make sure you have set the working directory to somewhere appropriate.
-In this example, we will use the default temporary directory determined by `tempdir()`, but ordinarily, this would be a folder of your own choosing located somewhere sensible on your machine.
-
-> N.B. We **_strongly_** advise that you do not use this `tempdir` in your own analyses!
-
-In this example, we store the original working directory to `origwd` so that we can return the `R` session to the original working directory after using the temporary one.
-Then we can finally we can run the analysis using the imputeSider function.
-This model will normally take approximately 5 minutes, however for brevity we will run a much shorter chain.
+As the function exports the model output to avoid memory issues within `R` when running over multiple phylogenies make sure you have set the working directory to somewhere appropriate. Vignettes use a temporary directory, but if you run this code yourself then the files will appear in your working directory (which you may choose to change prior to running this code, and then change back afterwards).
 
 ```{r eval_glmm}
 
-# here we set to R's temporary directory but you would normally use 
-# your local folder for your project. We keep track of the original 
-# directory and change back again at the end of this example.
-# origwd <- getwd() # get the current, or original working directory.
-# setwd(tempdir()) 
 
 TDF_est.c <- imputeSider(mulTree.data = tdf_data_c, 
                          formula = formula.c, 

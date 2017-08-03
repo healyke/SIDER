@@ -22,9 +22,11 @@ library(ggplot2)
 # knitr::opts_chunk$set(eval = FALSE)
 
 ```
-In this example we will illustrate how you can add additional data for known TDFs to the dataset and run SIDER. We also compare the results obtained from SIDER should the new species be added with the case when it was omitted entirely. In compiling the dataset for SIDER we applied strict rules on the data, including that he TDFs be from a strictly controlled feeding diet. In many cases this excluded data from studies where the TDFs were inferred indirectly from an experiemental manipulation such as when [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves (**Canis lupus**) using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated. Here we will use SIDER to estimate the TDF for wolf hair when wolves are absent from the dataset, and when we include the Derbridge et al (2015) data.
+In this example we will illustrate how you can add additional data for known TDFs to the dataset and run SIDER. We also compare the results obtained from SIDER should the new species be added with the case when it was omitted entirely. In compiling the dataset for SIDER we applied strict rules on the data, including that he TDFs be from a strictly controlled feeding diet. In many cases this excluded data from studies where the TDFs were inferred indirectly from an experiemental manipulation such as when [Derbridge et al (2015)](https://doi.org/10.1371/journal.pone.0119940) inferred TDFs for wolves (*Canis lupus*) using a modified Stable Isotope Mixing Model in which the TDFs themselves were estimated. Here we will use SIDER to estimate the TDF for wolf hair when wolves are absent from the dataset, and when we include the Derbridge et al (2015) data.
 
 It may seem like over-kill to run SIDER for a species for which you have data, and the obvious question is "why would you do this?". It comes down to how much you trust the TDFs for your species. If you are confident that they most fairly and acccurately reflect the consumers in your mixing model, then you should use them. If however they are from a different population, or at a different time, or they lack the number of replicates etc... then in all likelihood you are not as certain of them as you might be. By adding the data you do have to SIDER and then running SIDER with that same species and tissue missing, then you are getting an estimate that is more informed by the dataset total. Of course it will be weighted more heavily towards the same species data in the dataset owing to the phylogenetic correlation structure in the models, but you will also get estimates of the uncertainty that might be lacking if your data comprise only the mean estimates.
+
+Throughout this example we run relatively short runs of SIDER which results in estimates that do not pass the convergence tests. This is done to keep the build time for the package vignettes to something reasonable. As per the introduction vignette, we recommend longer runs, which make take up to an hour or even more, to produce the definitive values you would used subsequently in any analysis.
 
 
 ## SIDER data without wolves
@@ -80,15 +82,6 @@ n_chains <- c(2)
 # convergence settings
 convergence =  c(1.1)
 ESS = c(1000)
-
-
-# ************** VIGNETTE *********************
-# here we set to R's temporary directory but you would normally use 
-# your local folder for your project. We keep track of the original 
-# directory and change back again at the end of this example.
-# origwd <- getwd() # get the current, or original working directory.
-# setwd(tempdir()) # 
-# ***********************************
 
 # estimated TDFs for wolves that are not in (i.e. out) of 
 # the dataset
@@ -161,13 +154,6 @@ derbridge_tdf_data_n <- prepareSider(derbridge_data_with_imputed_species,
                                       "nitrogen")
 
 
-# ************** VIGNETTE *********************
-# These dont work in notebooks
-# origwd <- getwd() # get the current, or original working directory.
-# # setwd(tempdir()) # 
-# setwd("/tmp")
-# ***********************************
-
 # estimated TDFs for wolves that are in the dataset
 TDF_est_in_c <- imputeSider(mulTree.data = derbridge_tdf_data_c, 
                            formula = formula_c, 
@@ -190,12 +176,8 @@ TDF_est_in_n <- imputeSider(mulTree.data = derbridge_tdf_data_n,
                            ESS = ESS)
 
 
-# **************** VIGNETTE *******************
-# reset back for the vignette
-# setwd(origwd)
-# ***********************************
-
-###Now lets have a look at the files imputeSider has saved to the current working directory
+### Now lets have a look at the files imputeSider has saved to the 
+### current working directory
 # list.files(pattern = "test_c_run")
 
 ```

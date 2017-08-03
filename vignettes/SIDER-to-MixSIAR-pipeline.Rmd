@@ -28,6 +28,8 @@ N.B. to run this example you will need to download and install the `jags` softwa
 
 In this example we illustrate how to include a SIDER analysis into a workflow for a mixing model anlaysis using MixSIAR. The section **Use SIDER to estimate TDFs (discrimination factors)** illustrates how to run SIDER and then use the estimated TDFs in a subsequent mixing model analysis using MixSIAR. The rest of document is not required for such an analysis, and instead it serves as a comparison of alternative methods, that we would like to see consigned ultimately to history!
 
+Throughout this example we run relatively short runs of SIDER which results in estimates that do not pass the convergence tests. This is done to keep the build time for the package vignettes to something reasonable. As per the introduction vignette, we recommend longer runs, which make take up to an hour or even more, to produce the definitive values you would used subsequently in any analysis.
+
 We will take a single pack from the Wolves example in MixSIAR [Semmens et al 2009](https://doi.org/10.1371/journal.pone.0006187) which is based on a study by [Darimont et al 2008](http://dx.doi.org/10.1111/j.1365-2656.2008.01473.x). The SIDER dataset does not contain a TDF for wolf hair (the tissue type sampled in that study) nor indeed any wolf tissue sample. For the original analysis by [Darimont et al 2008](http://dx.doi.org/10.1111/j.1365-2656.2008.01473.x) and subsequently used by [Semmens et al 2009](https://doi.org/10.1371/journal.pone.0006187)  to present a new heirarchical SIMM, the authors used TDFs from fox hair a nearest species neighbour approximation using data from [Roth & Hobson 2000](https://doi.org/10.1139/z00-008). We compare the effects on the SIMM estimates of diet using this fox TDF with a more recently derived TDF for wolf hair that is not included in SIDER owing to it not being a directly observed TDF from a feeing experiment and the TDFs estimated using SIDER. Using a nearest species neighbour would be a commonly adopted approach by researchers when their species does not have a published TDF. We will argue later that researchers should use SIDER to esimate their TDF in nearly all cases even if species-specific data are available.
 
 The instructions to run MixSIAR are taken from the manual for that package, and further information and explanation is included in the MixSIAR package documentation. 
@@ -73,13 +75,8 @@ model_filename <- "MixSIAR_model.txt"   # Name of the JAGS model file
 resid_err <- FALSE
 process_err <- TRUE
 
-
-# here we set to R's temporary directory but you would normally use 
-# your local folder for your project. We keep track of the original 
-# directory and change back again at the end of this example.
-# origwd <- getwd() # get the current, or original working directory.
-# setwd(tempdir()) 
-
+# this writes a jags model as a *txt file to your working directory
+# which is used later to implement the model.
 write_JAGS_model(model_filename, resid_err, process_err, mix, source)
 
 ```
@@ -249,7 +246,8 @@ Second, $\Delta^{15}$N.
 # taken from here and used in a mixing model analysis using 
 # MixSIAR, MixSIR or SIAR for example.
 summary(TDF_est_n$tdf_global)
-TDF_est_n
+
+
 # Credible intervals and the mode of the posterior are obtained 
 # using the hdrcde package
 hdrcde::hdr(TDF_est_n$tdf_global, prob = c(50, 95, 99))
@@ -321,7 +319,7 @@ Bundle all the posteriors together using dplyr for plotting with ggplot. Here we
 
 We did not include the Derbridge et al (2015) TDFs in the SIDER dataset as they did not conform to our criteria as they are not derived directly from a controlled feeding trial, and instead are inferred indirectly using a modified mixing model approach. In any case, we would argue that unless you have a TDF for your specific population of consumers, and you are satisfied that they best represent their physiology and diet, then SIDER should be used to estimate the TDFs for your study. An additional option is to add the extra data to the SIDER dataset yourself and re-run the analysis to impute a wolf TDF which will now draw additional information from the wolf data in the dataset already. We provide an associated vignette illustrating how to this in SIDER.
 
-```{r bundle-output, fig.width=8}
+```{r bundle-output, fig.width=7}
 
 post_df <- dplyr::bind_rows(list(as.data.frame(jags_fox$BUGSoutput$sims.matrix), 
                                  as.data.frame(jags_derbridge$BUGSoutput$sims.matrix),
