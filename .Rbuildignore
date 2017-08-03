@@ -2,11 +2,11 @@
 ^\.Rproj\.user$
 
 # AJ added
-issues.md
-README.md
-cran-comments.md
-\vignettes\*.rda
-\*.rda
+^issues\.md$
+^README\.md$
+^cran-comments\.md$
+^\vignettes\*.rda$
+^\*.rda$
 
 ## Ignore travis config file
 ^\.travis\.yml$
