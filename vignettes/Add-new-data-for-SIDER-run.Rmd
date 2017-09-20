@@ -37,7 +37,11 @@ Throughout this example we run relatively short runs of SIDER which results in e
 ##save the entire dataset as an object
 SIDER_data <- scrumpSider(iso.data = "all")
 
-combined_trees <- scrumpSider(tree = "all")
+##all trees
+all_combined_trees <- scrumpSider(tree = "all")
+
+##just two trees
+combined_trees <- all_combined_trees[[1:2]]
 
 # Checking the data for the species we want to estimate TEF for (Meles meles)
 data_with_imputed_species <- recipeSider(species = "Canis_lupus", 

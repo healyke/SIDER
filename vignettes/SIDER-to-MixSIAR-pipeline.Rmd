@@ -145,7 +145,12 @@ The wolf isotope samples are described fully in Darimont, C.T., Papquet, P.C. an
 
 # Read in the data
 SIDER_data <- scrumpSider(iso.data = "all")
-combined_trees <- scrumpSider(tree = "all")
+
+##all trees
+all_combined_trees <- scrumpSider(tree = "all")
+
+##just two trees
+combined_trees <- all_combined_trees[[1:2]]
 
 
 
