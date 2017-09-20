@@ -41,7 +41,7 @@ SIDER_data <- scrumpSider(iso.data = "all")
 all_combined_trees <- scrumpSider(tree = "all")
 
 ##just two trees
-combined_trees <- all_combined_trees[[1:2]]
+combined_trees <- all_combined_trees[1:2]
 
 # Checking the data for the species we want to estimate TEF for (Meles meles)
 data_with_imputed_species <- recipeSider(species = "Canis_lupus", 

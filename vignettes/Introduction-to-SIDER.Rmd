@@ -84,7 +84,7 @@ summary(single_tree)
 all_combined_trees <- scrumpSider(tree = "all")
 
 ##just two trees
-combined_trees <- all_combined_trees[[1:2]]
+combined_trees <- all_combined_trees[1:2]
 ```
 
 
