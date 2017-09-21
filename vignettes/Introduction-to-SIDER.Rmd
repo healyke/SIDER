@@ -85,6 +85,8 @@ all_combined_trees <- scrumpSider(tree = "all")
 
 ##just two trees
 combined_trees <- all_combined_trees[1:2]
+class(combined_trees) <-"multiPhylo"
+
 ```
 
 
