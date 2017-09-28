@@ -35,7 +35,7 @@ Following this you can install **`SIDER`** directly from GitHub using the follow
 
 ```{r install_SIDER, results = "hide", message=FALSE, eval = FALSE}
 # Installing SIDER
-devtools::install_github("healyke/SIDER@v1.0.0")
+devtools::install_github("healyke/SIDER@v1.0.0.0")
 
 ```
 

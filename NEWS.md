@@ -1,4 +1,7 @@
 # SIDER 1.0.0
++ Update on SIDER 1.0.0 with the phylogenies updated to insure ultrametric trees
+
+# SIDER 1.0.0
 + First full release. 
 + Two new vignettes added showing:
     1. how to perform a SIDER analysis and use the estimated TDFs in a subsequent mixing model analysis, in our example using MixSIAR.

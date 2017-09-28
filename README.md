@@ -17,7 +17,7 @@ If you want the vignettes installed along with `SIDER` you will need to first do
 ```
 # Install devtools if you dont already have it
 if(!require(devtools)) install.packages("devtools")
-devtools::install_github("healyke/SIDER@v1.0.0", build_vignettes = TRUE, dependencies = "suggests")
+devtools::install_github("healyke/SIDER@v1.0.0.0", build_vignettes = TRUE, dependencies = "suggests")
 library(SIDER)
 ```
 
@@ -26,7 +26,7 @@ If you want to skip the vignette installation then you can run the following.
 ```
 # Install devtools if you dont already have it
 if(!require(devtools)) install.packages("devtools")
-devtools::install_github("healyke/SIDER@v1.0.0", build_vignettes = FALSE)
+devtools::install_github("healyke/SIDER@v1.0.0.0", build_vignettes = FALSE)
 library(SIDER)
 ```
 
