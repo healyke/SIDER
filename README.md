@@ -44,6 +44,8 @@ Authors
 
 Citation
 -------
-If you are using this package, please cite this pre-print until we finalise the paper and have it peer-reviewed:
+If you are using this package, please cite:
 
-Healy K, Kelly SBA, Guillerme T, Inger R, Bearhop S, Jackson AL. (2016) Predicting trophic discrimination factor using Bayesian inference and phylogenetic, ecological and physiological data. SIDER: Discrimination Estimation in R. PeerJ Preprints 4:e1950v1 https://doi.org/10.7287/peerj.preprints.1950v1
+Healy, K., Guillerme, T., Kelly, S. B. A., Inger, R., Bearhop, S. and Jackson, A. L. (2017), SIDER: an R package for predicting trophic discrimination factors of consumers based on their ecology and phylogenetic relatedness. Ecography. doi:10.1111/ecog.03371
+
+This paper also has a pre-print in PeerJ which can be found here: https://doi.org/10.7287/peerj.preprints.1950v1
