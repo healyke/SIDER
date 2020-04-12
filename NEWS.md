@@ -1,3 +1,6 @@
+# SIDER 1.0.0.1
++ Minor update to link to the latest version of `mulTree` (only compatibility updates)
+
 # SIDER 1.0.0
 + Update on SIDER 1.0.0 with the phylogenies updated to insure ultrametric trees
 

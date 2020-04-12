@@ -4,8 +4,8 @@
 \alias{refresh.combined_tree}
 \title{Refreshes the phylogenetic tree dataset}
 \usage{
-refresh.combined_tree(data = c("3firstFritzTrees.tre", "3firstJetzTrees.tre"),
-  sample = 2, root.age = 250)
+refresh.combined_tree(data = c("3firstFritzTrees.tre",
+  "3firstJetzTrees.tre"), sample = 2, root.age = 250)
 }
 \arguments{
 \item{data}{A character vector file containing names of the *.tre files to be
